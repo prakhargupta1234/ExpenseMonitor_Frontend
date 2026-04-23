@@ -1,6 +1,6 @@
-import { useSearchParams } from "react-router-dom";
 import { useRef, useState } from "react";
 import { User, Upload, Trash } from "lucide-react";
+
 
 const ProfilePhotoSelector =({ image, setImage })=>{
     const inputRef = useRef(null);

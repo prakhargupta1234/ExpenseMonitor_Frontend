@@ -10,6 +10,7 @@ import toast from "react-hot-toast";
 import { API_ENDPOINTS } from "../util/apiEndPoints";
 import ProfilePhotoSelector from "../components/profilePhotoSelector";
 import  uploadProfileImage  from "../util/uploadProfileImage";  
+
 const Signup = () => {
 
   const [fullName, setFullName] = useState("");
