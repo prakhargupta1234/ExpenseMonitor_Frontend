@@ -1,15 +1,73 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import bg from "../assets/bgcimage.png";
 import Input from "../components/input";
 import { Link } from "react-router-dom";
+import { API_ENDPOINTS } from "../util/apiEndPoints";
+import { AppContext } from "../context/AppContext";
+import toast from "react-hot-toast";
+import { LoaderCircle } from "lucide-react";
+import { validateEmail } from "../util/validation";
+import axiosConfig from "../util/axiosConfig";
 
 const Login =()=>{
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading]= useState(false);
   const navigate = useNavigate();
+  const{setUser}= useContext(AppContext);
+
+
+  const handleSubmit= async(e)=>{
+    e.preventDefault();
+    setIsLoading(true);
+
+    //basic validation
+        if(!validateEmail(email)){
+            setError("Please enter a valid email address");
+             setIsLoading(false);
+            return;
+        }
+    
+         if(!password.trim()){
+            setError("Please enter your password");
+             setIsLoading(false);
+            return;
+        }
+        
+        setError("");
+        //login api call
+        try{
+            const response=await axiosConfig.post(API_ENDPOINTS.LOGIN,{     
+            email,
+            password
+            })
+
+            const  {token, user}=response.data;
+            if(token){
+                // Store token and user info in localStorage or context
+                localStorage.setItem("token", token);
+                setUser(user);
+                navigate("/dashboard");
+
+            }
+        }catch(error){
+            if(error.response && error.response.data.message){
+                setError(error.response.data.message);
+            } else{
+                
+            console.error("Something went wrong", error);
+            setError(error.message);
+            }
+
+
+        }finally{
+            setIsLoading(false); 
+        }
+    
+  }
 
     return (
       <div className="h-screen w-full relative flex items-center justify-center overflow-hidden">
@@ -30,7 +88,7 @@ const Login =()=>{
             Please enter your details to access your account and start tracking your expenses.
             </p>
 
-            <form className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-4">
                         <Input 
                             label="Email Address"
                             value={email}
@@ -58,11 +116,20 @@ const Login =()=>{
                     </p>
                 )}
 
-              <button 
-                        className="w-full py-3 text-lg font-medium text-white bg-purple-900 rounded-lg shadow-md hover:bg-purple-700 active:scale-[0.98] transition-all duration-300 ease-in-out" 
+              <button disabled={isLoading}
+                        className={`w-full py-3 text-lg font-medium text-white bg-purple-900 rounded-lg shadow-md hover:bg-purple-700 active:scale-[0.98] transition-all duration-300 ease-in-out flex items-center justify-center gap-2 ${isLoading? 
+                            `opacity-70 cursor-not-allowed `:``
+                        }`} 
                         type="submit"
                         >
-                        LOGIN
+                        {isLoading?(
+                            <>
+                            <LoaderCircle className=" animate-spin w-5 h-5 "/>
+                            Logging In...
+                            </>
+                        ):(
+                            "Login"
+                        )}
                 </button>
 
                 <p className="text-sm text-slate-800 text-center mt-6">

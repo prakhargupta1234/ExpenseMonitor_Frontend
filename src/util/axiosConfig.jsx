@@ -15,10 +15,10 @@ const excludePaths = ["/login", "/register", "/status", "/activate", "/health"]
 
 //request interceptor
 axiosConfig.interceptors.request.use((config)=>{
-     const requestUrl = config.url || "";
-   const shouldSkipToken = excludePaths.some((endpoint) => 
-    requestUrl.includes(endpoint)
-);
+    const requestUrl = config.url || "";
+    const shouldSkipToken = excludePaths.some((endpoint) =>{ 
+    return config.url?.includes(endpoint);
+});
 
     if(!shouldSkipToken){
         const access= localStorage.getItem("token");
@@ -50,3 +50,5 @@ axiosConfig.interceptors.response.use((response)=>{
     }
     return Promise.reject(error);
 })
+
+export default axiosConfig;

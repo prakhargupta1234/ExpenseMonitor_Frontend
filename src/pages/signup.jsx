@@ -3,39 +3,78 @@ import { useNavigate } from "react-router-dom";
 import bg from "../assets/bgcimage.png";
 import Input from "../components/input";
 import { Link } from "react-router-dom";
-import { ReceiptEuro } from "lucide-react";
+import { LoaderCircle, ReceiptEuro } from "lucide-react";
 import { validateEmail } from "../util/validation";
+import axiosConfig from "../util/axiosConfig";
+import toast from "react-hot-toast";
+import { API_ENDPOINTS } from "../util/apiEndPoints";
+import ProfilePhotoSelector from "../components/profilePhotoSelector";
+import  uploadProfileImage  from "../util/uploadProfileImage";  
 const Signup = () => {
 
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading]= useState(false);
+  const [profilePhoto, setProfilePhoto] = useState(null);
 
   const navigate = useNavigate();
 
 
   const handleSubmit = async(e)=>{
     e.preventDefault();
+    let profileImageUrl = null;
+    setIsLoading(true);
 
     //basic validation
     if(!fullName.trim()){
         setError("Please enter your full name");
+        setIsLoading(false);
         return;
     }
 
 
     if(!validateEmail(email)){
         setError("Please enter a valid email address");
+         setIsLoading(false);
         return;
     }
 
      if(!password.trim()){
         setError("Please enter your password");
+         setIsLoading(false);
         return;
     }
 
-    console.log(fullName, email, password)
+    setError("");
+    //console.log(fullName, email, password)
+    //signup api call
+
+    try{
+
+        // upload the image if it is present
+        if(profilePhoto){
+            const imageUrl= await uploadProfileImage(profilePhoto);
+            profileImageUrl= imageUrl||"";
+        } 
+        const response=await axiosConfig.post(API_ENDPOINTS.REGISTER,{
+            fullName,
+            email,
+            password,
+            profileImageUrl
+        })
+
+        if(response.status === 201){
+            toast.success("Registration successful Completed! Please Activate the account to continue.");
+            navigate("/login");
+        }
+    }catch(error){
+        console.error("Something went wrong");
+        setError(error.message);
+    }finally{
+         setIsLoading(false);
+    }
 
   }
 
@@ -61,6 +100,9 @@ const Signup = () => {
             <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="flex justify-center mb-6">
                     {/* Profile image*/}
+                    <ProfilePhotoSelector  image= {profilePhoto}
+                    setImage= {setProfilePhoto}
+                    />
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-2 gap-4">
                         <Input 
@@ -105,11 +147,18 @@ const Signup = () => {
                     </p>
                 )}
 
-              <button 
-                        className="w-full py-3 text-lg font-medium text-white bg-purple-900 rounded-lg shadow-md hover:bg-purple-700 active:scale-[0.98] transition-all duration-300 ease-in-out" 
+              <button disabled={isLoading}
+                        className= {`w-full py-3 text-lg font-medium text-white bg-purple-900 rounded-lg shadow-md hover:bg-purple-700 active:scale-[0.98] transition-all duration-300 ease-in-out flex items-center justify-center gap-2 ${isLoading? 
+                            `opacity-70 cursor-not-allowed `:``
+                        }`} 
                         type="submit"
                         >
-                        SIGN UP
+                        {isLoading ? 
+                        <>
+                        <LoaderCircle className="animate-spin w-5 h-5"/>
+                        Signing Up...
+                        </>
+                        : ("SIGN UP")}
                 </button>
 
                 <p className="text-sm text-slate-800 text-center mt-6">
