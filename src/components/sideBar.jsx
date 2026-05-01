@@ -3,7 +3,7 @@ import { AppContext } from "../context/AppContext";
 import { User } from "lucide-react";
 import { SIDE_BAR_DATA } from "../assets/assets";
 import { useNavigate } from "react-router-dom";
-const SideBar = () => {
+const SideBar = ({activeMenu}) => {
     const {user}= useContext(AppContext);
     const navigate = useNavigate();
     return (
@@ -24,7 +24,7 @@ const SideBar = () => {
                 <button
                     onClick={()=>navigate(item.path)}
                     key={`menu_${index}`}
-                    className="cursor-pointer w-full flex items-center gap-4 text-[15px] py-3 px-6 rounded-lg mb-3"
+                    className={`cursor-pointer w-full flex items-center gap-4 text-[15px] py-3 px-6 rounded-lg mb-3 ${activeMenu === item.label ? "text-white bg-purple-800 ":""} `}
                 >
                     <item.icon className="text-xl" />
                     {item.label}

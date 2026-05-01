@@ -1,17 +1,17 @@
-import { useContext, useState ,useRef } from "react";
 import { AppContext } from "../context/AppContext";
 import { useNavigate } from "react-router-dom";
 import { Menu, X, User, LogOut } from "lucide-react";
 import logo from "../assets/logo.png";
+import { useContext, useState, useRef, useEffect } from "react";
 
 
-const MenuBar = () => {
+const MenuBar = ({activeMenu}) => {
     const[openSideMenu, setOpenSideMenu] = useState(false);
     const[showDropdown, setShowDropdown] = useState(false);
     const dropDownRef= useRef(null);
     const {user, clearUser}= useContext(AppContext);
     const navigate = useNavigate();
-    console.log(user); 
+    
 
     const handleLogout=()=>{
         localStorage.clear();
@@ -21,6 +21,21 @@ const MenuBar = () => {
 
     }
 
+    useEffect(()=>{
+        const handleClickOutside = (event) => {
+            if (dropDownRef.current && !dropDownRef.current.contains(event.target)) {
+                setShowDropdown(false);
+            }
+
+        }
+        if(showDropdown){
+            document.addEventListener("mousedown", handleClickOutside);
+
+        }
+        return()=>{
+            document.removeEventListener("mousedown", handleClickOutside);
+        }
+    },[showDropdown])
     
     return(
         
@@ -95,7 +110,7 @@ const MenuBar = () => {
             {/* Mobile side menu */}
             {openSideMenu && (
             <div className="fixed left-0 right-0 bg-white border-b border-gray-200 lg:hidden z-20 top-[73px]">
-                <Sidebar />
+                <Sidebar activeMenu={activeMenu} />
             </div>
             )}
         </div>

@@ -3,7 +3,7 @@ import Dashboard from "../components/dashboard";
 const Expense =()=>{
    return (
         <div>
-            <Dashboard>
+            <Dashboard activeMenu="Expense">
                 this is expense page
             </Dashboard>
         </div>
