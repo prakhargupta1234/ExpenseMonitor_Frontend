@@ -1,6 +1,12 @@
+import Dashboard from "../components/dashboard";
+
 const Home =()=>{
     return (
-        <div>Home</div>
+        <div>
+                <Dashboard activeMenu="Dashboard">
+                    this is home page
+                </Dashboard>
+        </div>
     )
 };
 
