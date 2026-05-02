@@ -39,11 +39,9 @@ const MenuBar = ({ activeMenu }) => {
     }, [showDropdown])
 
     return (
-
-        <div className="flex items-center justify-between gap-5  bg-white 
-        border border-b border-gray-200/50 backdrop-blur-[2px] py-4 px-4 
-        sm:px-7 sticky top-0 z-30 ">
-            {/* Left side - Menu button and title*/}
+        <>
+            <div className="flex items-center justify-between gap-5 bg-white border border-b border-gray-200/50 backdrop-blur-[2px] py-4 px-4 sm:px-7 sticky top-0 z-30">
+                {/* Left side - Menu button and title*/}
             <div className="flex items-center gap-5">
                 <button
                     onClick={() => setOpenSideMenu(!openSideMenu)}
@@ -112,14 +110,30 @@ const MenuBar = ({ activeMenu }) => {
                     </div>
                 )}
             </div>
-            {/* Mobile side menu */}
-            {openSideMenu && (
-                <div className="fixed inset-x-0 bottom-0 top-[73px] bg-white lg:hidden z-40 overflow-hidden">
+            </div>
+
+            {/* Mobile side menu with overlay */}
+            <div 
+                className={`fixed inset-0 bg-black/40 backdrop-blur-sm z-[100] lg:hidden transition-opacity duration-300 ${openSideMenu ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+                onClick={() => setOpenSideMenu(false)}
+            />
+            <div 
+                className={`fixed inset-y-0 left-0 w-72 bg-white z-[110] lg:hidden transform transition-transform duration-300 ease-in-out ${openSideMenu ? 'translate-x-0' : '-translate-x-full'}`}
+            >
+                <div className="flex items-center justify-between p-4 border-b border-gray-100 bg-white">
+                    <div className="flex items-center gap-2">
+                        <img src={logo} alt="logo" className="h-8 w-8" />
+                        <span className="text-lg font-bold text-gray-900">Money Manager</span>
+                    </div>
+                    <button onClick={() => setOpenSideMenu(false)} className="p-2 hover:bg-gray-100 rounded-full">
+                        <X size={20} />
+                    </button>
+                </div>
+                <div className="h-full overflow-y-auto pb-20">
                     <SideBar activeMenu={activeMenu} onMenuItemClick={() => setOpenSideMenu(false)} />
                 </div>
-            )}
-        </div>
-
+            </div>
+        </>
     )
 }
 

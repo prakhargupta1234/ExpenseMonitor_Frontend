@@ -131,37 +131,37 @@ const Home = () => {
             <div className="my-5 mx-auto max-w-[1400px]">
                 
                 {/* Top Cards Row */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-6">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5 mb-6">
                     {/* Total Balance */}
-                    <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow duration-200 flex items-center gap-5">
-                        <div className="w-14 h-14 bg-[#7c26f0] rounded-2xl flex items-center justify-center shrink-0 shadow-sm shadow-purple-200">
-                            <Wallet className="w-6 h-6 text-white" />
+                    <div className="bg-white border border-gray-100 rounded-2xl p-4 sm:p-6 shadow-sm hover:shadow-md transition-shadow duration-200 flex items-center gap-4 sm:gap-5">
+                        <div className="w-12 h-12 sm:w-14 sm:h-14 bg-[#7c26f0] rounded-2xl flex items-center justify-center shrink-0 shadow-sm shadow-purple-200">
+                            <Wallet className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                         </div>
                         <div>
-                            <p className="text-sm font-medium text-gray-500 mb-1">Total Balance</p>
-                            <p className="text-2xl font-bold text-gray-900">{formatCurrency(balance)}</p>
+                            <p className="text-xs sm:text-sm font-medium text-gray-500 mb-0.5 sm:mb-1">Total Balance</p>
+                            <p className="text-xl sm:text-2xl font-bold text-gray-900">{formatCurrency(balance)}</p>
                         </div>
                     </div>
 
                     {/* Total Income */}
-                    <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow duration-200 flex items-center gap-5">
-                        <div className="w-14 h-14 bg-[#064e3b] rounded-2xl flex items-center justify-center shrink-0 shadow-sm shadow-emerald-900/20">
-                            <Wallet className="w-6 h-6 text-white" />
+                    <div className="bg-white border border-gray-100 rounded-2xl p-4 sm:p-6 shadow-sm hover:shadow-md transition-shadow duration-200 flex items-center gap-4 sm:gap-5">
+                        <div className="w-12 h-12 sm:w-14 sm:h-14 bg-[#064e3b] rounded-2xl flex items-center justify-center shrink-0 shadow-sm shadow-emerald-900/20">
+                            <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                         </div>
                         <div>
-                            <p className="text-sm font-medium text-gray-500 mb-1">Total Income</p>
-                            <p className="text-2xl font-bold text-gray-900">{formatCurrency(totalIncome)}</p>
+                            <p className="text-xs sm:text-sm font-medium text-gray-500 mb-0.5 sm:mb-1">Total Income</p>
+                            <p className="text-xl sm:text-2xl font-bold text-emerald-700">{formatCurrency(totalIncome)}</p>
                         </div>
                     </div>
 
                     {/* Total Expense */}
-                    <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow duration-200 flex items-center gap-5">
-                        <div className="w-14 h-14 bg-[#7f1d1d] rounded-2xl flex items-center justify-center shrink-0 shadow-sm shadow-red-900/20">
-                            <Wallet className="w-6 h-6 text-white" />
+                    <div className="bg-white border border-gray-100 rounded-2xl p-4 sm:p-6 shadow-sm hover:shadow-md transition-shadow duration-200 flex items-center gap-4 sm:gap-5">
+                        <div className="w-12 h-12 sm:w-14 sm:h-14 bg-[#7f1d1d] rounded-2xl flex items-center justify-center shrink-0 shadow-sm shadow-red-900/20">
+                            <TrendingDown className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                         </div>
                         <div>
-                            <p className="text-sm font-medium text-gray-500 mb-1">Total Expense</p>
-                            <p className="text-2xl font-bold text-gray-900">{formatCurrency(totalExpense)}</p>
+                            <p className="text-xs sm:text-sm font-medium text-gray-500 mb-0.5 sm:mb-1">Total Expense</p>
+                            <p className="text-xl sm:text-2xl font-bold text-red-700">{formatCurrency(totalExpense)}</p>
                         </div>
                     </div>
                 </div>
@@ -188,25 +188,25 @@ const Home = () => {
                     {/* Financial Overview Donut Chart */}
                     <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm flex flex-col">
                         <h3 className="text-lg font-bold text-gray-900 mb-2">Financial Overview</h3>
-                        <div className="flex-1 relative flex flex-col items-center justify-center min-h-[300px]">
+                        <div className="flex-1 relative flex flex-col items-center justify-center min-h-[280px] sm:min-h-[300px]">
                             {overviewData.length === 1 && overviewData[0].name === "No Data" ? (
                                 <p className="text-gray-400 text-sm">No financial data available</p>
                             ) : (
                                 <>
                                     {/* Center Text Overlay */}
-                                    <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none pb-8">
-                                        <p className="text-xs font-medium text-gray-500 mb-0.5">Total Balance</p>
-                                        <p className="text-2xl font-bold text-gray-900">{formatCurrency(balance)}</p>
+                                    <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none pb-8 sm:pb-12">
+                                        <p className="text-[10px] sm:text-xs font-medium text-gray-500 mb-0.5 uppercase tracking-wider">Balance</p>
+                                        <p className="text-xl sm:text-2xl font-bold text-gray-900">{formatCurrency(balance)}</p>
                                     </div>
-                                    <ResponsiveContainer width="100%" height={280}>
+                                    <ResponsiveContainer width="100%" height={260}>
                                         <PieChart>
                                             <Pie
                                                 data={overviewData}
                                                 cx="50%"
                                                 cy="50%"
-                                                innerRadius={85}
-                                                outerRadius={120}
-                                                paddingAngle={3}
+                                                innerRadius={75}
+                                                outerRadius={105}
+                                                paddingAngle={4}
                                                 dataKey="value"
                                                 stroke="none"
                                             >
