@@ -1,5 +1,6 @@
-export const BASE_URL = "http://localhost:8080/api/v1.0";
-// export const BASE_URL = "https://expensemonitor-backend.onrender.com/api/v1.0";
+//export const BASE_URL = "http://localhost:8080/api/v1.0";
+export const BASE_URL = "https://expensemonitor-backend.onrender.com/api/v1.0";
+
 const CLOUDINARY_CLOUD_NAME = "dncoknrf7";
 
 export const API_ENDPOINTS = {
