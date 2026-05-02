@@ -118,14 +118,14 @@ const Expense = () => {
     return (
         <div>
             <Dashboard activeMenu="Expense">
-                <div className="my-5 mx-auto">
+                <div className="my-5 mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
                     {/* Header */}
-                    <div className="flex justify-between items-center mb-5">
+                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-5">
                         <div>
                             <h2 className="text-2xl font-semibold">Expenses</h2>
                             <p className="text-sm text-gray-500 mt-1">This month's expenses</p>
                         </div>
-                        <div className="flex items-center gap-3">
+                        <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
                             <button
                                 onClick={handleEmail}
                                 disabled={isEmailing}

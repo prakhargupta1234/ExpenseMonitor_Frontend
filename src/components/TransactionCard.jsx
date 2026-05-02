@@ -60,7 +60,7 @@ const TransactionCard = ({ transaction, onDelete, type }) => {
                 {onDelete && (
                     <button
                         onClick={() => onDelete(transaction.id)}
-                        className="p-1.5 rounded-md text-gray-300 hover:text-red-500 hover:bg-red-50 opacity-0 group-hover:opacity-100 transition-all duration-200"
+                        className="p-1.5 rounded-md text-gray-400 sm:text-gray-300 hover:text-red-500 hover:bg-red-50 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-all duration-200"
                         title="Delete"
                     >
                         <Trash2 size={15} />

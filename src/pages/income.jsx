@@ -129,16 +129,16 @@ const Income = () => {
     return (
         <div>
             <Dashboard activeMenu="Income">
-                <div className="my-5 mx-auto">
+                <div className="my-5 mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
                     {/* Header with Add Button */}
-                    <div className="flex justify-between items-center mb-6">
+                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                         <div>
                             <h2 className="text-2xl font-bold text-gray-900">Income Overview</h2>
                             <p className="text-sm text-gray-500 mt-1">Manage and track your income sources</p>
                         </div>
                         <button
                             onClick={() => setShowAddModal(true)}
-                            className="flex items-center gap-2 bg-[#7c26f0] text-white px-5 py-2.5 rounded-lg hover:bg-[#6819d4] transition-colors duration-200 text-sm font-medium shadow-sm"
+                            className="flex items-center justify-center gap-2 bg-[#7c26f0] text-white px-5 py-2.5 rounded-lg hover:bg-[#6819d4] transition-colors duration-200 text-sm font-medium shadow-sm w-full sm:w-auto"
                         >
                             <Plus size={18} />
                             Add Income
@@ -163,7 +163,7 @@ const Income = () => {
                                 {/* Card Header */}
                                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
                                     <h3 className="text-xl font-bold text-gray-900">Income Sources</h3>
-                                    <div className="flex items-center gap-3">
+                                    <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
                                         <button 
                                             onClick={handleEmail}
                                             disabled={isEmailing}
@@ -235,7 +235,7 @@ const Income = () => {
 
                                                 <button
                                                     onClick={() => setDeleteId(income.id)}
-                                                    className="p-2 rounded-lg text-gray-300 hover:text-red-500 hover:bg-red-50 opacity-0 group-hover:opacity-100 transition-all duration-200"
+                                                    className="p-2 rounded-lg text-gray-400 sm:text-gray-300 hover:text-red-500 hover:bg-red-50 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-all duration-200"
                                                     title="Delete Income"
                                                 >
                                                     <Trash2 size={18} />

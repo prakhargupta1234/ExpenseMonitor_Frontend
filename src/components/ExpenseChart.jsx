@@ -17,7 +17,7 @@ const CustomTooltip = ({ active, payload, label }) => {
                 <p className="font-bold text-gray-900 mb-2">{label}</p>
                 <div className="flex items-center justify-between mb-1">
                     <span className="text-sm font-semibold text-gray-700">Total: </span>
-                    <span className="text-sm font-bold text-[#7c26f0]">
+                    <span className="text-sm font-bold text-red-600">
                         ₹{data.amount.toLocaleString("en-IN")}
                     </span>
                 </div>
@@ -92,8 +92,8 @@ const ExpenseChart = ({ expenses }) => {
                     >
                         <defs>
                             <linearGradient id="colorExpense" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="5%" stopColor="#7c26f0" stopOpacity={0.3} />
-                                <stop offset="95%" stopColor="#7c26f0" stopOpacity={0} />
+                                <stop offset="5%" stopColor="#ef4444" stopOpacity={0.3} />
+                                <stop offset="95%" stopColor="#ef4444" stopOpacity={0} />
                             </linearGradient>
                         </defs>
                         <XAxis 
@@ -114,11 +114,11 @@ const ExpenseChart = ({ expenses }) => {
                         <Area 
                             type="monotone" 
                             dataKey="amount" 
-                            stroke="#7c26f0" 
+                            stroke="#ef4444" 
                             strokeWidth={3}
                             fillOpacity={1} 
                             fill="url(#colorExpense)" 
-                            activeDot={{ r: 6, fill: '#7c26f0', stroke: '#fff', strokeWidth: 2 }}
+                            activeDot={{ r: 6, fill: '#ef4444', stroke: '#fff', strokeWidth: 2 }}
                         />
                     </AreaChart>
                 </ResponsiveContainer>
