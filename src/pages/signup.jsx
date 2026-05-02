@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import bg from "../assets/bgcimage.png";
 import Input from "../components/input";
 import { Link } from "react-router-dom";
-import { LoaderCircle, ReceiptEuro } from "lucide-react";
+import { LoaderCircle } from "lucide-react";
 import { validateEmail } from "../util/validation";
 import axiosConfig from "../util/axiosConfig";
 import toast from "react-hot-toast";
@@ -49,8 +49,6 @@ const Signup = () => {
     }
 
     setError("");
-    //console.log(fullName, email, password)
-    //signup api call
 
     try{
 
@@ -99,79 +97,53 @@ const Signup = () => {
             </p>
 
             <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="flex justify-center mb-6">
-                    {/* Profile image*/}
-                    <ProfilePhotoSelector  image= {profilePhoto}
-                    setImage= {setProfilePhoto}
-                    />
-                </div>
-                <div className="grid grid-cols-2 md:grid-cols-2 gap-4">
-                        <Input 
-                            label="Full Name"
-                            value={fullName}
-                            onChange={(e) =>{
-                                setFullName(e.target.value)
-                            }}
-                            placeholder="Enter your full name"
-                            type="text"
-                        />
-
-
-                        <Input 
-                            label="Email Address"
-                            value={email}
-                            onChange={(e) =>{
-                                setEmail(e.target.value)
-                            }}
-                            placeholder="Enter your email address"
-                            type="text"
-                        />  
-
-
-                       <div className="col-span-2">
-                             <Input 
-                                label="Password"
-                                value={password}
-                                onChange={(e) =>{
-                                    setPassword(e.target.value)
-                                }}
-                                placeholder="Enter your password"
-                                type="password"
-                            />
-                       </div>
-                       
-                </div>
-
-                {error &&(
-                    <p className="text-red-500.text-sm.mt-2 text-center bg-red-50 p-2 rounded">
-                        {error}
-                    </p>
-                )}
-
-              <button disabled={isLoading}
-                        className= {`w-full py-3 text-lg font-medium text-white bg-purple-900 rounded-lg shadow-md hover:bg-purple-700 active:scale-[0.98] transition-all duration-300 ease-in-out flex items-center justify-center gap-2 ${isLoading? 
-                            `opacity-70 cursor-not-allowed `:``
-                        }`} 
-                        type="submit"
-                        >
-                        {isLoading ? 
-                        <>
-                        <LoaderCircle className="animate-spin w-5 h-5"/>
-                        Signing Up...
-                        </>
-                        : ("SIGN UP")}
-                </button>
-
-                <p className="text-sm text-slate-800 text-center mt-6">
-                    Already have an account?
-                    <Link to="/login" className="font-medium text-primary underline hover:text-primary-dark transition-colors">Login</Link>
-                </p>
+            <ProfilePhotoSelector image={profilePhoto} setImage={setProfilePhoto} />
+              <Input
+                label="Full Name"
+                value={fullName}
+                onChange={(e) => {
+                  setFullName(e.target.value);
+                }}
+                placeholder="Enter your full name"
+                type="text"
+              />
+              <Input
+                label="Email Address"
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                }}
+                placeholder="Enter your email address"
+                type="text"
+              />
+              <Input
+                label="Password"
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                }}
+                placeholder="Enter your password"
+                type="password"
+              />
+              {error && <p className="text-red-500 text-sm">{error}</p>}
+              <button
+                type="submit"
+                className="w-full bg-black text-white py-2 rounded-md hover:bg-gray-800 transition-colors duration-300 flex items-center justify-center"
+                disabled={isLoading}
+              >
+                {isLoading ? <LoaderCircle className="animate-spin" /> : "Sign Up"}
+              </button>
             </form>
+            <p className="text-center text-sm text-slate-700 mt-4">
+              Already have an account?{" "}
+              <Link to="/login" className="text-black font-semibold hover:underline">
+                Login
+              </Link>
+            </p>
         </div>
+      </div>
     </div>
-
-    </div>
-
-)};
+  );
+};
 
 export default Signup;

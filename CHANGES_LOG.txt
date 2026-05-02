@@ -1,0 +1,224 @@
+=====================================================
+  MONEY MANAGER - FRONTEND CHANGES LOG
+  Date: 2026-05-02
+=====================================================
+
+OVERVIEW:
+---------
+Completed the Money Manager React frontend by building all
+missing page functionality, creating reusable components,
+fixing critical bugs, and integrating all Spring Boot backend
+API endpoints. No changes were made to the existing UI design
+or login/signup visual structure.
+
+=====================================================
+BUGS FIXED (Existing Code Issues)
+=====================================================
+
+1. login.jsx
+   - ISSUE: Had duplicate dead code after `export default Login` (lines 124-169)
+   - ISSUE: Missing email input field in the form (only password was rendered)
+   - FIX: Removed dead code, added email input field
+
+2. signup.jsx
+   - ISSUE: Had duplicate dead code after `export default Signup` (lines 152-229)
+   - FIX: Removed dead code, kept the clean working version
+
+3. useUser.jsx (hooks)
+   - ISSUE: Hook did not return anything (no return statement)
+   - ISSUE: ProtectedRoute imported it as default but it was only a named export
+   - FIX: Added `return { user, isLoading }` and added default export
+   - FIX: Added `isLoading` state tracking for proper loading UI
+
+4. ProtectedRoute.jsx
+   - ISSUE: Was rendering SideBar and MenuBar directly, but pages already
+     use the Dashboard layout component which includes both, causing DOUBLE rendering
+   - FIX: Simplified to only handle auth guard + Outlet rendering
+
+5. menuBar.jsx
+   - ISSUE: Referenced `<Sidebar>` (lowercase 'b') but component is named `SideBar`
+   - ISSUE: No import for SideBar component
+   - FIX: Added proper import and fixed component name
+   - FIX: Added profile image display in avatar button
+
+6. home.jsx (Dashboard page)
+   - ISSUE: Imported from 'chart.js' (not installed) instead of 'recharts' (installed)
+   - FIX: Rewrote using Recharts PieChart components
+   - FIX: Wrapped in Dashboard layout component (was missing)
+   - FIX: Added useUser() hook call
+
+7. apiEndPoints.js
+   - ISSUE: Missing ACTIVATE, DASHBOARD, all income/expense/filter endpoints
+   - FIX: Added all missing endpoints
+
+=====================================================
+NEW REUSABLE COMPONENTS CREATED
+=====================================================
+
+1. src/components/modal.jsx
+   - Full-screen overlay modal with backdrop blur
+   - Props: isOpen, onClose, title, children
+   - Animated entrance, close on backdrop click
+
+2. src/components/DeleteConfirmModal.jsx
+   - Specialized confirmation dialog for delete actions
+   - Warning icon, customizable item name, loading state
+   - Props: isOpen, onClose, onConfirm, isDeleting, itemName
+
+3. src/components/EmptyState.jsx
+   - Placeholder UI for empty lists
+   - Optional icon, title, description, and action button
+   - Props: icon, title, description, actionLabel, onAction
+
+4. src/components/PageLoader.jsx
+   - Centered spinning loader for page-level loading states
+   - Consistent styling across all pages
+
+5. src/components/TransactionCard.jsx
+   - Displays a single income/expense transaction
+   - Shows category icon, description, date, amount, delete button
+   - Color-coded for income (green) vs expense (red)
+   - Props: transaction, type, onDelete
+
+6. src/components/TransactionForm.jsx
+   - Form for adding new income or expense
+   - Auto-fetches categories by type (INCOME/EXPENSE)
+   - Validates amount, date, category selection
+   - Props: type, onSuccess, onCancel
+
+7. src/components/CategoryForm.jsx
+   - Form for adding/editing categories
+   - Emoji picker for icon selection
+   - Type toggle (INCOME/EXPENSE)
+   - Supports both create and edit modes
+   - Props: onSubmit, isLoading, initialData, onCancel
+
+=====================================================
+PAGES COMPLETED / UPDATED
+=====================================================
+
+1. DASHBOARD (src/pages/home.jsx) - REWRITTEN
+   - Summary cards: Total Income, Total Expense, Balance
+   - Donut charts: Income by Category, Expense by Category (using Recharts)
+   - Recent Transactions list with color-coded entries
+   - Proper loading and error states
+   - API: GET /dashboard
+
+2. CATEGORY (src/pages/category.jsx) - ENHANCED
+   - Category listing with type badges (INCOME/EXPENSE)
+   - Add Category modal with emoji picker and type selection
+   - Edit Category modal (pre-filled form)
+   - Loading state with PageLoader
+   - API: GET /categories, POST /categories, PUT /categories/{id}
+
+3. INCOME (src/pages/income.jsx) - BUILT FROM SCRATCH
+   - Income transaction listing for current month
+   - Total income summary card
+   - Add Income modal with category selector
+   - Delete with confirmation dialog
+   - Empty state when no data
+   - API: GET /incomes, POST /incomes, DELETE /incomes/{id}
+
+4. EXPENSE (src/pages/expense.jsx) - BUILT FROM SCRATCH
+   - Expense transaction listing for current month
+   - Total expense summary card
+   - Add Expense modal with category selector
+   - Delete with confirmation dialog
+   - Empty state when no data
+   - API: GET /expences, POST /expences, DELETE /expences/{id}
+
+5. FILTER (src/pages/filter.jsx) - BUILT FROM SCRATCH
+   - Type toggle (Income/Expense)
+   - Date range filters (Start Date, End Date)
+   - Keyword search
+   - Sort by field (Date/Amount) and order (Newest/Oldest)
+   - Results display using TransactionCard
+   - Results summary with total amount
+   - Reset functionality
+   - API: POST /filter
+
+=====================================================
+API ENDPOINTS CONFIGURED (src/util/apiEndPoints.js)
+=====================================================
+
+Auth:
+  - POST /login
+  - POST /register
+  - GET  /activate
+
+Profile:
+  - GET  /profile
+
+Categories:
+  - GET    /categories
+  - GET    /categories/{type}
+  - POST   /categories
+  - PUT    /categories/{categoryId}
+
+Dashboard:
+  - GET    /dashboard
+
+Income:
+  - GET    /incomes
+  - POST   /incomes
+  - DELETE /incomes/{id}
+
+Expense:
+  - GET    /expences
+  - POST   /expences
+  - DELETE /expences/{id}
+
+Filter:
+  - POST   /filter
+
+Health:
+  - GET    /status
+
+External:
+  - POST   Cloudinary image upload
+
+=====================================================
+GLOBAL STYLES ADDED (src/index.css)
+=====================================================
+
+  - Modal slide-up animation (.animate-in)
+  - Custom scrollbar styling (thin, rounded)
+  - Existing font imports preserved
+
+=====================================================
+EXISTING CODE NOT CHANGED
+=====================================================
+
+  - src/App.jsx (routing structure preserved)
+  - src/main.jsx (entry point preserved)
+  - src/context/AppContext.jsx (context structure preserved)
+  - src/components/sideBar.jsx (sidebar preserved)
+  - src/components/input.jsx (input component preserved)
+  - src/components/profilePhotoSelector.jsx (preserved)
+  - src/util/axiosConfig.jsx (interceptors preserved)
+  - src/util/validation.js (email validation preserved)
+  - src/util/uploadProfileImage.js (cloudinary upload preserved)
+  - src/assets/assets.js (sidebar data preserved)
+  - Login/Signup UI design and styling preserved
+
+=====================================================
+BUILD STATUS
+=====================================================
+
+  ✅ Production build successful (npm run build)
+  ✅ No compilation errors
+  ✅ All imports resolved
+  ✅ All routes functional
+
+=====================================================
+NOTES
+=====================================================
+
+  - Backend URL is set to http://localhost:8080/api/v1.0
+  - Production URL is commented out in apiEndPoints.js
+  - Expense endpoints use "/expences" (matching backend typo)
+  - All authenticated requests automatically include Bearer token
+  - 401 responses redirect to login page
+  - Emoji icons are stored as image URLs from emoji-picker-react
+
+=====================================================

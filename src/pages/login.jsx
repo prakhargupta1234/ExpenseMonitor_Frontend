@@ -97,51 +97,35 @@ const Login =()=>{
                             }}
                             placeholder="Enter your email address"
                             type="text"
-                        />  
-
-                             <Input 
-                                label="Password"
-                                value={password}
-                                onChange={(e) =>{
-                                    setPassword(e.target.value)
-                                }}
-                                placeholder="Enter your password"
-                                type="password"
-                            />
-
-
-                {error &&(
-                    <p className="text-red-500.text-sm.mt-2 text-center bg-red-50 p-2 rounded">
-                        {error}
-                    </p>
-                )}
-
-              <button disabled={isLoading}
-                        className={`w-full py-3 text-lg font-medium text-white bg-purple-900 rounded-lg shadow-md hover:bg-purple-700 active:scale-[0.98] transition-all duration-300 ease-in-out flex items-center justify-center gap-2 ${isLoading? 
-                            `opacity-70 cursor-not-allowed `:``
-                        }`} 
-                        type="submit"
+                        />
+                        <Input 
+                            label="Password"
+                            value={password}
+                            onChange={(e) =>{
+                                setPassword(e.target.value)
+                            }}
+                            placeholder="Enter your password"
+                            type="password"
+                        />
+                        {error && <p className="text-red-500 text-sm">{error}</p>}
+                        <button
+                            type="submit"
+                            className="w-full bg-black text-white py-2 rounded-md hover:bg-gray-800 transition-colors duration-300 flex items-center justify-center"
+                            disabled={isLoading}
                         >
-                        {isLoading?(
-                            <>
-                            <LoaderCircle className=" animate-spin w-5 h-5 "/>
-                            Logging In...
-                            </>
-                        ):(
-                            "Login"
-                        )}
-                </button>
-
-                <p className="text-sm text-slate-800 text-center mt-6">
-                    Don't have an account?
-                    <Link to="/signup" className="font-medium text-primary underline hover:text-primary-dark transition-colors">Signup</Link>
-                </p>
+                            {isLoading ? <LoaderCircle className="animate-spin" /> : "Login"}
+                        </button>
             </form>
+            <p className="text-center text-sm text-slate-700 mt-4">
+                Don't have an account?{" "}
+                <Link to="/signup" className="text-black font-semibold hover:underline">
+                    Sign Up
+                </Link>
+            </p>
         </div>
     </div>
-
-    </div>
-    )
-};
+</div>
+);
+}
 
 export default Login;

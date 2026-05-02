@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Menu, X, User, LogOut } from "lucide-react";
 import logo from "../assets/logo.png";
 import { useContext, useState, useRef, useEffect } from "react";
+import SideBar from "./sideBar";
 
 
 const MenuBar = ({activeMenu}) => {
@@ -67,7 +68,11 @@ const MenuBar = ({activeMenu}) => {
         <button
             onClick={() => setShowDropdown(!showDropdown)}
             className="flex items-center justify-center w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-purple-800 focus:ring-offset-2">
-            <User className="text-purple-500" />
+            {user?.profileImageUrl ? (
+                <img src={user.profileImageUrl} alt="profile" className="w-10 h-10 rounded-full object-cover" />
+            ) : (
+                <User className="text-purple-500" />
+            )}
         </button>
 
         {/* DropDown Menu */}
@@ -85,7 +90,7 @@ const MenuBar = ({activeMenu}) => {
 
                         <div className="flex-1 min-w-0">
                             <p className="text-sm font-medium text-gray-900 truncate">
-                                {user?.fullName}
+                                {user?.fullName || user?.name}
                             </p>
                             <p className="text-xs text-gray-500 truncate">
                                 {user?.email}
@@ -109,8 +114,8 @@ const MenuBar = ({activeMenu}) => {
         </div>
             {/* Mobile side menu */}
             {openSideMenu && (
-            <div className="fixed left-0 right-0 bg-white border-b border-gray-200 lg:hidden z-20 top-[73px]">
-                <Sidebar activeMenu={activeMenu} />
+            <div className="fixed inset-x-0 bottom-0 top-[73px] bg-white lg:hidden z-40 overflow-hidden">
+                <SideBar activeMenu={activeMenu} onMenuItemClick={() => setOpenSideMenu(false)} />
             </div>
             )}
         </div>

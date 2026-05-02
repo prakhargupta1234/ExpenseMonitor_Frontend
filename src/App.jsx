@@ -7,6 +7,8 @@ import Expense from "./pages/expense";
 import Filter from "./pages/filter";
 import Login from "./pages/login";
 import Signup from "./pages/signup";
+import Activate from "./pages/activate";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 
 const App = () => {
@@ -16,17 +18,19 @@ const App = () => {
      <BrowserRouter>
       <Routes>
         <Route path="/" element={<Root />} />
-        <Route path="/dashboard" element={<Home />} />
-        <Route path="/category" element={<Category />} />
-        <Route path="/income" element={<Income />} />
-        <Route path="/expense" element={<Expense />} />
-        <Route path="/filter" element={<Filter />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/activate" element={<Activate />} />
+
+        <Route element={<ProtectedRoute />}>
+          <Route path="/dashboard" element={<Home />} />
+          <Route path="/category" element={<Category />} />
+          <Route path="/income" element={<Income />} />
+          <Route path="/expense" element={<Expense />} />
+          <Route path="/filter" element={<Filter />} />
+        </Route>
       </Routes>
     </BrowserRouter>
-
-    
     </>
   )
 }
