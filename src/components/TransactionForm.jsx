@@ -12,7 +12,7 @@ const TransactionForm = ({ type, onSuccess, onCancel }) => {
     const [categories, setCategories] = useState([]);
     const [icon, setIcon] = useState("");
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-    
+
     const [isLoading, setIsLoading] = useState(false);
     const [isFetchingCategories, setIsFetchingCategories] = useState(true);
     const [error, setError] = useState("");
@@ -63,11 +63,11 @@ const TransactionForm = ({ type, onSuccess, onCancel }) => {
 
         setIsLoading(true);
         try {
-            const endpoint = isIncome ? API_ENDPOINTS.CREATE_INCOME : API_ENDPOINTS.CREATE_EXPENSE;
+            const endpoint = isIncome ? API_ENDPOINTS.ADD_INCOME : API_ENDPOINTS.ADD_EXPENSE;
             const payload = {
                 amount: Number(amount),
                 date,
-                description: description.trim(),
+                name: description.trim(),
                 categoryId: Number(categoryId),
                 ...(icon && { icon })
             };
@@ -87,7 +87,7 @@ const TransactionForm = ({ type, onSuccess, onCancel }) => {
             {/* Icon Selector */}
             <div className="relative pt-2">
                 <div className="flex items-center gap-4">
-                    <div 
+                    <div
                         onClick={() => setShowEmojiPicker(!showEmojiPicker)}
                         className="w-14 h-14 bg-purple-50 rounded-xl flex items-center justify-center cursor-pointer hover:bg-purple-100 transition-colors shadow-sm border border-purple-100"
                     >
@@ -101,7 +101,7 @@ const TransactionForm = ({ type, onSuccess, onCancel }) => {
                             <span className="text-3xl leading-none">😃</span>
                         )}
                     </div>
-                    <span 
+                    <span
                         onClick={() => setShowEmojiPicker(!showEmojiPicker)}
                         className="text-sm font-medium text-gray-700 cursor-pointer hover:text-[#7c26f0] transition-colors"
                     >
@@ -110,9 +110,9 @@ const TransactionForm = ({ type, onSuccess, onCancel }) => {
                 </div>
                 {showEmojiPicker && (
                     <div className="absolute top-16 left-0 z-50 bg-white shadow-xl rounded-lg border border-gray-100">
-                        <EmojiPicker 
-                            onEmojiClick={onEmojiClick} 
-                            width={320} 
+                        <EmojiPicker
+                            onEmojiClick={onEmojiClick}
+                            width={320}
                             height={350}
                             searchPlaceHolder="Search emoji..."
                         />

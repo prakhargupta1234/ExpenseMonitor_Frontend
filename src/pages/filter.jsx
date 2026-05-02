@@ -25,18 +25,33 @@ const Filter = () => {
 
     const handleFilter = async (e) => {
         e?.preventDefault();
+
+        // Validation: Dates are mandatory
+        if (!startDate || !endDate) {
+            toast.error("Please select both Start Date and End Date");
+            return;
+        }
+
         setLoading(true);
         setHasSearched(true);
 
         try {
-            const payload = { type };
-            if (startDate) payload.startDate = startDate;
-            if (endDate) payload.endDate = endDate;
-            if (keyword.trim()) payload.keyword = keyword.trim();
+            const payload = { 
+                type: type.toUpperCase(),
+                categoryType: type.toUpperCase(),
+                transactionType: type.toUpperCase(),
+                startDate,
+                endDate 
+            };
+            
+            if (keyword.trim()) {
+                payload.keyword = keyword.trim();
+                payload.description = keyword.trim();
+            }
             if (sortField) payload.sortField = sortField;
             if (sortOrder) payload.sortOrder = sortOrder;
 
-            const response = await axiosConfig.post(API_ENDPOINTS.FILTER, payload);
+            const response = await axiosConfig.post(API_ENDPOINTS.APPLY_FILTERS, payload);
             setResults(response.data || []);
         } catch (error) {
             console.error("Failed to filter:", error);
@@ -59,7 +74,12 @@ const Filter = () => {
     };
 
     // Calculate total
-    const total = results.reduce((sum, item) => sum + Number(item.amount), 0);
+    const total = results.reduce((sum, item) => {
+        const amount = typeof item.amount === 'string' 
+            ? Number(item.amount.replace(/[^\d.-]/g, '')) 
+            : Number(item.amount);
+        return sum + (isNaN(amount) ? 0 : amount);
+    }, 0);
 
     return (
         <div>
@@ -78,22 +98,20 @@ const Filter = () => {
                                         <button
                                             type="button"
                                             onClick={() => setType("income")}
-                                            className={`flex-1 py-2 rounded-lg text-sm font-medium transition-colors duration-200 ${
-                                                type === "income"
+                                            className={`flex-1 py-2 rounded-lg text-sm font-medium transition-colors duration-200 ${type === "income"
                                                     ? "bg-green-600 text-white"
                                                     : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                                            }`}
+                                                }`}
                                         >
                                             Income
                                         </button>
                                         <button
                                             type="button"
                                             onClick={() => setType("expense")}
-                                            className={`flex-1 py-2 rounded-lg text-sm font-medium transition-colors duration-200 ${
-                                                type === "expense"
+                                            className={`flex-1 py-2 rounded-lg text-sm font-medium transition-colors duration-200 ${type === "expense"
                                                     ? "bg-red-600 text-white"
                                                     : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                                            }`}
+                                                }`}
                                         >
                                             Expense
                                         </button>
@@ -157,11 +175,10 @@ const Filter = () => {
                                         <button
                                             type="button"
                                             onClick={() => setSortOrder("desc")}
-                                            className={`flex-1 py-2 rounded-lg text-sm font-medium transition-colors duration-200 flex items-center justify-center gap-1 ${
-                                                sortOrder === "desc"
+                                            className={`flex-1 py-2 rounded-lg text-sm font-medium transition-colors duration-200 flex items-center justify-center gap-1 ${sortOrder === "desc"
                                                     ? "bg-black text-white"
                                                     : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                                            }`}
+                                                }`}
                                         >
                                             <ArrowUpDown size={14} />
                                             Newest
@@ -169,11 +186,10 @@ const Filter = () => {
                                         <button
                                             type="button"
                                             onClick={() => setSortOrder("asc")}
-                                            className={`flex-1 py-2 rounded-lg text-sm font-medium transition-colors duration-200 flex items-center justify-center gap-1 ${
-                                                sortOrder === "asc"
+                                            className={`flex-1 py-2 rounded-lg text-sm font-medium transition-colors duration-200 flex items-center justify-center gap-1 ${sortOrder === "asc"
                                                     ? "bg-black text-white"
                                                     : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                                            }`}
+                                                }`}
                                         >
                                             <ArrowUpDown size={14} />
                                             Oldest

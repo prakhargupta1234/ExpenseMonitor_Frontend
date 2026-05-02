@@ -30,7 +30,7 @@ const Input = ({ label, value, onChange, placeholder, type }) => {
                         onClick={toggleShowPassword}
                         className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
                     >
-                       {showPassword ? (
+                        {showPassword ? (
                             <Eye
                                 size={20}
                                 className="text-purple-900"

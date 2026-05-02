@@ -11,36 +11,36 @@ import CategoryForm from "../components/CategoryForm";
 import PageLoader from "../components/PageLoader";
 
 
-const Category =()=>{
+const Category = () => {
     useUser();
 
-    const[loading , setLoading] = useState(false);
-    const[categoryData , setCategoryData] = useState([]);
-    const[openAddModal , setOpenAddModal] = useState(false);
-    const[openEditModal , setOpenEditModal] = useState(false);
-    const[selectedCategory , setSelectedCategory] = useState(null);
-    const[isSaving, setIsSaving] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [categoryData, setCategoryData] = useState([]);
+    const [openAddModal, setOpenAddModal] = useState(false);
+    const [openEditModal, setOpenEditModal] = useState(false);
+    const [selectedCategory, setSelectedCategory] = useState(null);
+    const [isSaving, setIsSaving] = useState(false);
 
-    const fetchCategoryDetails = async()=>{
-        if(loading) return;
+    const fetchCategoryDetails = async () => {
+        if (loading) return;
 
         setLoading(true);
-        try{
+        try {
             const response = await axiosConfig.get(API_ENDPOINTS.GET_ALL_CATEGORIES);
-            if(response.status === 200){
+            if (response.status === 200) {
                 setCategoryData(response.data);
             }
-        }catch(error){
+        } catch (error) {
             console.error("Something went wrong please try again later", error);
             toast.error("Failed to load categories");
-        }finally{
+        } finally {
             setLoading(false);
         }
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         fetchCategoryDetails();
-    },[]);
+    }, []);
 
     const handleAddCategory = async (formData) => {
         const categoryExists = categoryData.some(
@@ -57,11 +57,11 @@ const Category =()=>{
             const response = await axiosConfig.post(API_ENDPOINTS.ADD_CATEGORY, formData);
             if (response.status === 201) {
                 toast.success("Category added successfully!");
-                
+
                 // Instantly update the list with the new category
                 const newCategory = response.data || { ...formData, id: Date.now() };
                 setCategoryData(prev => [...prev, newCategory]);
-                
+
                 setOpenAddModal(false);
             }
         } catch (error) {
@@ -76,9 +76,9 @@ const Category =()=>{
         if (!selectedCategory) return;
 
         const categoryExists = categoryData.some(
-            (c) => c.id !== selectedCategory.id && 
-                   c.name.toLowerCase() === formData.name.toLowerCase() && 
-                   c.type === formData.type
+            (c) => c.id !== selectedCategory.id &&
+                c.name.toLowerCase() === formData.name.toLowerCase() &&
+                c.type === formData.type
         );
 
         if (categoryExists) {
@@ -89,19 +89,19 @@ const Category =()=>{
         setIsSaving(true);
         try {
             const response = await axiosConfig.put(
-                API_ENDPOINTS.UPDATE_CATEGORY(selectedCategory.id), 
+                API_ENDPOINTS.UPDATE_CATEGORY(selectedCategory.id),
                 formData
             );
             if (response.status === 200) {
                 toast.success("Category updated successfully!");
-                
+
                 // Update local state instantly to reflect type and color changes
-                setCategoryData(prev => 
-                    prev.map(c => 
+                setCategoryData(prev =>
+                    prev.map(c =>
                         c.id === selectedCategory.id ? { ...c, ...response.data, ...formData } : c
                     )
                 );
-                
+
                 setOpenEditModal(false);
                 setSelectedCategory(null);
             }
@@ -122,7 +122,7 @@ const Category =()=>{
         <div>
             <Dashboard activeMenu="Category">
                 <div className="my-5 mx-auto">
-                {/* Add button to add category*/}
+                    {/* Add button to add category*/}
                     <div className="flex justify-between items-center mb-5">
                         <h2 className="text-2xl font-semibold">All Categories</h2>
                         <button
@@ -139,8 +139,8 @@ const Category =()=>{
                         <PageLoader />
                     ) : (
                         /* category list */
-                        <CategoryList 
-                            categories={categoryData} 
+                        <CategoryList
+                            categories={categoryData}
                             onEditCategory={onEditCategory}
                         />
                     )}
@@ -177,5 +177,6 @@ const Category =()=>{
             </Modal>
         </div>
     )
+
 };
 export default Category;

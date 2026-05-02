@@ -18,11 +18,11 @@ const CategoryForm = ({ onSubmit, isLoading, initialData = null, onCancel }) => 
             return;
         }
 
-        onSubmit({ 
+        onSubmit({
             ...(initialData?.id ? { id: initialData.id } : {}),
-            name: name.trim(), 
-            icon, 
-            type 
+            name: name.trim(),
+            icon,
+            type
         });
     };
 
@@ -36,7 +36,7 @@ const CategoryForm = ({ onSubmit, isLoading, initialData = null, onCancel }) => 
             {/* Icon Selector */}
             <div className="relative">
                 <div className="flex items-center gap-4">
-                    <div 
+                    <div
                         onClick={() => setShowEmojiPicker(!showEmojiPicker)}
                         className="w-14 h-14 bg-purple-50 rounded-xl flex items-center justify-center cursor-pointer hover:bg-purple-100 transition-colors shadow-sm border border-purple-100"
                     >
@@ -46,7 +46,7 @@ const CategoryForm = ({ onSubmit, isLoading, initialData = null, onCancel }) => 
                             <span className="text-purple-400 text-2xl">+</span>
                         )}
                     </div>
-                    <span 
+                    <span
                         onClick={() => setShowEmojiPicker(!showEmojiPicker)}
                         className="text-sm font-medium text-gray-700 cursor-pointer hover:text-purple-700"
                     >
@@ -55,9 +55,9 @@ const CategoryForm = ({ onSubmit, isLoading, initialData = null, onCancel }) => 
                 </div>
                 {showEmojiPicker && (
                     <div className="absolute top-16 left-0 z-50 bg-white shadow-xl rounded-lg border border-gray-100">
-                        <EmojiPicker 
-                            onEmojiClick={onEmojiClick} 
-                            width={320} 
+                        <EmojiPicker
+                            onEmojiClick={onEmojiClick}
+                            width={320}
                             height={350}
                             searchPlaceHolder="Search emoji..."
                         />
@@ -100,9 +100,8 @@ const CategoryForm = ({ onSubmit, isLoading, initialData = null, onCancel }) => 
                 <button
                     type="submit"
                     disabled={isLoading}
-                    className={`py-2.5 px-6 bg-[#7c26f0] text-white rounded-lg hover:bg-[#6819d4] transition-colors duration-200 font-medium text-sm flex items-center justify-center gap-2 ${
-                        isLoading ? "opacity-60 cursor-not-allowed" : ""
-                    }`}
+                    className={`py-2.5 px-6 bg-[#7c26f0] text-white rounded-lg hover:bg-[#6819d4] transition-colors duration-200 font-medium text-sm flex items-center justify-center gap-2 ${isLoading ? "opacity-60 cursor-not-allowed" : ""
+                        }`}
                 >
                     {isLoading ? (
                         <>

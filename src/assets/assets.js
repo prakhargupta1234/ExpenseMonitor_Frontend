@@ -2,11 +2,11 @@ import logo from './logo.png';
 import background from './bgcimage.png';
 
 import { Coins, FunnelPlus, LayoutDashboard, List, Wallet } from "lucide-react";
-export const assets={
-    logo,
-    background,
+export const assets = {
+  logo,
+  background,
 }
- 
+
 export const SIDE_BAR_DATA = [
   {
     id: "01",
