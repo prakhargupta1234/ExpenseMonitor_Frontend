@@ -7,8 +7,7 @@ import { useEffect, useState } from "react";
 import axiosConfig from "../util/axiosConfig";
 import { API_ENDPOINTS } from "../util/apiEndPoints";
 import Modal from "../components/modal";
-import CategoryForm from "../components/CategoryForm";
-import PageLoader from "../components/PageLoader";
+import AddCategoryForm from "../components/AddCategoryForm";
 
 
 const Category = () => {
@@ -16,10 +15,9 @@ const Category = () => {
 
     const [loading, setLoading] = useState(false);
     const [categoryData, setCategoryData] = useState([]);
-    const [openAddModal, setOpenAddModal] = useState(false);
-    const [openEditModal, setOpenEditModal] = useState(false);
+    const [openAddCategoryModal, setOpenAddCategoryModal] = useState(false);
+    const [openEditCategoryModal, setOpenEditCategoryModal] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState(null);
-    const [isSaving, setIsSaving] = useState(false);
 
     const fetchCategoryDetails = async () => {
         if (loading) return;
@@ -28,11 +26,12 @@ const Category = () => {
         try {
             const response = await axiosConfig.get(API_ENDPOINTS.GET_ALL_CATEGORIES);
             if (response.status === 200) {
+                console.log("Category data", response.data);
                 setCategoryData(response.data);
             }
         } catch (error) {
             console.error("Something went wrong please try again later", error);
-            toast.error("Failed to load categories");
+            toast.error(error.message);
         } finally {
             setLoading(false);
         }
@@ -42,141 +41,86 @@ const Category = () => {
         fetchCategoryDetails();
     }, []);
 
-    const handleAddCategory = async (formData) => {
-        const categoryExists = categoryData.some(
-            (c) => c.name.toLowerCase() === formData.name.toLowerCase() && c.type === formData.type
-        );
-
-        if (categoryExists) {
-            toast.error("Category already exists");
-            return;
-        }
-
-        setIsSaving(true);
+    const handleAddCategory = async (category) => {
         try {
-            const response = await axiosConfig.post(API_ENDPOINTS.ADD_CATEGORY, formData);
-            if (response.status === 201) {
+            const response = await axiosConfig.post(API_ENDPOINTS.ADD_CATEGORY, category);
+            if (response.status === 201 || response.status === 200) {
                 toast.success("Category added successfully!");
-
-                // Instantly update the list with the new category
-                const newCategory = response.data || { ...formData, id: Date.now() };
-                setCategoryData(prev => [...prev, newCategory]);
-
-                setOpenAddModal(false);
+                setOpenAddCategoryModal(false);
+                fetchCategoryDetails();
             }
         } catch (error) {
-            console.error("Failed to add category:", error);
+            console.error("Error adding category", error);
             toast.error(error.response?.data?.message || "Failed to add category");
-        } finally {
-            setIsSaving(false);
         }
     };
 
-    const handleEditCategory = async (formData) => {
-        if (!selectedCategory) return;
-
-        const categoryExists = categoryData.some(
-            (c) => c.id !== selectedCategory.id &&
-                c.name.toLowerCase() === formData.name.toLowerCase() &&
-                c.type === formData.type
-        );
-
-        if (categoryExists) {
-            toast.error("Category already exists");
-            return;
-        }
-
-        setIsSaving(true);
+    const handleUpdateCategory = async (category) => {
         try {
-            const response = await axiosConfig.put(
-                API_ENDPOINTS.UPDATE_CATEGORY(selectedCategory.id),
-                formData
-            );
+            const response = await axiosConfig.put(API_ENDPOINTS.UPDATE_CATEGORY(category.id), category);
             if (response.status === 200) {
                 toast.success("Category updated successfully!");
-
-                // Update local state instantly to reflect type and color changes
-                setCategoryData(prev =>
-                    prev.map(c =>
-                        c.id === selectedCategory.id ? { ...c, ...response.data, ...formData } : c
-                    )
-                );
-
-                setOpenEditModal(false);
-                setSelectedCategory(null);
+                setOpenEditCategoryModal(false);
+                fetchCategoryDetails();
             }
         } catch (error) {
-            console.error("Failed to update category:", error);
+            console.error("Error updating category", error);
             toast.error(error.response?.data?.message || "Failed to update category");
-        } finally {
-            setIsSaving(false);
         }
     };
 
-    const onEditCategory = (category) => {
+    const onEditClick = (category) => {
         setSelectedCategory(category);
-        setOpenEditModal(true);
+        setOpenEditCategoryModal(true);
     };
+
 
     return (
         <div>
             <Dashboard activeMenu="Category">
                 <div className="my-5 mx-auto">
                     {/* Add button to add category*/}
-                    <div className="flex justify-between items-center mb-5">
-                        <h2 className="text-2xl font-semibold">All Categories</h2>
+                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+                        <div>
+                            <h2 className="text-3xl font-bold text-gray-800 tracking-tight">All Categories</h2>
+                            <p className="text-gray-500 mt-1">Manage your expense and income categories</p>
+                        </div>
                         <button
-                            onClick={() => setOpenAddModal(true)}
-                            className="flex items-center gap-1.5 bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors duration-200 text-sm font-medium"
+                            onClick={() => setOpenAddCategoryModal(true)}
+                            className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 shadow-lg shadow-indigo-100 hover:shadow-xl hover:shadow-indigo-200 active:scale-95 group"
                         >
-                            <Plus size={16} />
-                            Add Category
+                            <Plus size={20} className="transition-transform duration-300 group-hover:rotate-90" />
+                            <span>Add Category</span>
                         </button>
                     </div>
 
-                    {/* Loading state */}
-                    {loading ? (
-                        <PageLoader />
-                    ) : (
-                        /* category list */
-                        <CategoryList
-                            categories={categoryData}
-                            onEditCategory={onEditCategory}
+                    {/* category list */}
+                    <CategoryList categories={categoryData} onEditCategory={onEditClick} />
+
+                    {/* add the modal */}
+                    <Modal 
+                        isOpen={openAddCategoryModal} 
+                        onClose={() => setOpenAddCategoryModal(false)}
+                        title="Add New Category"
+                    >
+                        <AddCategoryForm onAddCategory={handleAddCategory} />
+                    </Modal>
+
+                    {/* edit the modal */}
+                    <Modal 
+                        isOpen={openEditCategoryModal} 
+                        onClose={() => setOpenEditCategoryModal(false)}
+                        title="Edit Category"
+                    >
+                        <AddCategoryForm 
+                            onAddCategory={handleUpdateCategory} 
+                            initialCategoryData={selectedCategory}
+                            isEditing={true}
                         />
-                    )}
+                    </Modal>
                 </div>
             </Dashboard>
-
-            {/* Add Category Modal */}
-            <Modal
-                isOpen={openAddModal}
-                onClose={() => setOpenAddModal(false)}
-                title="Add New Category"
-            >
-                <CategoryForm
-                    onSubmit={handleAddCategory}
-                    isLoading={isSaving}
-                    onCancel={() => setOpenAddModal(false)}
-                />
-            </Modal>
-
-            {/* Edit Category Modal */}
-            <Modal
-                isOpen={openEditModal}
-                onClose={() => { setOpenEditModal(false); setSelectedCategory(null); }}
-                title="Edit Category"
-            >
-                {selectedCategory && (
-                    <CategoryForm
-                        onSubmit={handleEditCategory}
-                        isLoading={isSaving}
-                        initialData={selectedCategory}
-                        onCancel={() => { setOpenEditModal(false); setSelectedCategory(null); }}
-                    />
-                )}
-            </Modal>
         </div>
     )
-
 };
 export default Category;

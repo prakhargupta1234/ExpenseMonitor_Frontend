@@ -65,16 +65,15 @@ const AddCategoryForm = ({onAddCategory, initialCategoryData, isEditing}) => {
                     type="button"
                     onClick={handleSubmit}
                     disabled={loading}
-                    className="add-btn add-btn-fill">
+                    className="w-full sm:w-auto flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 disabled:bg-gray-400 text-white px-8 py-3 rounded-xl font-bold transition-all duration-300 shadow-lg shadow-indigo-100 hover:shadow-xl hover:shadow-indigo-200 active:scale-95 mb-4"
+                >
                     {loading ? (
                         <>
-                            <LoaderCircle className="w-4 h-4 animate-spin"/>
-                            {isEditing ? "Updating..." : "Adding..."}
+                            <LoaderCircle className="w-5 h-5 animate-spin" />
+                            <span>{isEditing ? "Updating..." : "Adding..."}</span>
                         </>
-                    ): (
-                        <>
-                            {isEditing ? "Update Category" : "Add Category"}
-                        </>
+                    ) : (
+                        <span>{isEditing ? "Update Category" : "Add Category"}</span>
                     )}
                 </button>
             </div>
