@@ -2,7 +2,7 @@ import { useState } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import Home from "./pages/home";
-import Category from "./pages/category";
+import Category from "./pages/Category";
 import Income from "./pages/income";
 import Expense from "./pages/expense";
 import Filter from "./pages/filter";
@@ -21,7 +21,7 @@ const App = () => {
 
   return (
     <>
-      <Toaster/>
+      <Toaster />
 
       {!isInitialized && (
         <AppInitializer onComplete={() => {
@@ -53,9 +53,9 @@ const App = () => {
 
 const Root = () => {
   const isAuthenticated = !!localStorage.getItem("token");
-  return isAuthenticated? (
+  return isAuthenticated ? (
     <Navigate to="/dashboard" />
-  ):(
+  ) : (
     <Navigate to="/login" />
   );
 }
