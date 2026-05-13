@@ -1,0 +1,23 @@
+# BACKEND SERVER KEEP-ALIVE CONFIGURATION
+
+To prevent the Render backend server from spinning down due to inactivity (common on the free tier), a background "heartbeat" has been implemented.
+
+## How it works:
+The application pings the backend's health check endpoint (https://expensemonitor-backend.onrender.com/api/v1.0/health) every 5 minutes while the frontend is open in a browser.
+
+## How to Disable/Close this feature:
+If you want to stop the server from being kept alive, follow these steps:
+
+1. Open the file: `src/main.jsx`
+2. Locate the line: `startKeepAlive(5);`
+3. Comment it out or delete it:
+   ```javascript
+   // startKeepAlive(5);
+   ```
+
+## Files Involved:
+- `src/util/keepAlive.js`: Contains the logic for the periodic ping.
+- `src/main.jsx`: Initializes the ping on app startup.
+- `src/util/apiEndPoints.js`: Defines the health check endpoint.
+
+This feature is modular and commenting it out in `main.jsx` will NOT affect any other part of the application.
