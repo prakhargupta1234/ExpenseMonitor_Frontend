@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Plus, Coins, Download, Mail, LoaderCircle } from "lucide-react";
+import { useEffect, useState, useCallback } from "react";
+import { Plus, Coins, Download, Mail, LoaderCircle, TrendingDown } from "lucide-react";
 import Dashboard from "../components/dashboard";
 import { useUser } from "../hooks/useUser";
 import axiosConfig from "../util/axiosConfig";
@@ -24,8 +24,9 @@ const Expense = () => {
     const [isDownloading, setIsDownloading] = useState(false);
     const [isEmailing, setIsEmailing] = useState(false);
 
-    const fetchExpenses = async () => {
+    const fetchExpenses = useCallback(async () => {
         try {
+            setLoading(true);
             const response = await axiosConfig.get(API_ENDPOINTS.GET_ALL_EXPENSE);
             setExpenses(response.data || []);
         } catch (error) {
@@ -34,16 +35,15 @@ const Expense = () => {
         } finally {
             setLoading(false);
         }
-    };
+    }, []);
 
     useEffect(() => {
         fetchExpenses();
-    }, []);
+    }, [fetchExpenses]);
 
     const handleAddSuccess = () => {
         setShowAddModal(false);
         toast.success("Expense added successfully!");
-        setLoading(true);
         fetchExpenses();
     };
 
@@ -55,15 +55,14 @@ const Expense = () => {
         setIsDownloading(true);
         try {
             const response = await axiosConfig.get(API_ENDPOINTS.EXPENSE_EXCEL_DOWNLOAD, {
-                responseType: 'blob', // Important for handling binary data
+                responseType: 'blob',
             });
             
-            // Create a blob URL and trigger download
             const blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
             const url = window.URL.createObjectURL(blob);
             const link = document.createElement('a');
             link.href = url;
-            link.setAttribute('download', 'Expense_Report.xlsx'); // filename
+            link.setAttribute('download', 'Expense_Report.xlsx');
             document.body.appendChild(link);
             link.click();
             link.parentNode.removeChild(link);
@@ -107,7 +106,6 @@ const Expense = () => {
         }
     };
 
-    // Calculate total
     const totalExpense = expenses.reduce((sum, item) => {
         const amount = typeof item.amount === 'string' 
             ? Number(item.amount.replace(/[^\d.-]/g, '')) 
@@ -116,90 +114,88 @@ const Expense = () => {
     }, 0);
 
     return (
-        <div>
-            <Dashboard activeMenu="Expense">
-                <div className="my-5 mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
-                    {/* Header */}
-                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-5">
-                        <div>
-                            <h2 className="text-2xl font-semibold">Expenses</h2>
-                            <p className="text-sm text-gray-500 mt-1">This month's expenses</p>
-                        </div>
-                        <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
-                            <button
-                                onClick={handleEmail}
-                                disabled={isEmailing}
-                                className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 border border-gray-200 ${isEmailing ? 'bg-gray-50 text-gray-400 cursor-not-allowed' : 'bg-white text-gray-700 hover:bg-gray-50'}`}
-                            >
-                                {isEmailing ? <LoaderCircle size={16} className="animate-spin" /> : <Mail size={16} />}
-                                {isEmailing ? 'Sending...' : 'Email'}
-                            </button>
-                            <button
-                                onClick={handleDownload}
-                                disabled={isDownloading}
-                                className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 border border-gray-200 ${isDownloading ? 'bg-gray-50 text-gray-400 cursor-not-allowed' : 'bg-white text-gray-700 hover:bg-gray-50'}`}
-                            >
-                                {isDownloading ? <LoaderCircle size={16} className="animate-spin" /> : <Download size={16} />}
-                                {isDownloading ? 'Downloading...' : 'Download'}
-                            </button>
-                            <button
-                                onClick={() => setShowAddModal(true)}
-                                className="flex items-center gap-1.5 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors duration-200 text-sm font-medium"
-                            >
-                                <Plus size={16} />
-                                Add Expense
-                            </button>
-                        </div>
+        <Dashboard activeMenu="Expense">
+            <div>
+                {/* Header */}
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+                    <div>
+                        <h2 className="text-2xl font-bold text-gray-900">Expenses</h2>
+                        <p className="text-sm text-gray-500 mt-1">Manage and track your monthly spending</p>
                     </div>
-
-                    {/* Chart */}
-                    {!loading && expenses.length > 0 && <ExpenseChart expenses={expenses} />}
-
-                    {/* Total Summary */}
-                    {!loading && expenses.length > 0 && (
-                        <div className="bg-red-50 border border-red-100 rounded-xl p-4 mb-5 flex items-center justify-between">
-                            <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
-                                    <Coins className="w-5 h-5 text-red-600" />
-                                </div>
-                                <div>
-                                    <p className="text-sm text-red-700 font-medium">Total Expenses</p>
-                                    <p className="text-xs text-red-600">
-                                        {expenses.length} transaction{expenses.length !== 1 ? "s" : ""}
-                                    </p>
-                                </div>
-                            </div>
-                            <p className="text-xl font-bold text-red-700">
-                                -₹{totalExpense.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
-                            </p>
-                        </div>
-                    )}
-
-                    {/* Content */}
-                    {loading ? (
-                        <PageLoader />
-                    ) : expenses.length === 0 ? (
-                        <EmptyState
-                            icon={Coins}
-                            title="No expenses recorded"
-                            description="Start tracking your expenses by adding your first entry."
-                            actionLabel="Add Expense"
-                            onAction={() => setShowAddModal(true)}
-                        />
-                    ) : (
-                        <div className="space-y-2">
-                            {expenses.map((expense) => (
-                                <TransactionCard
-                                    key={expense.id}
-                                    transaction={expense}
-                                    type="expense"
-                                    onDelete={handleDeleteClick}
-                                />
-                            ))}
-                        </div>
-                    )}
+                    <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
+                        <button
+                            onClick={handleEmail}
+                            disabled={isEmailing}
+                            className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-bold transition-all duration-200 border border-gray-200 shadow-sm ${isEmailing ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-white text-gray-700 hover:bg-gray-50 hover:border-emerald-200 active:scale-95'}`}
+                        >
+                            {isEmailing ? <LoaderCircle size={16} className="animate-spin" /> : <Mail size={16} />}
+                            {isEmailing ? 'Sending...' : 'Email'}
+                        </button>
+                        <button
+                            onClick={handleDownload}
+                            disabled={isDownloading}
+                            className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-bold transition-all duration-200 border border-gray-200 shadow-sm ${isDownloading ? 'bg-gray-50 text-gray-400 cursor-not-allowed' : 'bg-white text-gray-700 hover:bg-gray-50 hover:border-emerald-200 active:scale-95'}`}
+                        >
+                            {isDownloading ? <LoaderCircle size={16} className="animate-spin" /> : <Download size={16} />}
+                            {isDownloading ? 'Downloading...' : 'Download'}
+                        </button>
+                        <button
+                            onClick={() => setShowAddModal(true)}
+                            className="flex items-center gap-1.5 bg-red-600 text-white px-5 py-2.5 rounded-xl hover:bg-red-700 transition-all duration-300 text-sm font-bold shadow-lg shadow-red-100 active:scale-95"
+                        >
+                            <Plus size={18} />
+                            Add Expense
+                        </button>
+                    </div>
                 </div>
-            </Dashboard>
+
+                {/* Chart */}
+                {!loading && expenses.length > 0 && <ExpenseChart expenses={expenses} />}
+
+                {/* Total Summary */}
+                {!loading && expenses.length > 0 && (
+                    <div className="bg-red-50 border border-red-100 rounded-2xl p-5 mb-6 flex items-center justify-between shadow-sm">
+                        <div className="flex items-center gap-4">
+                            <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow-sm">
+                                <TrendingDown className="w-6 h-6 text-red-600" />
+                            </div>
+                            <div>
+                                <p className="text-xs font-bold text-red-800 uppercase tracking-widest">Total Expenses</p>
+                                <p className="text-[11px] text-red-600 font-medium">
+                                    {expenses.length} transaction{expenses.length !== 1 ? "s" : ""} recorded
+                                </p>
+                            </div>
+                        </div>
+                        <p className="text-2xl font-bold text-red-700">
+                            -₹{totalExpense.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+                        </p>
+                    </div>
+                )}
+
+                {/* Content */}
+                {loading ? (
+                    <PageLoader />
+                ) : expenses.length === 0 ? (
+                    <EmptyState
+                        icon={Coins}
+                        title="No expenses recorded"
+                        description="Start tracking your expenses by adding your first entry."
+                        actionLabel="Add Expense"
+                        onAction={() => setShowAddModal(true)}
+                    />
+                ) : (
+                    <div className="space-y-3">
+                        {expenses.map((expense) => (
+                            <TransactionCard
+                                key={expense.id}
+                                transaction={expense}
+                                type="expense"
+                                onDelete={handleDeleteClick}
+                            />
+                        ))}
+                    </div>
+                )}
+            </div>
 
             {/* Add Expense Modal */}
             <Modal
@@ -222,7 +218,7 @@ const Expense = () => {
                 isDeleting={isDeleting}
                 itemName="Expense"
             />
-        </div>
+        </Dashboard>
     );
 };
 

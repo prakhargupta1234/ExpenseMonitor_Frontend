@@ -1,0 +1,92 @@
+# PROJECT DOCUMENTATION: MONEY MANAGER (EXPENSE MONITOR)
+
+This document provides a comprehensive overview of the project structure, frontend-backend integration, and key functionalities to assist in future UI updates while maintaining backend compatibility.
+
+## 1. PROJECT OVERVIEW
+A web application for managing personal finances, tracking incomes, and monitoring expenses with categorization and filtering capabilities.
+
+- **Frontend Tech**: React (Vite), Tailwind CSS, React Router, Lucide Icons, React Hot Toast.
+- **Backend URL**: https://expensemonitor-backend.onrender.com/api/v1.0
+- **Storage**: User tokens are stored in `localStorage` for authentication.
+
+---
+
+## 2. PROJECT STRUCTURE (FRONTEND)
+
+### Core Pages (`src/pages/`):
+- **Login (`Login.jsx`)**: User authentication entry point.
+- **Signup (`Signup.jsx`)**: New user registration.
+- **Activate (`activate.jsx`)**: Account activation/verification page.
+- **Dashboard (`Home.jsx`)**: Main overview with charts and summary data.
+- **Category (`Category.jsx`)**: Manage income and expense categories.
+- **Income (`Income.jsx`)**: Track and manage income sources.
+- **Expense (`Expense.jsx`)**: Track and manage spending.
+- **Filter (`Filter.jsx`)**: Advanced filtering for transactions.
+
+### Key Components (`src/components/`):
+- **Dashboard Layout**: Wrapper component providing the sidebar and navigation.
+- **CategoryList**: Displays categories with edit/delete options.
+- **AddCategoryForm**: Form for creating/updating categories.
+- **TransactionCard**: Reusable card for income/expense items.
+- **Modal**: Generic UI modal for forms and popups.
+- **ProtectedRoute**: Handles authentication-based route protection.
+
+---
+
+## 3. BACKEND API ENDPOINTS
+Defined in `src/util/apiEndPoints.js`. **DO NOT CHANGE THESE ENDPOINTS** when updating the UI.
+
+| Feature | Endpoint | Method |
+|---------|----------|--------|
+| Authentication | `/login`, `/register`, `/activate` | POST |
+| User Profile | `/profile` | GET |
+| Categories | `/categories` | GET, POST, PUT (via id) |
+| Category Type | `/categories/{type}` | GET |
+| Incomes | `/incomes` | GET, POST, DELETE (via id) |
+| Expenses | `/expences` | GET, POST, DELETE (via id) |
+| Excel Download | `/excel/download/income`, `/excel/download/expense` | GET |
+| Email Report | `/email/income-excel`, `/email/expense-excel` | POST |
+| Filters | `/filter` | POST |
+| Dashboard Data | `/dashboard` | GET |
+| Health Check | `/health` | GET |
+| Image Upload | Cloudinary API | POST |
+
+---
+
+## 4. FUNCTIONALITY DETAILS
+
+### Data Fetching
+Uses `axiosConfig.js` (located in `src/util/`) which includes interceptors for adding the Bearer token to headers automatically.
+
+### Category Management
+- Fetches all categories using `GET_ALL_CATEGORIES`.
+- Categories have a `name`, `type` (income/expense), and an `icon` (emoji or image URL).
+- Uses `ADD_CATEGORY` and `UPDATE_CATEGORY` for CRUD operations.
+
+### Keep-Alive Mechanism (`src/util/keepAlive.js`)
+- **Purpose**: Prevents the Render free-tier backend from sleeping.
+- **Mechanism**: Pings the `/health` endpoint every 5 minutes while the app is open.
+- **Activation**: Called in `src/main.jsx` using `startKeepAlive(5)`.
+- **How to Disable**: 
+    - Open `src/main.jsx`.
+    - Comment out or remove the line: `startKeepAlive(5);`.
+    - This will stop the "heartbeat" without affecting any other UI or logic.
+
+---
+
+## 5. UI UPDATE GUIDELINES
+When updating the UI:
+1. **Maintain Data Flow**: Ensure state management (using `useState`, `useEffect`, or `Context`) remains consistent with the current component logic.
+2. **Prop Drilling**: Respect the props passed to child components like `AddCategoryForm` (`onAddCategory`, `initialCategoryData`, `isEditing`).
+3. **Icons**: Continue using `lucide-react` for consistency or replace globally.
+4. **Tailwind Classes**: You can freely change Tailwind classes to update colors, spacing, and layout. Avoid changing the logical structure of interactive elements (buttons, inputs).
+
+---
+
+## 6. ASSETS & STYLING
+- **CSS**: Main styles in `src/index.css`.
+- **Design Rule**: No gradients are used in the current UI (Strict Instruction). Use solid colors like `indigo-600` for primary actions.
+- **Fonts**: Primary font is 'Outfit' (Google Fonts).
+
+---
+*Generated for the purpose of UI Modernization.*

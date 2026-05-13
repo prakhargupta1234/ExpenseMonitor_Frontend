@@ -4,14 +4,23 @@ export const AppContext = createContext();
 
 export const AppContextProvider = ({ children }) => {
     const [user, setUser] = useState(null);
+    const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
     const clearUser = () => {
         setUser(null);
-    }
+    };
+
+    const toggleSidebar = () => {
+        setSidebarCollapsed(prev => !prev);
+    };
+
     const contextValue = {
         user,
         setUser,
         clearUser,
+        sidebarCollapsed,
+        setSidebarCollapsed,
+        toggleSidebar,
     };
 
     return <AppContext.Provider value={contextValue}>{children}</AppContext.Provider>;

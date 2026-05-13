@@ -26,7 +26,6 @@ const Category = () => {
         try {
             const response = await axiosConfig.get(API_ENDPOINTS.GET_ALL_CATEGORIES);
             if (response.status === 200) {
-                console.log("Category data", response.data);
                 setCategoryData(response.data);
             }
         } catch (error) {
@@ -78,18 +77,18 @@ const Category = () => {
     return (
         <div>
             <Dashboard activeMenu="Category">
-                <div className="my-5 mx-auto">
-                    {/* Add button to add category*/}
-                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+                <div>
+                    {/* Header */}
+                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                         <div>
-                            <h2 className="text-3xl font-bold text-gray-800 tracking-tight">All Categories</h2>
-                            <p className="text-gray-500 mt-1">Manage your expense and income categories</p>
+                            <h2 className="text-2xl font-semibold text-gray-900">Categories</h2>
+                            <p className="text-sm text-gray-500 mt-1">Manage your expense and income categories</p>
                         </div>
                         <button
                             onClick={() => setOpenAddCategoryModal(true)}
-                            className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 shadow-lg shadow-indigo-100 hover:shadow-xl hover:shadow-indigo-200 active:scale-95 group"
+                            className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-xl font-semibold transition-all duration-300 text-sm shadow-sm hover:shadow-md active:scale-[0.97] group"
                         >
-                            <Plus size={20} className="transition-transform duration-300 group-hover:rotate-90" />
+                            <Plus size={18} className="transition-transform duration-300 group-hover:rotate-90" />
                             <span>Add Category</span>
                         </button>
                     </div>

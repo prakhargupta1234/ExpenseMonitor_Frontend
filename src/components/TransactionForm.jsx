@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { LoaderCircle } from "lucide-react";
+import { LoaderCircle, Image, X } from "lucide-react";
 import EmojiPicker from "emoji-picker-react";
 import axiosConfig from "../util/axiosConfig";
 import { API_ENDPOINTS } from "../util/apiEndPoints";
@@ -22,9 +22,16 @@ const TransactionForm = ({ type, onSuccess, onCancel }) => {
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const categoryType = isIncome ? "INCOME" : "EXPENSE";
-                const response = await axiosConfig.get(API_ENDPOINTS.CATEGORY_BY_TYPE(categoryType));
-                setCategories(response.data || []);
+                const response = await axiosConfig.get(API_ENDPOINTS.GET_ALL_CATEGORIES);
+                const allCategories = response.data || [];
+                
+                // Filter categories based on type
+                const targetType = isIncome ? "income" : "expense";
+                const filtered = allCategories.filter(cat => 
+                    cat.type?.toLowerCase() === targetType
+                );
+                
+                setCategories(filtered);
             } catch (err) {
                 console.error("Failed to fetch categories:", err);
                 setCategories([]);
@@ -83,125 +90,146 @@ const TransactionForm = ({ type, onSuccess, onCancel }) => {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="space-y-5">
-            {/* Icon Selector */}
-            <div className="relative pt-2">
-                <div className="flex items-center gap-4">
-                    <div
-                        onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-                        className="w-14 h-14 bg-purple-50 rounded-xl flex items-center justify-center cursor-pointer hover:bg-purple-100 transition-colors shadow-sm border border-purple-100"
-                    >
+        <form onSubmit={handleSubmit} className="space-y-6 p-4">
+            {/* Icon Selector - Floating Style */}
+            <div className="relative mb-4">
+                <div
+                    onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+                    className="flex items-center gap-4 cursor-pointer group"
+                >
+                    <div className="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center transition-all duration-200 border border-emerald-100 shadow-sm group-hover:shadow-md">
                         {icon ? (
                             icon.startsWith('http') || icon.startsWith('data:') ? (
-                                <img src={icon} alt="icon" className="w-8 h-8 object-contain" />
+                                <img src={icon} alt="icon" className="w-10 h-10 object-contain" />
                             ) : (
                                 <span className="text-3xl leading-none">{icon}</span>
                             )
                         ) : (
-                            <span className="text-3xl leading-none">😃</span>
+                            <Image className="w-6 h-6" />
                         )}
                     </div>
-                    <span
-                        onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-                        className="text-sm font-medium text-gray-700 cursor-pointer hover:text-[#7c26f0] transition-colors"
-                    >
-                        Change icon
-                    </span>
+                    <div>
+                        <p className="text-sm font-bold text-gray-800">Icon</p>
+                        <p className="text-xs text-emerald-600 font-medium">{icon ? "Change icon" : "Pick an icon"}</p>
+                    </div>
                 </div>
+
                 {showEmojiPicker && (
-                    <div className="absolute top-16 left-0 z-50 bg-white shadow-xl rounded-lg border border-gray-100">
+                    <div className="absolute top-16 left-0 z-[60] bg-white shadow-2xl rounded-2xl border border-gray-100 overflow-hidden animate-in fade-in zoom-in duration-200">
+                        <div className="flex justify-between items-center p-3 border-b border-gray-50 bg-gray-50/50">
+                            <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">Select Emoji</span>
+                            <button
+                                type="button"
+                                onClick={() => setShowEmojiPicker(false)}
+                                className="p-1 hover:bg-white rounded-full transition-colors text-gray-400 hover:text-gray-600"
+                            >
+                                <X size={16} />
+                            </button>
+                        </div>
                         <EmojiPicker
                             onEmojiClick={onEmojiClick}
                             width={320}
-                            height={350}
-                            searchPlaceHolder="Search emoji..."
+                            height={380}
+                            searchPlaceHolder="Search..."
+                            skinTonesDisabled
                         />
                     </div>
                 )}
             </div>
 
-            {/* Income/Expense Source */}
-            <div>
-                <label className="block text-sm font-semibold text-gray-800 mb-1.5">
-                    {isIncome ? "Income Source" : "Expense Source"}
-                </label>
-                <input
-                    type="text"
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    placeholder="e.g., job"
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-gray-700 focus:outline-none focus:border-[#7c26f0] focus:ring-1 focus:ring-[#7c26f0] transition-all shadow-sm"
-                />
-            </div>
+            {/* Form Fields */}
+            <div className="space-y-5">
+                <div>
+                    <label className="block text-[13px] font-semibold text-gray-700 mb-2">
+                        {isIncome ? "Income Source" : "Expense Name"}
+                    </label>
+                    <input
+                        type="text"
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                        placeholder={isIncome ? "e.g., Monthly Salary" : "e.g., Grocery Shopping"}
+                        className="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-700 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all shadow-sm bg-white"
+                    />
+                </div>
 
-            {/* Category */}
-            <div>
-                <label className="block text-sm font-semibold text-gray-800 mb-1.5">Category</label>
-                {isFetchingCategories ? (
-                    <div className="flex items-center gap-2 text-sm text-gray-500 py-2">
-                        <LoaderCircle className="animate-spin w-4 h-4" />
-                        Loading categories...
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <div>
+                        <label className="block text-[13px] font-semibold text-gray-700 mb-2">Amount</label>
+                        <div className="relative">
+                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 font-medium">₹</span>
+                            <input
+                                type="number"
+                                step="0.01"
+                                min="0"
+                                value={amount}
+                                onChange={(e) => setAmount(e.target.value)}
+                                placeholder="0.00"
+                                className="w-full border border-gray-300 rounded-lg pl-8 pr-4 py-3 text-gray-700 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all shadow-sm bg-white"
+                            />
+                        </div>
                     </div>
-                ) : categories.length === 0 ? (
-                    <p className="text-sm text-amber-600 bg-amber-50 p-2 rounded-lg">
-                        No {isIncome ? "income" : "expense"} categories found. Please create one first.
-                    </p>
-                ) : (
-                    <select
-                        value={categoryId}
-                        onChange={(e) => setCategoryId(e.target.value)}
-                        className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-gray-700 focus:outline-none focus:border-[#7c26f0] focus:ring-1 focus:ring-[#7c26f0] transition-all bg-white shadow-sm"
-                    >
-                        <option value="">Select a category</option>
-                        {categories.map((cat) => (
-                            <option key={cat.id} value={cat.id}>
-                                {cat.name}
-                            </option>
-                        ))}
-                    </select>
-                )}
+
+                    <div>
+                        <label className="block text-[13px] font-semibold text-gray-700 mb-2">Date</label>
+                        <input
+                            type="date"
+                            value={date}
+                            onChange={(e) => setDate(e.target.value)}
+                            className="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-700 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all shadow-sm bg-white"
+                        />
+                    </div>
+                </div>
+
+                <div>
+                    <label className="block text-[13px] font-semibold text-gray-700 mb-2">Category</label>
+                    {isFetchingCategories ? (
+                        <div className="flex items-center gap-2 text-sm text-gray-500 py-3.5 bg-gray-50 rounded-lg px-4 border border-dashed border-gray-200">
+                            <LoaderCircle className="animate-spin w-4 h-4 text-emerald-600" />
+                            Loading categories...
+                        </div>
+                    ) : categories.length === 0 ? (
+                        <div className="text-sm text-amber-600 bg-amber-50 p-4 rounded-lg border border-amber-100">
+                            No {isIncome ? "income" : "expense"} categories found. Please create one first.
+                        </div>
+                    ) : (
+                        <div className="relative">
+                            <select
+                                value={categoryId}
+                                onChange={(e) => setCategoryId(e.target.value)}
+                                className="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-700 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all bg-white shadow-sm appearance-none"
+                            >
+                                <option value="">Select Category</option>
+                                {categories.map((cat) => (
+                                    <option key={cat.id} value={cat.id}>
+                                        {cat.name}
+                                    </option>
+                                ))}
+                            </select>
+                            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-400">
+                                <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>
+                            </div>
+                        </div>
+                    )}
+                </div>
             </div>
 
-            {/* Amount */}
-            <div>
-                <label className="block text-sm font-semibold text-gray-800 mb-1.5">Amount</label>
-                <input
-                    type="number"
-                    step="0.01"
-                    min="0"
-                    value={amount}
-                    onChange={(e) => setAmount(e.target.value)}
-                    placeholder="e.g., 500.00"
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-gray-700 focus:outline-none focus:border-[#7c26f0] focus:ring-1 focus:ring-[#7c26f0] transition-all shadow-sm"
-                />
-            </div>
-
-            {/* Date */}
-            <div>
-                <label className="block text-sm font-semibold text-gray-800 mb-1.5">Date</label>
-                <input
-                    type="date"
-                    value={date}
-                    onChange={(e) => setDate(e.target.value)}
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-gray-700 focus:outline-none focus:border-[#7c26f0] focus:ring-1 focus:ring-[#7c26f0] transition-all shadow-sm"
-                />
-            </div>
-
-            {/* Error */}
+            {/* Error Message */}
             {error && (
-                <p className="text-red-500 text-sm bg-red-50 p-2 rounded-lg">{error}</p>
+                <div className="text-red-500 text-xs font-medium bg-red-50 p-3 rounded-lg border border-red-100 animate-pulse">
+                    {error}
+                </div>
             )}
 
-            {/* Actions */}
-            <div className="flex justify-end pt-2">
+            {/* Submit Button */}
+            <div className="pt-4">
                 <button
                     type="submit"
                     disabled={isLoading || categories.length === 0}
-                    className={`py-2.5 px-6 bg-[#7c26f0] text-white rounded-lg hover:bg-[#6819d4] transition-colors duration-200 font-medium text-sm flex items-center justify-center gap-2 ${(isLoading || categories.length === 0) ? "opacity-60 cursor-not-allowed" : ""}`}
+                    className="w-full py-4 bg-emerald-600 text-white rounded-xl hover:bg-emerald-700 transition-all duration-300 font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-emerald-100 hover:shadow-emerald-200 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                     {isLoading ? (
                         <>
-                            <LoaderCircle className="animate-spin w-4 h-4" />
+                            <LoaderCircle className="animate-spin w-5 h-5" />
                             Saving...
                         </>
                     ) : (

@@ -1,80 +1,106 @@
 import { useState, useEffect } from "react";
 import EmojiPickerPopup from "./EmojiPickerPopup.jsx";
 import Input from "./Input.jsx";
+import { LoaderCircle } from "lucide-react";
 
-// Add 'categories' prop
 const AddExpenseForm = ({ onAddExpense, categories }) => {
-    const [expense, setExpense] = useState({ // Renamed 'income' state to 'expense' for clarity
-        name,
-        categoryId: "", // Changed from 'category' to 'categoryId'
+    const [expense, setExpense] = useState({
+        name: "",
+        categoryId: "",
         amount: "",
         date: "",
-        icon: "", // Icon might be associated with the selected category, or kept separate for custom entries
+        icon: "",
     });
+    const [loading, setLoading] = useState(false);
 
-    // Effect to set a default category if categories are loaded and none is selected
     useEffect(() => {
         if (categories && categories.length > 0 && !expense.categoryId) {
-            // Automatically select the first category as default if none is chosen
-            setExpense((prev) => ({ ...prev, categoryId: categories[0].id })); // Use categories[0].id for MySQL
+            setExpense((prev) => ({ ...prev, categoryId: categories[0].id }));
         }
     }, [categories, expense.categoryId]);
 
-    const handleChange = (key, value) => setExpense({ ...expense, [key]: value }); // Changed setIncome to setExpense
+    const handleChange = (key, value) => setExpense({ ...expense, [key]: value });
 
-    // Map categories to the format expected by the reusable Input dropdown
-    const categoryOptions = categories.map((cat) => ({
-        value: cat.id, // Correct for MySQL 'id'
-        label: `${cat.name}`, // Display icon and name in dropdown
-    }));
+    const handleAddExpense = async () => {
+        if (!expense.name || !expense.amount || !expense.date || !expense.categoryId) {
+            return;
+        }
+        setLoading(true);
+        try {
+            await onAddExpense(expense);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return (
-        <div>
+        <div className="space-y-5 p-2">
             <EmojiPickerPopup
-                icon={expense.icon} // Uses expense.icon now
+                icon={expense.icon}
                 onSelect={(selectedIcon) => handleChange("icon", selectedIcon)}
             />
 
             <Input
                 value={expense.name}
                 onChange={({ target }) => handleChange("name", target.value)}
-                label="Income Source"
-                placeholder="e.g., Electricity, Wifi"
+                label="Expense Name"
+                placeholder="e.g., Electricity Bill, Groceries"
                 type="text"
             />
 
-            {/* Replaced Input for 'Category' text with a dropdown for 'Category' */}
-            <Input
-                label="Category"
-                value={expense.categoryId}
-                onChange={({ target }) => handleChange("categoryId", target.value)}
-                isSelect={true}
-                options={categoryOptions}
-            />
+            <div className="flex flex-col mb-4">
+                <label className="text-[13px] text-slate-800 mb-1 font-medium">Category</label>
+                <div className="relative">
+                    <select
+                        value={expense.categoryId}
+                        onChange={({ target }) => handleChange("categoryId", target.value)}
+                        className="w-full bg-transparent border border-gray-300 rounded-md py-2.5 px-3 appearance-none text-gray-700 leading-tight focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors shadow-sm"
+                    >
+                        {categories.map((cat) => (
+                            <option key={cat.id} value={cat.id}>
+                                {cat.name}
+                            </option>
+                        ))}
+                    </select>
+                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500">
+                        <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>
+                    </div>
+                </div>
+            </div>
 
-            <Input
-                value={expense.amount}
-                onChange={({ target }) => handleChange("amount", target.value)}
-                label="Amount"
-                placeholder="e.g., 150.00"
-                type="number"
-            />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <Input
+                    value={expense.amount}
+                    onChange={({ target }) => handleChange("amount", target.value)}
+                    label="Amount"
+                    placeholder="e.g., 150.00"
+                    type="number"
+                />
 
-            <Input
-                value={expense.date}
-                onChange={({ target }) => handleChange("date", target.value)}
-                label="Date"
-                placeholder=""
-                type="date"
-            />
+                <Input
+                    value={expense.date}
+                    onChange={({ target }) => handleChange("date", target.value)}
+                    label="Date"
+                    placeholder=""
+                    type="date"
+                />
+            </div>
 
-            <div className="flex justify-end mt-6">
+            <div className="flex justify-end mt-8">
                 <button
                     type="button"
-                    className="add-btn add-btn-fill"
-                    onClick={() => onAddExpense(expense)} // Changed income to expense
+                    onClick={handleAddExpense}
+                    disabled={loading}
+                    className="w-full flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 disabled:bg-gray-400 text-white px-8 py-3 rounded-xl font-bold transition-all duration-300 shadow-lg shadow-emerald-100 hover:shadow-xl hover:shadow-emerald-200 active:scale-95 mb-4"
                 >
-                    Add Expense
+                    {loading ? (
+                        <>
+                            <LoaderCircle className="w-5 h-5 animate-spin" />
+                            <span>Adding...</span>
+                        </>
+                    ) : (
+                        <span>Add Expense</span>
+                    )}
                 </button>
             </div>
         </div>

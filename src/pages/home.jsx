@@ -8,8 +8,6 @@ import { useUser } from "../hooks/useUser";
 import PageLoader from "../components/PageLoader";
 import { Link } from "react-router-dom";
 
-const COLORS_OVERVIEW = ["#7c26f0", "#ef4444", "#10b981"]; // Purple (Balance), Red (Expense), Green (Income)
-
 const Home = () => {
     useUser();
     const [dashboardData, setDashboardData] = useState(null);
@@ -62,16 +60,14 @@ const Home = () => {
 
     const recentTransactions = dashboardData?.recentTransactions || [];
     
-    // Filter incomes and expenses
     const recentIncomes = recentTransactions.filter(tx => tx.type?.toUpperCase() === "INCOME").slice(0, 5);
     const recentExpenses = recentTransactions.filter(tx => tx.type?.toUpperCase() === "EXPENSE").slice(0, 5);
     const generalRecent = recentTransactions.slice(0, 5);
 
-    // Prepare Financial Overview Donut Data
     const overviewData = [];
-    if (balance > 0) overviewData.push({ name: "Total Balance", value: balance, fill: "#7c26f0" });
-    if (totalExpense > 0) overviewData.push({ name: "Total Expenses", value: totalExpense, fill: "#ef4444" });
-    if (totalIncome > 0) overviewData.push({ name: "Total Income", value: totalIncome, fill: "#10b981" });
+    if (balance > 0) overviewData.push({ name: "Balance", value: balance, fill: "#059669" });
+    if (totalExpense > 0) overviewData.push({ name: "Expenses", value: totalExpense, fill: "#ef4444" });
+    if (totalIncome > 0) overviewData.push({ name: "Income", value: totalIncome, fill: "#10b981" });
     
     if (overviewData.length === 0) {
         overviewData.push({ name: "No Data", value: 1, fill: "#e5e7eb" });
@@ -81,7 +77,6 @@ const Home = () => {
         return `₹${parseAmount(val).toLocaleString("en-IN", { minimumFractionDigits: 2 })}`;
     };
 
-    // Reusable Transaction Item Renderer
     const renderTransactionItem = (tx, index) => {
         const isIncome = tx.type?.toUpperCase() === "INCOME";
         const displayName = tx.name || tx.description || tx.categoryName || "Transaction";
@@ -90,10 +85,10 @@ const Home = () => {
         return (
             <div
                 key={tx.id || index}
-                className="group flex items-center justify-between p-4 rounded-xl hover:bg-gray-50 transition-all duration-200"
+                className="group flex items-center justify-between p-3.5 rounded-xl hover:bg-gray-50/80 transition-all duration-200"
             >
-                <div className="flex items-center gap-4">
-                    <div className={`w-11 h-11 rounded-full flex items-center justify-center text-lg shrink-0 ${isIncome ? "bg-green-50 text-green-600" : "bg-red-50 text-red-600"}`}>
+                <div className="flex items-center gap-3">
+                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-base shrink-0 transition-all duration-200 ${isIncome ? "bg-emerald-50 group-hover:bg-emerald-100" : "bg-red-50 group-hover:bg-red-100"}`}>
                         {(tx.icon || tx.categoryIcon) ? (
                             (tx.icon || tx.categoryIcon).startsWith('http') || (tx.icon || tx.categoryIcon).startsWith('data:') ? (
                                 <img src={tx.icon || tx.categoryIcon} alt={displayName} className="w-5 h-5 object-contain" />
@@ -101,7 +96,7 @@ const Home = () => {
                                 <span>{tx.icon || tx.categoryIcon}</span>
                             )
                         ) : (
-                            <span className="font-bold text-sm">
+                            <span className={`font-bold text-xs ${isIncome ? 'text-emerald-600' : 'text-red-500'}`}>
                                 {displayName.charAt(0).toUpperCase()}
                             </span>
                         )}
@@ -110,117 +105,170 @@ const Home = () => {
                         <p className="font-semibold text-sm text-gray-900 capitalize truncate">
                             {displayName}
                         </p>
-                        <p className="text-xs font-medium text-gray-500 mt-0.5">
+                        <p className="text-[11px] font-medium text-gray-400 mt-0.5">
                             {displayDate}
                         </p>
                     </div>
                 </div>
                 <div className="shrink-0 text-right">
-                    <p className={`font-bold text-sm ${isIncome ? "text-green-600 bg-green-50" : "text-red-600 bg-red-50"} px-2.5 py-1 rounded-md inline-block`}>
+                    <span className={`font-bold text-sm px-2.5 py-1 rounded-lg inline-flex items-center gap-1 ${isIncome ? "text-emerald-700 bg-emerald-50" : "text-red-600 bg-red-50"}`}>
+                        {isIncome ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
                         {isIncome ? "+" : "-"}{formatCurrency(tx.amount)}
-                    </p>
+                    </span>
                 </div>
             </div>
         );
     };
 
-
-
     return (
         <Dashboard activeMenu="Dashboard">
-            <div className="my-5 mx-auto max-w-[1400px]">
-                
-                {/* Top Cards Row */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5 mb-6">
+            <div>
+                {/* Hero Section */}
+                <div className="bg-emerald-600 rounded-2xl p-7 sm:p-10 mb-7 text-white shadow-lg relative overflow-hidden animate-scale-in">
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500 rounded-full mix-blend-multiply filter blur-3xl opacity-50 translate-x-1/2 -translate-y-1/2"></div>
+                    <div className="absolute bottom-0 left-10 w-48 h-48 bg-teal-400 rounded-full mix-blend-multiply filter blur-3xl opacity-30 translate-y-1/2"></div>
+                    
+                    <div className="relative z-10 max-w-3xl">
+                        <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold mb-3 leading-tight">
+                            Take Control of Your Financial Life
+                        </h1>
+                        <p className="text-emerald-100 text-sm sm:text-base max-w-2xl leading-relaxed">
+                            Track expenses, monitor income, analyze spending habits, and manage your finances smarter with <strong className="text-white">ExpenseIQ</strong>.
+                        </p>
+                    </div>
+                </div>
+
+                {/* Stats Cards */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8 stagger-children">
                     {/* Total Balance */}
-                    <div className="bg-white border border-gray-100 rounded-2xl p-4 sm:p-6 shadow-sm hover:shadow-md transition-shadow duration-200 flex items-center gap-4 sm:gap-5">
-                        <div className="w-12 h-12 sm:w-14 sm:h-14 bg-[#7c26f0] rounded-2xl flex items-center justify-center shrink-0 shadow-sm shadow-purple-200">
-                            <Wallet className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
-                        </div>
-                        <div>
-                            <p className="text-xs sm:text-sm font-medium text-gray-500 mb-0.5 sm:mb-1">Total Balance</p>
-                            <p className="text-xl sm:text-2xl font-bold text-gray-900">{formatCurrency(balance)}</p>
+                    <div className="bg-slate-900 rounded-3xl p-6 shadow-xl shadow-slate-200 relative overflow-hidden group hover:scale-[1.02] transition-all duration-300">
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-3xl -mr-10 -mt-10"></div>
+                        <div className="relative z-10">
+                            <div className="flex items-center justify-between mb-4">
+                                <div className="w-10 h-10 bg-emerald-500/20 rounded-xl flex items-center justify-center border border-emerald-500/30">
+                                    <Wallet className="w-5 h-5 text-emerald-400" />
+                                </div>
+                                <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-widest bg-emerald-500/10 px-2 py-1 rounded-lg border border-emerald-500/20">Net Worth</span>
+                            </div>
+                            <p className="text-emerald-100/60 text-xs font-semibold uppercase tracking-wider mb-1">Total Balance</p>
+                            <p className="text-3xl font-bold text-white tracking-tight">{formatCurrency(balance)}</p>
                         </div>
                     </div>
 
                     {/* Total Income */}
-                    <div className="bg-white border border-gray-100 rounded-2xl p-4 sm:p-6 shadow-sm hover:shadow-md transition-shadow duration-200 flex items-center gap-4 sm:gap-5">
-                        <div className="w-12 h-12 sm:w-14 sm:h-14 bg-[#064e3b] rounded-2xl flex items-center justify-center shrink-0 shadow-sm shadow-emerald-900/20">
-                            <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
-                        </div>
-                        <div>
-                            <p className="text-xs sm:text-sm font-medium text-gray-500 mb-0.5 sm:mb-1">Total Income</p>
-                            <p className="text-xl sm:text-2xl font-bold text-emerald-700">{formatCurrency(totalIncome)}</p>
+                    <div className="bg-emerald-50 border border-emerald-100 rounded-3xl p-6 shadow-sm hover:shadow-md transition-all duration-300 group overflow-hidden relative">
+                        <div className="absolute -right-4 -bottom-4 w-24 h-24 bg-emerald-200/30 rounded-full blur-2xl group-hover:scale-125 transition-transform duration-500"></div>
+                        <div className="relative z-10">
+                            <div className="flex items-center justify-between mb-4">
+                                <div className="w-10 h-10 bg-emerald-600 rounded-xl flex items-center justify-center shadow-md shadow-emerald-100">
+                                    <TrendingUp className="w-5 h-5 text-white" />
+                                </div>
+                            </div>
+                            <p className="text-emerald-700/60 text-xs font-semibold uppercase tracking-wider mb-1">Total Income</p>
+                            <p className="text-3xl font-bold text-emerald-900 tracking-tight">{formatCurrency(totalIncome)}</p>
+                            <div className="mt-3 flex items-center gap-1 text-[11px] font-bold text-emerald-600">
+                                <div className="w-1 h-1 rounded-full bg-emerald-600 animate-pulse"></div>
+                                Cumulative earnings
+                            </div>
                         </div>
                     </div>
 
                     {/* Total Expense */}
-                    <div className="bg-white border border-gray-100 rounded-2xl p-4 sm:p-6 shadow-sm hover:shadow-md transition-shadow duration-200 flex items-center gap-4 sm:gap-5">
-                        <div className="w-12 h-12 sm:w-14 sm:h-14 bg-[#7f1d1d] rounded-2xl flex items-center justify-center shrink-0 shadow-sm shadow-red-900/20">
-                            <TrendingDown className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
-                        </div>
-                        <div>
-                            <p className="text-xs sm:text-sm font-medium text-gray-500 mb-0.5 sm:mb-1">Total Expense</p>
-                            <p className="text-xl sm:text-2xl font-bold text-red-700">{formatCurrency(totalExpense)}</p>
+                    <div className="bg-red-50 border border-red-100 rounded-3xl p-6 shadow-sm hover:shadow-md transition-all duration-300 group overflow-hidden relative">
+                        <div className="absolute -right-4 -bottom-4 w-24 h-24 bg-red-200/30 rounded-full blur-2xl group-hover:scale-125 transition-transform duration-500"></div>
+                        <div className="relative z-10">
+                            <div className="flex items-center justify-between mb-4">
+                                <div className="w-10 h-10 bg-red-600 rounded-xl flex items-center justify-center shadow-md shadow-red-100">
+                                    <TrendingDown className="w-5 h-5 text-white" />
+                                </div>
+                            </div>
+                            <p className="text-red-700/60 text-xs font-semibold uppercase tracking-wider mb-1">Total Expense</p>
+                            <p className="text-3xl font-bold text-red-900 tracking-tight">{formatCurrency(totalExpense)}</p>
+                            <div className="mt-3 flex items-center gap-1 text-[11px] font-bold text-red-600">
+                                <div className="w-1 h-1 rounded-full bg-red-600 animate-pulse"></div>
+                                Total spending
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                {/* Middle Row: Recent Transactions & Financial Overview */}
+                {/* Middle Row */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-6">
-                    {/* Recent Transactions List */}
-                    <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm">
-                        <div className="flex justify-between items-center mb-6">
-                            <h3 className="text-lg font-bold text-gray-900">Recent Transactions</h3>
-                            <Link to="/filter" className="flex items-center gap-1.5 px-3 py-1.5 bg-gray-50 hover:bg-gray-100 text-gray-600 rounded-lg text-xs font-semibold transition-colors">
-                                More <ArrowRight size={14} />
+                    {/* Recent Transactions */}
+                    <div className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm animate-fade-in">
+                        <div className="flex justify-between items-center mb-5">
+                            <h3 className="text-base font-bold text-gray-900">Recent Transactions</h3>
+                            <Link to="/filter" className="flex items-center gap-1.5 px-3 py-1.5 bg-gray-50 hover:bg-gray-100 text-gray-500 rounded-lg text-xs font-semibold transition-all">
+                                More <ArrowRight size={13} />
                             </Link>
                         </div>
                         {generalRecent.length === 0 ? (
                             <p className="text-gray-400 text-sm text-center py-10">No recent transactions</p>
                         ) : (
-                            <div className="space-y-1">
+                            <div className="space-y-0.5">
                                 {generalRecent.map((tx, index) => renderTransactionItem(tx, index))}
                             </div>
                         )}
                     </div>
 
-                    {/* Financial Overview Donut Chart */}
-                    <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm flex flex-col">
-                        <h3 className="text-lg font-bold text-gray-900 mb-2">Financial Overview</h3>
-                        <div className="flex-1 relative flex flex-col items-center justify-center min-h-[280px] sm:min-h-[300px]">
+                    {/* Financial Overview */}
+                    <div className="bg-white border border-gray-100 rounded-3xl p-6 shadow-sm flex flex-col animate-fade-in group">
+                        <div className="flex items-center justify-between mb-4">
+                            <h3 className="text-base font-bold text-gray-900">Financial Overview</h3>
+                            <div className="w-8 h-8 bg-gray-50 rounded-lg flex items-center justify-center">
+                                <TrendingUp size={16} className="text-emerald-600" />
+                            </div>
+                        </div>
+                        <div className="flex-1 relative flex flex-col items-center justify-center min-h-[300px]">
                             {overviewData.length === 1 && overviewData[0].name === "No Data" ? (
                                 <p className="text-gray-400 text-sm">No financial data available</p>
                             ) : (
                                 <>
-                                    {/* Center Text Overlay */}
-                                    <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none pb-8 sm:pb-12">
-                                        <p className="text-[10px] sm:text-xs font-medium text-gray-500 mb-0.5 uppercase tracking-wider">Balance</p>
-                                        <p className="text-xl sm:text-2xl font-bold text-gray-900">{formatCurrency(balance)}</p>
+                                    <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none pb-8">
+                                        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-0.5">Balance</p>
+                                        <p className="text-2xl font-bold text-slate-900">{formatCurrency(balance)}</p>
                                     </div>
-                                    <ResponsiveContainer width="100%" height={260}>
+                                    <ResponsiveContainer width="100%" height={300}>
                                         <PieChart>
                                             <Pie
                                                 data={overviewData}
                                                 cx="50%"
                                                 cy="50%"
-                                                innerRadius={75}
-                                                outerRadius={105}
-                                                paddingAngle={4}
+                                                innerRadius={80}
+                                                outerRadius={110}
+                                                paddingAngle={8}
                                                 dataKey="value"
                                                 stroke="none"
+                                                activeShape={{ stroke: 'none', fillOpacity: 0.8 }}
+                                                isAnimationActive={true}
+                                                animationDuration={1000}
                                             >
                                                 {overviewData.map((entry, index) => (
-                                                    <Cell key={`cell-${index}`} fill={entry.fill} />
+                                                    <Cell 
+                                                        key={`cell-${index}`} 
+                                                        fill={entry.fill} 
+                                                        style={{ outline: 'none' }}
+                                                    />
                                                 ))}
                                             </Pie>
                                             <Tooltip 
-                                                formatter={(value) => formatCurrency(value)} 
-                                                contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)' }}
+                                                formatter={(value) => [formatCurrency(value), ""]} 
+                                                contentStyle={{ 
+                                                    borderRadius: '16px', 
+                                                    border: 'none', 
+                                                    boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1)',
+                                                    padding: '12px 16px',
+                                                    fontSize: '13px',
+                                                    fontWeight: 'bold',
+                                                    color: '#1e293b'
+                                                }}
+                                                itemStyle={{ color: '#1e293b' }}
+                                                cursor={{ fill: 'transparent' }}
                                             />
                                             <Legend 
                                                 iconType="circle" 
-                                                wrapperStyle={{ paddingTop: '10px' }}
+                                                wrapperStyle={{ paddingTop: '20px', fontSize: '12px', fontWeight: '600' }}
+                                                verticalAlign="bottom"
                                             />
                                         </PieChart>
                                     </ResponsiveContainer>
@@ -230,37 +278,35 @@ const Home = () => {
                     </div>
                 </div>
 
-                {/* Bottom Row: Recent Expenses & Recent Incomes */}
+                {/* Bottom Row */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-6">
-                    {/* Recent Expenses List */}
-                    <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm">
-                        <div className="flex justify-between items-center mb-6">
-                            <h3 className="text-lg font-bold text-gray-900">Recent Expenses</h3>
-                            <Link to="/expense" className="flex items-center gap-1.5 px-3 py-1.5 bg-gray-50 hover:bg-gray-100 text-gray-600 rounded-lg text-xs font-semibold transition-colors">
-                                More <ArrowRight size={14} />
+                    <div className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm animate-fade-in">
+                        <div className="flex justify-between items-center mb-5">
+                            <h3 className="text-base font-bold text-gray-900">Recent Expenses</h3>
+                            <Link to="/expense" className="flex items-center gap-1.5 px-3 py-1.5 bg-gray-50 hover:bg-gray-100 text-gray-500 rounded-lg text-xs font-semibold transition-all">
+                                More <ArrowRight size={13} />
                             </Link>
                         </div>
                         {recentExpenses.length === 0 ? (
                             <p className="text-gray-400 text-sm text-center py-8">No recent expenses</p>
                         ) : (
-                            <div className="space-y-1">
+                            <div className="space-y-0.5">
                                 {recentExpenses.map((tx, index) => renderTransactionItem(tx, index))}
                             </div>
                         )}
                     </div>
 
-                    {/* Recent Incomes List */}
-                    <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm">
-                        <div className="flex justify-between items-center mb-6">
-                            <h3 className="text-lg font-bold text-gray-900">Recent Incomes</h3>
-                            <Link to="/income" className="flex items-center gap-1.5 px-3 py-1.5 bg-gray-50 hover:bg-gray-100 text-gray-600 rounded-lg text-xs font-semibold transition-colors">
-                                More <ArrowRight size={14} />
+                    <div className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm animate-fade-in">
+                        <div className="flex justify-between items-center mb-5">
+                            <h3 className="text-base font-bold text-gray-900">Recent Incomes</h3>
+                            <Link to="/income" className="flex items-center gap-1.5 px-3 py-1.5 bg-gray-50 hover:bg-gray-100 text-gray-500 rounded-lg text-xs font-semibold transition-all">
+                                More <ArrowRight size={13} />
                             </Link>
                         </div>
                         {recentIncomes.length === 0 ? (
                             <p className="text-gray-400 text-sm text-center py-8">No recent incomes</p>
                         ) : (
-                            <div className="space-y-1">
+                            <div className="space-y-0.5">
                                 {recentIncomes.map((tx, index) => renderTransactionItem(tx, index))}
                             </div>
                         )}
