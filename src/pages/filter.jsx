@@ -81,7 +81,7 @@ const Filter = () => {
 
     return (
         <div>
-            <Dashboard activeMenu="Filters">
+            <Dashboard activeMenu="Analytics">
                 <div>
                     <div className="mb-6">
                         <h2 className="text-2xl font-semibold text-gray-900">Filter Transactions</h2>

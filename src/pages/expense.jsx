@@ -114,7 +114,7 @@ const Expense = () => {
     }, 0);
 
     return (
-        <Dashboard activeMenu="Expense">
+        <Dashboard activeMenu="Spending">
             <div>
                 {/* Header */}
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">

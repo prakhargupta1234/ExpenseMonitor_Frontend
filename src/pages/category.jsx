@@ -1,4 +1,4 @@
-import { Plus } from "lucide-react";
+import { Plus, Layers2, TrendingUp, TrendingDown } from "lucide-react";
 import Dashboard from "../components/dashboard";
 import { useUser } from "../hooks/useUser";
 import toast from "react-hot-toast";
@@ -74,15 +74,18 @@ const Category = () => {
     };
 
 
+    const incomeCategoriesCount = categoryData.filter(c => c.type?.toLowerCase() === 'income').length;
+    const expenseCategoriesCount = categoryData.filter(c => c.type?.toLowerCase() === 'expense').length;
+
     return (
         <div>
-            <Dashboard activeMenu="Category">
+            <Dashboard activeMenu="Categories">
                 <div>
                     {/* Header */}
                     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                         <div>
                             <h2 className="text-2xl font-semibold text-gray-900">Categories</h2>
-                            <p className="text-sm text-gray-500 mt-1">Manage your expense and income categories</p>
+                            <p className="text-sm text-gray-500 mt-1">Manage your spending and earnings classifications</p>
                         </div>
                         <button
                             onClick={() => setOpenAddCategoryModal(true)}
@@ -91,6 +94,37 @@ const Category = () => {
                             <Plus size={18} className="transition-transform duration-300 group-hover:rotate-90" />
                             <span>Add Category</span>
                         </button>
+                    </div>
+
+                    {/* Summary Stats */}
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+                        <div className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm flex items-center justify-between">
+                            <div>
+                                <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Total Categories</p>
+                                <p className="text-2xl font-bold text-gray-900">{categoryData.length}</p>
+                            </div>
+                            <div className="w-10 h-10 bg-gray-50 rounded-xl flex items-center justify-center text-gray-400">
+                                <Layers2 size={20} />
+                            </div>
+                        </div>
+                        <div className="bg-emerald-50 border border-emerald-100 rounded-2xl p-5 shadow-sm flex items-center justify-between">
+                            <div>
+                                <p className="text-xs font-bold text-emerald-600 uppercase tracking-widest mb-1">Earnings Types</p>
+                                <p className="text-2xl font-bold text-emerald-800">{incomeCategoriesCount}</p>
+                            </div>
+                            <div className="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center text-emerald-600">
+                                <TrendingUp size={20} />
+                            </div>
+                        </div>
+                        <div className="bg-red-50 border border-red-100 rounded-2xl p-5 shadow-sm flex items-center justify-between">
+                            <div>
+                                <p className="text-xs font-bold text-red-500 uppercase tracking-widest mb-1">Spending Types</p>
+                                <p className="text-2xl font-bold text-red-800">{expenseCategoriesCount}</p>
+                            </div>
+                            <div className="w-10 h-10 bg-red-100 rounded-xl flex items-center justify-center text-red-600">
+                                <TrendingDown size={20} />
+                            </div>
+                        </div>
                     </div>
 
                     {/* category list */}

@@ -121,7 +121,7 @@ const Home = () => {
     };
 
     return (
-        <Dashboard activeMenu="Dashboard">
+        <Dashboard activeMenu="Overview">
             <div>
                 {/* Hero Section */}
                 <div className="bg-emerald-600 rounded-2xl p-7 sm:p-10 mb-7 text-white shadow-lg relative overflow-hidden animate-scale-in">
