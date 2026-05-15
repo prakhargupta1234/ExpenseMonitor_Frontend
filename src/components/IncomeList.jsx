@@ -3,7 +3,7 @@ import TransactionInfoCard from "./TransactionInfoCard.jsx";
 import moment from "moment";
 import {useState} from "react";
 
-const IncomeList = ({transactions, onDelete, onDownload, onEmail}) => {
+const EarningsList = ({transactions, onDelete, onDownload, onEmail}) => {
     const [loading, setLoading] = useState(false);
     const handleEmail = async () => {
         setLoading(true);
@@ -24,7 +24,7 @@ const IncomeList = ({transactions, onDelete, onDownload, onEmail}) => {
     return (
         <div className="card">
             <div className="flex items-center justify-between">
-                <h5 className="text-lg">Income Sources</h5>
+                <h5 className="text-lg">Earnings Sources</h5>
                 <div className="flex items-center justify-end gap-2">
                     <button disabled={loading} className="card-btn" onClick={handleEmail}>
                         {loading ? (
@@ -57,16 +57,16 @@ const IncomeList = ({transactions, onDelete, onDownload, onEmail}) => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2">
-                {/* display the incomes */}
-                {transactions?.map((income) => (
+                {/* display the earnings */}
+                {transactions?.map((earning) => (
                     <TransactionInfoCard
-                        key={income.id}
-                        title={income.name}
-                        icon={income.icon}
-                        date={moment(income.date).format('Do MMM YYYY')}
-                        amount={income.amount}
-                        type="income"
-                        onDelete={() => onDelete(income.id)}
+                        key={earning.id}
+                        title={earning.name}
+                        icon={earning.icon}
+                        date={moment(earning.date).format('Do MMM YYYY')}
+                        amount={earning.amount}
+                        type="earnings"
+                        onDelete={() => onDelete(earning.id)}
                     />
                 ))}
             </div>
@@ -74,4 +74,4 @@ const IncomeList = ({transactions, onDelete, onDownload, onEmail}) => {
     )
 }
 
-export default IncomeList;
+export default EarningsList;

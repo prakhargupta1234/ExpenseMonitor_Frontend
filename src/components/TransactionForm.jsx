@@ -17,7 +17,7 @@ const TransactionForm = ({ type, onSuccess, onCancel }) => {
     const [isFetchingCategories, setIsFetchingCategories] = useState(true);
     const [error, setError] = useState("");
 
-    const isIncome = type === "income";
+    const isIncome = type === "earnings" || type === "income";
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -28,7 +28,9 @@ const TransactionForm = ({ type, onSuccess, onCancel }) => {
                 // Filter categories based on type
                 const targetType = isIncome ? "income" : "expense";
                 const filtered = allCategories.filter(cat => 
-                    cat.type?.toLowerCase() === targetType
+                    cat.type?.toLowerCase() === targetType || 
+                    (isIncome && cat.type?.toLowerCase() === "earnings") || 
+                    (!isIncome && cat.type?.toLowerCase() === "spendings")
                 );
                 
                 setCategories(filtered);
@@ -52,7 +54,7 @@ const TransactionForm = ({ type, onSuccess, onCancel }) => {
         setError("");
 
         if (!description.trim()) {
-            setError(`Please enter a valid ${isIncome ? "income" : "expense"} source`);
+            setError(`Please enter a valid ${isIncome ? "earning" : "spending"} source`);
             return;
         }
         if (!categoryId) {
@@ -70,7 +72,7 @@ const TransactionForm = ({ type, onSuccess, onCancel }) => {
 
         setIsLoading(true);
         try {
-            const endpoint = isIncome ? API_ENDPOINTS.ADD_INCOME : API_ENDPOINTS.ADD_EXPENSE;
+            const endpoint = isIncome ? API_ENDPOINTS.ADD_EARNING : API_ENDPOINTS.ADD_SPENDING;
             const payload = {
                 amount: Number(amount),
                 date,
@@ -141,7 +143,7 @@ const TransactionForm = ({ type, onSuccess, onCancel }) => {
             <div className="space-y-5">
                 <div>
                     <label className="block text-[13px] font-semibold text-gray-700 mb-2">
-                        {isIncome ? "Income Source" : "Expense Name"}
+                        {isIncome ? "Earning Source" : "Spending Name"}
                     </label>
                     <input
                         type="text"
@@ -189,7 +191,7 @@ const TransactionForm = ({ type, onSuccess, onCancel }) => {
                         </div>
                     ) : categories.length === 0 ? (
                         <div className="text-sm text-amber-600 bg-amber-50 p-4 rounded-lg border border-amber-100">
-                            No {isIncome ? "income" : "expense"} categories found. Please create one first.
+                            No {isIncome ? "earnings" : "spendings"} categories found. Please create one first.
                         </div>
                     ) : (
                         <div className="relative">
@@ -233,7 +235,7 @@ const TransactionForm = ({ type, onSuccess, onCancel }) => {
                             Saving...
                         </>
                     ) : (
-                        `Add ${isIncome ? "Income" : "Expense"}`
+                        `Add ${isIncome ? "Earning" : "Spending"}`
                     )}
                 </button>
             </div>

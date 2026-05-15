@@ -24,7 +24,7 @@ const CategoryList = ({ categories, onEditCategory }) => {
                         >
                             {/* icon /emoji display */}
                             <div className={`w-11 h-11 flex items-center justify-center rounded-xl transition-all duration-200 ${
-                                category.type?.toLowerCase() === "income" ? "bg-emerald-50 group-hover:bg-emerald-100" : "bg-red-50 group-hover:bg-red-100"
+                                category.type?.toLowerCase() === "income" || category.type?.toLowerCase() === "earnings" ? "bg-emerald-50 group-hover:bg-emerald-100" : "bg-red-50 group-hover:bg-red-100"
                             }`}>
                                 {category.icon ? (
                                     category.icon.startsWith('http') || category.icon.startsWith('data:') ? (
@@ -33,7 +33,7 @@ const CategoryList = ({ categories, onEditCategory }) => {
                                         <span className="text-xl leading-none">{category.icon}</span>
                                     )
                                 ) : (
-                                    <span className={`font-bold text-sm ${category.type?.toLowerCase() === 'income' ? 'text-emerald-600' : 'text-red-500'}`}>
+                                    <span className={`font-bold text-sm ${category.type?.toLowerCase() === 'income' || category.type?.toLowerCase() === 'earnings' ? 'text-emerald-600' : 'text-red-500'}`}>
                                         {(category.name || "C").charAt(0).toUpperCase()}
                                     </span>
                                 )}
@@ -43,11 +43,11 @@ const CategoryList = ({ categories, onEditCategory }) => {
                                 <div className="min-w-0">
                                     <h5 className="font-semibold text-sm text-gray-900 truncate capitalize">{category.name}</h5>
                                     <span className={`text-[11px] font-semibold px-2 py-0.5 rounded-md capitalize inline-block mt-1 ${
-                                        category.type?.toLowerCase() === "income"
+                                        category.type?.toLowerCase() === "income" || category.type?.toLowerCase() === "earnings"
                                             ? "bg-emerald-50 text-emerald-600"
                                             : "bg-red-50 text-red-500"
                                     }`}>
-                                        {category.type}
+                                        {category.type === "income" ? "Earnings" : category.type === "expense" ? "Spendings" : category.type}
                                     </span>
                                 </div>
                             </div>

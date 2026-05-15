@@ -11,12 +11,12 @@ import TransactionCard from "../components/TransactionCard";
 import DeleteConfirmModal from "../components/DeleteConfirmModal";
 import EmptyState from "../components/EmptyState";
 import PageLoader from "../components/PageLoader";
-import ExpenseChart from "../components/ExpenseChart";
+import SpendingsChart from "../components/ExpenseChart";
 
-const Expense = () => {
+const Spendings = () => {
     useUser();
 
-    const [expenses, setExpenses] = useState([]);
+    const [spendings, setSpendings] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showAddModal, setShowAddModal] = useState(false);
     const [deleteId, setDeleteId] = useState(null);
@@ -24,27 +24,27 @@ const Expense = () => {
     const [isDownloading, setIsDownloading] = useState(false);
     const [isEmailing, setIsEmailing] = useState(false);
 
-    const fetchExpenses = useCallback(async () => {
+    const fetchSpendings = useCallback(async () => {
         try {
             setLoading(true);
-            const response = await axiosConfig.get(API_ENDPOINTS.GET_ALL_EXPENSE);
-            setExpenses(response.data || []);
+            const response = await axiosConfig.get(API_ENDPOINTS.GET_ALL_SPENDINGS);
+            setSpendings(response.data || []);
         } catch (error) {
-            console.error("Failed to fetch expenses:", error);
-            toast.error("Failed to load expenses");
+            console.error("Failed to fetch spendings:", error);
+            toast.error("Failed to load spendings");
         } finally {
             setLoading(false);
         }
     }, []);
 
     useEffect(() => {
-        fetchExpenses();
-    }, [fetchExpenses]);
+        fetchSpendings();
+    }, [fetchSpendings]);
 
     const handleAddSuccess = () => {
         setShowAddModal(false);
-        toast.success("Expense added successfully!");
-        fetchExpenses();
+        toast.success("Spending added successfully!");
+        fetchSpendings();
     };
 
     const handleDeleteClick = (id) => {
@@ -54,7 +54,7 @@ const Expense = () => {
     const handleDownload = async () => {
         setIsDownloading(true);
         try {
-            const response = await axiosConfig.get(API_ENDPOINTS.EXPENSE_EXCEL_DOWNLOAD, {
+            const response = await axiosConfig.get(API_ENDPOINTS.SPENDINGS_EXCEL_DOWNLOAD, {
                 responseType: 'blob',
             });
             
@@ -62,7 +62,7 @@ const Expense = () => {
             const url = window.URL.createObjectURL(blob);
             const link = document.createElement('a');
             link.href = url;
-            link.setAttribute('download', 'Expense_Report.xlsx');
+            link.setAttribute('download', 'Spendings_Report.xlsx');
             document.body.appendChild(link);
             link.click();
             link.parentNode.removeChild(link);
@@ -80,8 +80,8 @@ const Expense = () => {
     const handleEmail = async () => {
         setIsEmailing(true);
         try {
-            await axiosConfig.get(API_ENDPOINTS.EMAIL_EXPENSE);
-            toast.success("Expense report emailed successfully!");
+            await axiosConfig.get(API_ENDPOINTS.EMAIL_SPENDINGS);
+            toast.success("Spending report emailed successfully!");
         } catch (error) {
             console.error("Failed to email report:", error);
             toast.error("Failed to send email");
@@ -94,19 +94,19 @@ const Expense = () => {
         if (!deleteId) return;
         setIsDeleting(true);
         try {
-            await axiosConfig.delete(API_ENDPOINTS.DELETE_EXPENSE(deleteId));
-            toast.success("Expense deleted successfully!");
+            await axiosConfig.delete(API_ENDPOINTS.DELETE_SPENDING(deleteId));
+            toast.success("Spending deleted successfully!");
             setDeleteId(null);
-            fetchExpenses();
+            fetchSpendings();
         } catch (error) {
-            console.error("Failed to delete expense:", error);
-            toast.error("Failed to delete expense");
+            console.error("Failed to delete spending:", error);
+            toast.error("Failed to delete spending");
         } finally {
             setIsDeleting(false);
         }
     };
 
-    const totalExpense = expenses.reduce((sum, item) => {
+    const totalSpendings = spendings.reduce((sum, item) => {
         const amount = typeof item.amount === 'string' 
             ? Number(item.amount.replace(/[^\d.-]/g, '')) 
             : Number(item.amount);
@@ -119,7 +119,7 @@ const Expense = () => {
                 {/* Header */}
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                     <div>
-                        <h2 className="text-2xl font-bold text-gray-900">Expenses</h2>
+                        <h2 className="text-2xl font-bold text-gray-900">Spendings</h2>
                         <p className="text-sm text-gray-500 mt-1">Manage and track your monthly spending</p>
                     </div>
                     <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
@@ -144,30 +144,30 @@ const Expense = () => {
                             className="flex items-center gap-1.5 bg-red-600 text-white px-5 py-2.5 rounded-xl hover:bg-red-700 transition-all duration-300 text-sm font-bold shadow-lg shadow-red-100 active:scale-95"
                         >
                             <Plus size={18} />
-                            Add Expense
+                            Add Spending
                         </button>
                     </div>
                 </div>
 
                 {/* Chart */}
-                {!loading && expenses.length > 0 && <ExpenseChart expenses={expenses} />}
+                {!loading && spendings.length > 0 && <SpendingsChart spendings={spendings} />}
 
                 {/* Total Summary */}
-                {!loading && expenses.length > 0 && (
+                {!loading && spendings.length > 0 && (
                     <div className="bg-red-50 border border-red-100 rounded-2xl p-5 mb-6 flex items-center justify-between shadow-sm">
                         <div className="flex items-center gap-4">
                             <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow-sm">
                                 <TrendingDown className="w-6 h-6 text-red-600" />
                             </div>
                             <div>
-                                <p className="text-xs font-bold text-red-800 uppercase tracking-widest">Total Expenses</p>
+                                <p className="text-xs font-bold text-red-800 uppercase tracking-widest">Total Spendings</p>
                                 <p className="text-[11px] text-red-600 font-medium">
-                                    {expenses.length} transaction{expenses.length !== 1 ? "s" : ""} recorded
+                                    {spendings.length} transaction{spendings.length !== 1 ? "s" : ""} recorded
                                 </p>
                             </div>
                         </div>
                         <p className="text-2xl font-bold text-red-700">
-                            -₹{totalExpense.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+                            -₹{totalSpendings.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
                         </p>
                     </div>
                 )}
@@ -175,21 +175,21 @@ const Expense = () => {
                 {/* Content */}
                 {loading ? (
                     <PageLoader />
-                ) : expenses.length === 0 ? (
+                ) : spendings.length === 0 ? (
                     <EmptyState
                         icon={Coins}
-                        title="No expenses recorded"
-                        description="Start tracking your expenses by adding your first entry."
-                        actionLabel="Add Expense"
+                        title="No spendings recorded"
+                        description="Start tracking your spendings by adding your first entry."
+                        actionLabel="Add Spending"
                         onAction={() => setShowAddModal(true)}
                     />
                 ) : (
                     <div className="space-y-3">
-                        {expenses.map((expense) => (
+                        {spendings.map((spending) => (
                             <TransactionCard
-                                key={expense.id}
-                                transaction={expense}
-                                type="expense"
+                                key={spending.id}
+                                transaction={spending}
+                                type="spendings"
                                 onDelete={handleDeleteClick}
                             />
                         ))}
@@ -197,14 +197,14 @@ const Expense = () => {
                 )}
             </div>
 
-            {/* Add Expense Modal */}
+            {/* Add Spending Modal */}
             <Modal
                 isOpen={showAddModal}
                 onClose={() => setShowAddModal(false)}
-                title="Add Expense"
+                title="Add Spending"
             >
                 <TransactionForm
-                    type="expense"
+                    type="spendings"
                     onSuccess={handleAddSuccess}
                     onCancel={() => setShowAddModal(false)}
                 />
@@ -216,10 +216,10 @@ const Expense = () => {
                 onClose={() => setDeleteId(null)}
                 onConfirm={handleDeleteConfirm}
                 isDeleting={isDeleting}
-                itemName="Expense"
+                itemName="Spending"
             />
         </Dashboard>
     );
 };
 
-export default Expense;
+export default Spendings;

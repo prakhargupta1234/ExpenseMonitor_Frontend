@@ -92,7 +92,7 @@ const AppInitializer = ({ onComplete }) => {
 
                         {/* Typography */}
                         <h1 className="text-5xl md:text-6xl font-extrabold text-white tracking-tight mb-2 animate-slide-up-1">
-                            ExpenseIQ
+                            SpendingsIQ
                         </h1>
                         <p className="text-emerald-200 font-bold tracking-widest uppercase text-xs md:text-sm mb-12 animate-slide-up-2">
                             Track Smart • Spend Better • Save More

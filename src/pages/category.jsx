@@ -74,8 +74,8 @@ const Category = () => {
     };
 
 
-    const incomeCategoriesCount = categoryData.filter(c => c.type?.toLowerCase() === 'income').length;
-    const expenseCategoriesCount = categoryData.filter(c => c.type?.toLowerCase() === 'expense').length;
+    const earningsCategoriesCount = categoryData.filter(c => c.type?.toLowerCase() === 'income' || c.type?.toLowerCase() === 'earnings').length;
+    const spendingsCategoriesCount = categoryData.filter(c => c.type?.toLowerCase() === 'expense' || c.type?.toLowerCase() === 'spendings').length;
 
     return (
         <div>
@@ -85,7 +85,7 @@ const Category = () => {
                     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                         <div>
                             <h2 className="text-2xl font-semibold text-gray-900">Categories</h2>
-                            <p className="text-sm text-gray-500 mt-1">Manage your spending and earnings classifications</p>
+                            <p className="text-sm text-gray-500 mt-1">Manage your spendings and earnings classifications</p>
                         </div>
                         <button
                             onClick={() => setOpenAddCategoryModal(true)}
@@ -110,7 +110,7 @@ const Category = () => {
                         <div className="bg-emerald-50 border border-emerald-100 rounded-2xl p-5 shadow-sm flex items-center justify-between">
                             <div>
                                 <p className="text-xs font-bold text-emerald-600 uppercase tracking-widest mb-1">Earnings Types</p>
-                                <p className="text-2xl font-bold text-emerald-800">{incomeCategoriesCount}</p>
+                                <p className="text-2xl font-bold text-emerald-800">{earningsCategoriesCount}</p>
                             </div>
                             <div className="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center text-emerald-600">
                                 <TrendingUp size={20} />
@@ -118,8 +118,8 @@ const Category = () => {
                         </div>
                         <div className="bg-red-50 border border-red-100 rounded-2xl p-5 shadow-sm flex items-center justify-between">
                             <div>
-                                <p className="text-xs font-bold text-red-500 uppercase tracking-widest mb-1">Spending Types</p>
-                                <p className="text-2xl font-bold text-red-800">{expenseCategoriesCount}</p>
+                                <p className="text-xs font-bold text-red-500 uppercase tracking-widest mb-1">Spendings Types</p>
+                                <p className="text-2xl font-bold text-red-800">{spendingsCategoriesCount}</p>
                             </div>
                             <div className="w-10 h-10 bg-red-100 rounded-xl flex items-center justify-center text-red-600">
                                 <TrendingDown size={20} />

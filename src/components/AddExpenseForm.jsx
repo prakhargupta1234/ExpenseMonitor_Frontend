@@ -3,8 +3,8 @@ import EmojiPickerPopup from "./EmojiPickerPopup.jsx";
 import Input from "./Input.jsx";
 import { LoaderCircle } from "lucide-react";
 
-const AddExpenseForm = ({ onAddExpense, categories }) => {
-    const [expense, setExpense] = useState({
+const AddSpendingsForm = ({ onAddSpendings, categories }) => {
+    const [spending, setSpending] = useState({
         name: "",
         categoryId: "",
         amount: "",
@@ -14,20 +14,20 @@ const AddExpenseForm = ({ onAddExpense, categories }) => {
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        if (categories && categories.length > 0 && !expense.categoryId) {
-            setExpense((prev) => ({ ...prev, categoryId: categories[0].id }));
+        if (categories && categories.length > 0 && !spending.categoryId) {
+            setSpending((prev) => ({ ...prev, categoryId: categories[0].id }));
         }
-    }, [categories, expense.categoryId]);
+    }, [categories, spending.categoryId]);
 
-    const handleChange = (key, value) => setExpense({ ...expense, [key]: value });
+    const handleChange = (key, value) => setSpending({ ...spending, [key]: value });
 
-    const handleAddExpense = async () => {
-        if (!expense.name || !expense.amount || !expense.date || !expense.categoryId) {
+    const handleAddSpendings = async () => {
+        if (!spending.name || !spending.amount || !spending.date || !spending.categoryId) {
             return;
         }
         setLoading(true);
         try {
-            await onAddExpense(expense);
+            await onAddSpendings(spending);
         } finally {
             setLoading(false);
         }
@@ -36,14 +36,14 @@ const AddExpenseForm = ({ onAddExpense, categories }) => {
     return (
         <div className="space-y-5 p-2">
             <EmojiPickerPopup
-                icon={expense.icon}
+                icon={spending.icon}
                 onSelect={(selectedIcon) => handleChange("icon", selectedIcon)}
             />
 
             <Input
-                value={expense.name}
+                value={spending.name}
                 onChange={({ target }) => handleChange("name", target.value)}
-                label="Expense Name"
+                label="Spending Name"
                 placeholder="e.g., Electricity Bill, Groceries"
                 type="text"
             />
@@ -52,7 +52,7 @@ const AddExpenseForm = ({ onAddExpense, categories }) => {
                 <label className="text-[13px] text-slate-800 mb-1 font-medium">Category</label>
                 <div className="relative">
                     <select
-                        value={expense.categoryId}
+                        value={spending.categoryId}
                         onChange={({ target }) => handleChange("categoryId", target.value)}
                         className="w-full bg-transparent border border-gray-300 rounded-md py-2.5 px-3 appearance-none text-gray-700 leading-tight focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors shadow-sm"
                     >
@@ -70,7 +70,7 @@ const AddExpenseForm = ({ onAddExpense, categories }) => {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <Input
-                    value={expense.amount}
+                    value={spending.amount}
                     onChange={({ target }) => handleChange("amount", target.value)}
                     label="Amount"
                     placeholder="e.g., 150.00"
@@ -78,7 +78,7 @@ const AddExpenseForm = ({ onAddExpense, categories }) => {
                 />
 
                 <Input
-                    value={expense.date}
+                    value={spending.date}
                     onChange={({ target }) => handleChange("date", target.value)}
                     label="Date"
                     placeholder=""
@@ -89,7 +89,7 @@ const AddExpenseForm = ({ onAddExpense, categories }) => {
             <div className="flex justify-end mt-8">
                 <button
                     type="button"
-                    onClick={handleAddExpense}
+                    onClick={handleAddSpendings}
                     disabled={loading}
                     className="w-full flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 disabled:bg-gray-400 text-white px-8 py-3 rounded-xl font-bold transition-all duration-300 shadow-lg shadow-emerald-100 hover:shadow-xl hover:shadow-emerald-200 active:scale-95 mb-4"
                 >
@@ -99,7 +99,7 @@ const AddExpenseForm = ({ onAddExpense, categories }) => {
                             <span>Adding...</span>
                         </>
                     ) : (
-                        <span>Add Expense</span>
+                        <span>Add Spending</span>
                     )}
                 </button>
             </div>
@@ -107,4 +107,4 @@ const AddExpenseForm = ({ onAddExpense, categories }) => {
     );
 };
 
-export default AddExpenseForm;
+export default AddSpendingsForm;

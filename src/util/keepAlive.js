@@ -1,5 +1,5 @@
 import axiosConfig from "./axiosConfig";
-import { API_ENDPOINTS } from "./apiEndpoints";
+import { API_ENDPOINTS } from "./apiEndPoints";
 
 /**
  * KeepAlive Utility

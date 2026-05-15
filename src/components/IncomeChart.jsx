@@ -39,12 +39,12 @@ const CustomTooltip = ({ active, payload, label }) => {
     return null;
 };
 
-const IncomeChart = ({ incomes }) => {
+const EarningsChart = ({ earnings }) => {
     const chartData = useMemo(() => {
-        if (!incomes || incomes.length === 0) return [];
+        if (!earnings || earnings.length === 0) return [];
 
-        // Aggregate incomes by date
-        const aggregated = incomes.reduce((acc, current) => {
+        // Aggregate earnings by date
+        const aggregated = earnings.reduce((acc, current) => {
             // Format date to "6th Jul"
             const dateStr = moment(current.date).format("Do MMM");
             
@@ -61,7 +61,7 @@ const IncomeChart = ({ incomes }) => {
             acc[dateStr].amount += currentAmount;
             
             acc[dateStr].details.push({
-                name: current.name || current.categoryName || "Income",
+                name: current.name || current.categoryName || "Earning",
                 amount: currentAmount
             });
             
@@ -70,7 +70,7 @@ const IncomeChart = ({ incomes }) => {
 
         // Convert to array and sort by date
         return Object.values(aggregated).sort((a, b) => a.rawDate - b.rawDate);
-    }, [incomes]);
+    }, [earnings]);
 
     if (chartData.length === 0) {
         return null;
@@ -79,8 +79,8 @@ const IncomeChart = ({ incomes }) => {
     return (
         <div className="bg-white rounded-2xl shadow-[0_2px_10px_rgba(0,0,0,0.04)] border border-gray-100 p-6 md:p-8 mb-6">
             <div className="mb-6">
-                <h3 className="text-xl font-bold text-gray-900">Income Overview</h3>
-                <p className="text-sm text-gray-500 mt-1">Track your earnings over time and analyze your income trends.</p>
+                <h3 className="text-xl font-bold text-gray-900">Earnings Overview</h3>
+                <p className="text-sm text-gray-500 mt-1">Track your earnings over time and analyze your earnings trends.</p>
             </div>
             
             <div className="h-[300px] w-full">
@@ -126,4 +126,4 @@ const IncomeChart = ({ incomes }) => {
     );
 };
 
-export default IncomeChart;
+export default EarningsChart;

@@ -9,7 +9,7 @@ const HeroSection = () => {
                     Take Control of Your Finances
                 </h1>
                 <p className="mt-4 max-w-2xl mx-auto text-lg md:text-xl text-gray-500">
-                    Your foundation for secure, intelligent financial management. Effortlessly track your income and expenses to achieve your financial goals.
+                    Your foundation for secure, intelligent financial management. Effortlessly track your earnings and spendings to achieve your financial goals.
                 </p>
                 <div className="mt-8 flex flex-col sm:flex-row justify-center items-center gap-4">
                     <Link

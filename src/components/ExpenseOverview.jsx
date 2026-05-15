@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import {Plus} from "lucide-react";
 import CustomLineChart from "./CustomLineChart.jsx";
-import {prepareIncomeLineChartData} from "../util/util.js";
+import {prepareEarningsLineChartData} from "../util/util.js";
 
-const ExpenseOverview = ({transactions, onExpenseIncome}) => {
+const SpendingsOverview = ({transactions, onAddSpendings}) => {
     const [chartData, setChartData] = useState([]);
 
     useEffect(() => {
-        const result = prepareIncomeLineChartData(transactions);
+        const result = prepareEarningsLineChartData(transactions);
         setChartData(result);
 
         return () => {};
@@ -17,16 +17,16 @@ const ExpenseOverview = ({transactions, onExpenseIncome}) => {
         <div className="card">
             <div className="flex items-center justify-between">
                 <div className="">
-                    <h5 className="text-lg">Expense Overview</h5>
+                    <h5 className="text-lg">Spendings Overview</h5>
                     <p className="text-xs text-gray-400 mt-0.5">
                         Track your spending trends over time and gain insights into where
                         your money goes.
                     </p>
                 </div>
 
-                <button className="add-btn" onClick={onExpenseIncome}>
+                <button className="add-btn" onClick={onAddSpendings}>
                     <Plus size={15} className="text-lg" />
-                    Add Expense
+                    Add Spending
                 </button>
             </div>
 
@@ -37,4 +37,4 @@ const ExpenseOverview = ({transactions, onExpenseIncome}) => {
     );
 };
 
-export default ExpenseOverview;
+export default SpendingsOverview;

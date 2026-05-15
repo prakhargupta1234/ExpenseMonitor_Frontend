@@ -3,8 +3,8 @@ import EmojiPickerPopup from "./EmojiPickerPopup.jsx";
 import Input from "./Input.jsx";
 import { LoaderCircle } from "lucide-react";
 
-const AddIncomeForm = ({ onAddIncome, categories }) => {
-    const [income, setIncome] = useState({
+const AddEarningsForm = ({ onAddEarnings, categories }) => {
+    const [earning, setEarning] = useState({
         name: '',
         amount: '',
         date: '',
@@ -14,38 +14,38 @@ const AddIncomeForm = ({ onAddIncome, categories }) => {
     const [loading, setLoading] = useState(false);
 
     const handleChange = (key, value) => {
-        setIncome({ ...income, [key]: value });
+        setEarning({ ...earning, [key]: value });
     }
 
-    const handleAddIncome = async () => {
-        if (!income.name || !income.amount || !income.date || !income.categoryId) {
+    const handleAddEarnings = async () => {
+        if (!earning.name || !earning.amount || !earning.date || !earning.categoryId) {
             return;
         }
         setLoading(true);
         try {
-            await onAddIncome(income);
+            await onAddEarnings(earning);
         } finally {
             setLoading(false);
         }
     }
 
     useEffect(() => {
-        if (categories.length > 0 && !income.categoryId) {
-            setIncome((prev) => ({ ...prev, categoryId: categories[0].id }))
+        if (categories.length > 0 && !earning.categoryId) {
+            setEarning((prev) => ({ ...prev, categoryId: categories[0].id }))
         }
-    }, [categories, income.categoryId]);
+    }, [categories, earning.categoryId]);
 
     return (
         <div className="space-y-5 p-2">
             <EmojiPickerPopup
-                icon={income.icon}
+                icon={earning.icon}
                 onSelect={(selectedIcon) => handleChange('icon', selectedIcon)}
             />
 
             <Input
-                value={income.name}
+                value={earning.name}
                 onChange={({ target }) => handleChange('name', target.value)}
-                label="Income Source"
+                label="Earning Source"
                 placeholder="e.g., Salary, Freelance, Bonus"
                 type="text"
             />
@@ -54,7 +54,7 @@ const AddIncomeForm = ({ onAddIncome, categories }) => {
                 <label className="text-[13px] text-slate-800 mb-1 font-medium">Category</label>
                 <div className="relative">
                     <select
-                        value={income.categoryId}
+                        value={earning.categoryId}
                         onChange={({ target }) => handleChange('categoryId', target.value)}
                         className="w-full bg-transparent border border-gray-300 rounded-md py-2.5 px-3 appearance-none text-gray-700 leading-tight focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors shadow-sm"
                     >
@@ -72,7 +72,7 @@ const AddIncomeForm = ({ onAddIncome, categories }) => {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <Input
-                    value={income.amount}
+                    value={earning.amount}
                     onChange={({ target }) => handleChange('amount', target.value)}
                     label="Amount"
                     placeholder="e.g., 500.00"
@@ -80,7 +80,7 @@ const AddIncomeForm = ({ onAddIncome, categories }) => {
                 />
 
                 <Input
-                    value={income.date}
+                    value={earning.date}
                     onChange={({ target }) => handleChange('date', target.value)}
                     label="Date"
                     placeholder=""
@@ -90,7 +90,7 @@ const AddIncomeForm = ({ onAddIncome, categories }) => {
 
             <div className="flex justify-end mt-8">
                 <button
-                    onClick={handleAddIncome}
+                    onClick={handleAddEarnings}
                     disabled={loading}
                     className="w-full flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 disabled:bg-gray-400 text-white px-8 py-3 rounded-xl font-bold transition-all duration-300 shadow-lg shadow-emerald-100 hover:shadow-xl hover:shadow-emerald-200 active:scale-95 mb-4"
                 >
@@ -100,7 +100,7 @@ const AddIncomeForm = ({ onAddIncome, categories }) => {
                             <span>Adding...</span>
                         </>
                     ) : (
-                        <span>Add Income</span>
+                        <span>Add Earning</span>
                     )}
                 </button>
             </div>
@@ -108,4 +108,4 @@ const AddIncomeForm = ({ onAddIncome, categories }) => {
     )
 }
 
-export default AddIncomeForm;
+export default AddEarningsForm;

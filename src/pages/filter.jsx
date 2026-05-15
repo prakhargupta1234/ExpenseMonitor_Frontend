@@ -12,7 +12,7 @@ import PageLoader from "../components/PageLoader";
 const Filter = () => {
     useUser();
 
-    const [type, setType] = useState("expense");
+    const [type, setType] = useState("spendings");
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
     const [keyword, setKeyword] = useState("");
@@ -36,9 +36,9 @@ const Filter = () => {
 
         try {
             const payload = { 
-                type: type.toUpperCase(),
-                categoryType: type.toUpperCase(),
-                transactionType: type.toUpperCase(),
+                type: type === "earnings" ? "INCOME" : "EXPENSE",
+                categoryType: type === "earnings" ? "INCOME" : "EXPENSE",
+                transactionType: type === "earnings" ? "INCOME" : "EXPENSE",
                 startDate,
                 endDate 
             };
@@ -62,7 +62,7 @@ const Filter = () => {
     };
 
     const handleReset = () => {
-        setType("expense");
+        setType("spendings");
         setStartDate("");
         setEndDate("");
         setKeyword("");
@@ -98,25 +98,25 @@ const Filter = () => {
                                     <div className="flex gap-2">
                                         <button
                                             type="button"
-                                            onClick={() => setType("income")}
-                                            className={`flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 flex items-center justify-center gap-1.5 ${type === "income"
+                                            onClick={() => setType("earnings")}
+                                            className={`flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 flex items-center justify-center gap-1.5 ${type === "earnings"
                                                     ? "bg-emerald-600 text-white shadow-md shadow-emerald-100"
                                                     : "bg-gray-50 text-gray-500 hover:bg-gray-100"
                                                 }`}
                                         >
                                             <TrendingUp size={14} />
-                                            Income
+                                            Earnings
                                         </button>
                                         <button
                                             type="button"
-                                            onClick={() => setType("expense")}
-                                            className={`flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 flex items-center justify-center gap-1.5 ${type === "expense"
+                                            onClick={() => setType("spendings")}
+                                            className={`flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 flex items-center justify-center gap-1.5 ${type === "spendings"
                                                     ? "bg-red-600 text-white shadow-md shadow-red-100"
                                                     : "bg-gray-50 text-gray-500 hover:bg-gray-100"
                                                 }`}
                                         >
                                             <TrendingDown size={14} />
-                                            Expense
+                                            Spendings
                                         </button>
                                     </div>
                                 </div>
@@ -229,12 +229,12 @@ const Filter = () => {
                         <>
                             {/* Results Summary */}
                             {results.length > 0 && (
-                                <div className={`${type === "income" ? "bg-emerald-50 border-emerald-100" : "bg-red-50 border-red-100"} border rounded-xl p-4 mb-5 flex items-center justify-between animate-scale-in`}>
+                                <div className={`${type === "earnings" ? "bg-emerald-50 border-emerald-100" : "bg-red-50 border-red-100"} border rounded-xl p-4 mb-5 flex items-center justify-between animate-scale-in`}>
                                     <p className="text-sm font-semibold text-gray-700">
                                         {results.length} result{results.length !== 1 ? "s" : ""} found
                                     </p>
-                                    <p className={`font-bold text-lg ${type === "income" ? "text-emerald-700" : "text-red-700"}`}>
-                                        {type === "income" ? "+" : "-"}₹{total.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+                                    <p className={`font-bold text-lg ${type === "earnings" ? "text-emerald-700" : "text-red-700"}`}>
+                                        {type === "earnings" ? "+" : "-"}₹{total.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
                                     </p>
                                 </div>
                             )}

@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import bg from "../assets/bgcimage.png";
-import Input from "../components/input";
+import Input from "../components/Input";
 import { API_ENDPOINTS } from "../util/apiEndPoints";
 import { AppContext } from "../context/AppContext";
 import toast from "react-hot-toast";
@@ -76,13 +76,13 @@ const Login = () => {
                 <div className="w-10 h-10 bg-emerald-600 rounded-xl flex items-center justify-center shadow-lg">
                     <Wallet size={20} className="text-white" />
                 </div>
-                <span className="text-2xl font-bold text-white drop-shadow-md">ExpenseIQ</span>
+                <span className="text-2xl font-bold text-white drop-shadow-md">SpendingsIQ</span>
             </div>
 
             <div className="relative z-10 w-full max-w-lg px-6">
                 <div className="bg-white bg-opacity-95 backdrop-blur-sm rounded-lg shadow-2xl p-8 max-h-[90vh] overflow-y-auto">
                     <h3 className="text-3xl font-bold text-black text-center mb-2">
-                        Welcome Back to ExpenseIQ
+                        Welcome Back to SpendingsIQ
                     </h3>
 
                     <p className="text-sm text-slate-700 text-center mb-8 font-medium">

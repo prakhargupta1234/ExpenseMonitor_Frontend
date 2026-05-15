@@ -51,9 +51,9 @@ const MenuBar = ({ activeMenu }) => {
                     </button>
 
                     <div className="flex items-center gap-2.5 cursor-pointer" onClick={() => navigate("/dashboard")}>
-                        <img src={logo} alt="ExpenseIQ" className="h-9 w-9" />
+                        <img src={logo} alt="SpendingsIQ" className="h-9 w-9" />
                         <div className="hidden sm:block">
-                            <span className="text-lg font-bold text-gray-900 tracking-tight">Expense</span>
+                            <span className="text-lg font-bold text-gray-900 tracking-tight">Spendings</span>
                             <span className="text-lg font-bold text-emerald-600 tracking-tight">IQ</span>
                         </div>
                     </div>
@@ -166,7 +166,7 @@ const MenuBar = ({ activeMenu }) => {
                     <div className="flex items-center gap-2">
                         <img src={logo} alt="logo" className="h-8 w-8" />
                         <div>
-                            <span className="text-base font-bold text-gray-900">Expense</span>
+                            <span className="text-base font-bold text-gray-900">Spendings</span>
                             <span className="text-base font-bold text-emerald-600">IQ</span>
                         </div>
                     </div>

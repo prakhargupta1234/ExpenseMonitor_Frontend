@@ -85,8 +85,8 @@ const CategoryForm = ({ onSubmit, isLoading, initialData = null, onCancel }) => 
                     onChange={(e) => setType(e.target.value)}
                     className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-gray-700 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all bg-white shadow-sm"
                 >
-                    <option value="INCOME">Income</option>
-                    <option value="EXPENSE">Expense</option>
+                    <option value="INCOME">Earnings</option>
+                    <option value="EXPENSE">Spendings</option>
                 </select>
             </div>
 

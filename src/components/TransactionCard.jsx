@@ -1,7 +1,7 @@
 import { Trash2, TrendingUp, TrendingDown } from "lucide-react";
 
 const TransactionCard = ({ transaction, onDelete, type }) => {
-    const isIncome = type === "income";
+    const isIncome = type === "earnings" || type === "income";
 
     const formatDate = (dateStr) => {
         if (!dateStr) return "";

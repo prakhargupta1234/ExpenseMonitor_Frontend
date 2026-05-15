@@ -59,8 +59,8 @@ const AddCategoryForm = ({ onAddCategory, initialCategoryData, isEditing }) => {
                             onChange={({ target }) => handleChange("type", target.value)}
                             className="w-full bg-transparent border border-gray-300 rounded-md py-2.5 px-3 appearance-none text-gray-700 leading-tight focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors shadow-sm"
                         >
-                            <option value="income">Income</option>
-                            <option value="expense">Expense</option>
+                            <option value="income">Earnings</option>
+                            <option value="expense">Spendings</option>
                         </select>
                         <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500">
                             <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>

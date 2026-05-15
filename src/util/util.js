@@ -27,7 +27,7 @@ export const addThousandsSeparator = (num) => {
     return fractionalPart ? `${integerPart}.${fractionalPart}` : integerPart;
 };
 
-export const prepareIncomeLineChartData = (data = []) => {
+export const prepareEarningsLineChartData = (data = []) => {
     // Group data by date
     const groupedByDate = data.reduce((acc, item) => {
         const dateKey = item.date; // Assuming 'date' is in 'YYYY-MM-DD' format

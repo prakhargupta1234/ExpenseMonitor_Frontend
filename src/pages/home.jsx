@@ -52,22 +52,22 @@ const Home = () => {
         return Number(String(val).replace(/[^\d.-]/g, '')) || 0;
     };
 
-    const totalIncome = parseAmount(dashboardData?.totalIncome);
-    const totalExpense = parseAmount(dashboardData?.totalExpense);
+    const totalEarnings = parseAmount(dashboardData?.totalIncome);
+    const totalSpendings = parseAmount(dashboardData?.totalExpense);
     const balance = dashboardData?.balance !== undefined && parseAmount(dashboardData?.balance) !== 0 
         ? parseAmount(dashboardData.balance) 
-        : (totalIncome - totalExpense);
+        : (totalEarnings - totalSpendings);
 
     const recentTransactions = dashboardData?.recentTransactions || [];
     
-    const recentIncomes = recentTransactions.filter(tx => tx.type?.toUpperCase() === "INCOME").slice(0, 5);
-    const recentExpenses = recentTransactions.filter(tx => tx.type?.toUpperCase() === "EXPENSE").slice(0, 5);
+    const recentEarnings = recentTransactions.filter(tx => tx.type?.toUpperCase() === "INCOME" || tx.type?.toUpperCase() === "EARNINGS").slice(0, 5);
+    const recentSpendings = recentTransactions.filter(tx => tx.type?.toUpperCase() === "EXPENSE" || tx.type?.toUpperCase() === "SPENDINGS").slice(0, 5);
     const generalRecent = recentTransactions.slice(0, 5);
 
     const overviewData = [];
     if (balance > 0) overviewData.push({ name: "Balance", value: balance, fill: "#059669" });
-    if (totalExpense > 0) overviewData.push({ name: "Expenses", value: totalExpense, fill: "#ef4444" });
-    if (totalIncome > 0) overviewData.push({ name: "Income", value: totalIncome, fill: "#10b981" });
+    if (totalSpendings > 0) overviewData.push({ name: "Spendings", value: totalSpendings, fill: "#ef4444" });
+    if (totalEarnings > 0) overviewData.push({ name: "Earnings", value: totalEarnings, fill: "#10b981" });
     
     if (overviewData.length === 0) {
         overviewData.push({ name: "No Data", value: 1, fill: "#e5e7eb" });
@@ -78,7 +78,7 @@ const Home = () => {
     };
 
     const renderTransactionItem = (tx, index) => {
-        const isIncome = tx.type?.toUpperCase() === "INCOME";
+        const isIncome = tx.type?.toUpperCase() === "INCOME" || tx.type?.toUpperCase() === "EARNINGS";
         const displayName = tx.name || tx.description || tx.categoryName || "Transaction";
         const displayDate = tx.date ? new Date(tx.date).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" }) : "Unknown Date";
         
@@ -133,7 +133,7 @@ const Home = () => {
                             Take Control of Your Financial Life
                         </h1>
                         <p className="text-emerald-100 text-sm sm:text-base max-w-2xl leading-relaxed">
-                            Track expenses, monitor income, analyze spending habits, and manage your finances smarter with <strong className="text-white">ExpenseIQ</strong>.
+                            Track spendings, monitor earnings, analyze spending habits, and manage your finances smarter with <strong className="text-white">ExpenseIQ</strong>.
                         </p>
                     </div>
                 </div>
@@ -155,7 +155,7 @@ const Home = () => {
                         </div>
                     </div>
 
-                    {/* Total Income */}
+                    {/* Total Earnings */}
                     <div className="bg-emerald-50 border border-emerald-100 rounded-3xl p-6 shadow-sm hover:shadow-md transition-all duration-300 group overflow-hidden relative">
                         <div className="absolute -right-4 -bottom-4 w-24 h-24 bg-emerald-200/30 rounded-full blur-2xl group-hover:scale-125 transition-transform duration-500"></div>
                         <div className="relative z-10">
@@ -164,8 +164,8 @@ const Home = () => {
                                     <TrendingUp className="w-5 h-5 text-white" />
                                 </div>
                             </div>
-                            <p className="text-emerald-700/60 text-xs font-semibold uppercase tracking-wider mb-1">Total Income</p>
-                            <p className="text-3xl font-bold text-emerald-900 tracking-tight">{formatCurrency(totalIncome)}</p>
+                            <p className="text-emerald-700/60 text-xs font-semibold uppercase tracking-wider mb-1">Total Earnings</p>
+                            <p className="text-3xl font-bold text-emerald-900 tracking-tight">{formatCurrency(totalEarnings)}</p>
                             <div className="mt-3 flex items-center gap-1 text-[11px] font-bold text-emerald-600">
                                 <div className="w-1 h-1 rounded-full bg-emerald-600 animate-pulse"></div>
                                 Cumulative earnings
@@ -173,7 +173,7 @@ const Home = () => {
                         </div>
                     </div>
 
-                    {/* Total Expense */}
+                    {/* Total Spendings */}
                     <div className="bg-red-50 border border-red-100 rounded-3xl p-6 shadow-sm hover:shadow-md transition-all duration-300 group overflow-hidden relative">
                         <div className="absolute -right-4 -bottom-4 w-24 h-24 bg-red-200/30 rounded-full blur-2xl group-hover:scale-125 transition-transform duration-500"></div>
                         <div className="relative z-10">
@@ -182,8 +182,8 @@ const Home = () => {
                                     <TrendingDown className="w-5 h-5 text-white" />
                                 </div>
                             </div>
-                            <p className="text-red-700/60 text-xs font-semibold uppercase tracking-wider mb-1">Total Expense</p>
-                            <p className="text-3xl font-bold text-red-900 tracking-tight">{formatCurrency(totalExpense)}</p>
+                            <p className="text-red-700/60 text-xs font-semibold uppercase tracking-wider mb-1">Total Spendings</p>
+                            <p className="text-3xl font-bold text-red-900 tracking-tight">{formatCurrency(totalSpendings)}</p>
                             <div className="mt-3 flex items-center gap-1 text-[11px] font-bold text-red-600">
                                 <div className="w-1 h-1 rounded-full bg-red-600 animate-pulse"></div>
                                 Total spending
@@ -282,32 +282,32 @@ const Home = () => {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-6">
                     <div className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm animate-fade-in">
                         <div className="flex justify-between items-center mb-5">
-                            <h3 className="text-base font-bold text-gray-900">Recent Expenses</h3>
+                            <h3 className="text-base font-bold text-gray-900">Recent Spendings</h3>
                             <Link to="/expense" className="flex items-center gap-1.5 px-3 py-1.5 bg-gray-50 hover:bg-gray-100 text-gray-500 rounded-lg text-xs font-semibold transition-all">
                                 More <ArrowRight size={13} />
                             </Link>
                         </div>
-                        {recentExpenses.length === 0 ? (
-                            <p className="text-gray-400 text-sm text-center py-8">No recent expenses</p>
+                        {recentSpendings.length === 0 ? (
+                            <p className="text-gray-400 text-sm text-center py-8">No recent spendings</p>
                         ) : (
                             <div className="space-y-0.5">
-                                {recentExpenses.map((tx, index) => renderTransactionItem(tx, index))}
+                                {recentSpendings.map((tx, index) => renderTransactionItem(tx, index))}
                             </div>
                         )}
                     </div>
 
                     <div className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm animate-fade-in">
                         <div className="flex justify-between items-center mb-5">
-                            <h3 className="text-base font-bold text-gray-900">Recent Incomes</h3>
+                            <h3 className="text-base font-bold text-gray-900">Recent Earnings</h3>
                             <Link to="/income" className="flex items-center gap-1.5 px-3 py-1.5 bg-gray-50 hover:bg-gray-100 text-gray-500 rounded-lg text-xs font-semibold transition-all">
                                 More <ArrowRight size={13} />
                             </Link>
                         </div>
-                        {recentIncomes.length === 0 ? (
-                            <p className="text-gray-400 text-sm text-center py-8">No recent incomes</p>
+                        {recentEarnings.length === 0 ? (
+                            <p className="text-gray-400 text-sm text-center py-8">No recent earnings</p>
                         ) : (
                             <div className="space-y-0.5">
-                                {recentIncomes.map((tx, index) => renderTransactionItem(tx, index))}
+                                {recentEarnings.map((tx, index) => renderTransactionItem(tx, index))}
                             </div>
                         )}
                     </div>

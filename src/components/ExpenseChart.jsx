@@ -38,12 +38,12 @@ const CustomTooltip = ({ active, payload, label }) => {
     return null;
 };
 
-const ExpenseChart = ({ expenses }) => {
+const SpendingsChart = ({ spendings }) => {
     const chartData = useMemo(() => {
-        if (!expenses || expenses.length === 0) return [];
+        if (!spendings || spendings.length === 0) return [];
 
-        // Aggregate expenses by date
-        const aggregated = expenses.reduce((acc, current) => {
+        // Aggregate spendings by date
+        const aggregated = spendings.reduce((acc, current) => {
             // Format date to "6th Jul"
             const dateStr = moment(current.date).format("Do MMM");
             
@@ -60,7 +60,7 @@ const ExpenseChart = ({ expenses }) => {
             acc[dateStr].amount += currentAmount;
             
             acc[dateStr].details.push({
-                name: current.name || current.categoryName || "Expense",
+                name: current.name || current.categoryName || "Spending",
                 amount: currentAmount
             });
             
@@ -69,7 +69,7 @@ const ExpenseChart = ({ expenses }) => {
 
         // Convert to array and sort by date
         return Object.values(aggregated).sort((a, b) => a.rawDate - b.rawDate);
-    }, [expenses]);
+    }, [spendings]);
 
     if (chartData.length === 0) {
         return null;
@@ -79,8 +79,8 @@ const ExpenseChart = ({ expenses }) => {
         <div className="bg-white rounded-2xl shadow-[0_2px_10px_rgba(0,0,0,0.04)] border border-gray-100 p-6 md:p-8 mb-6">
             <div className="mb-6 flex justify-between items-start">
                 <div>
-                    <h3 className="text-xl font-bold text-gray-900">Expense Overview</h3>
-                    <p className="text-sm text-gray-500 mt-1">Track your spending trends over time and gain insights into where your money goes.</p>
+                    <h3 className="text-xl font-bold text-gray-900">Spendings Overview</h3>
+                    <p className="text-sm text-gray-500 mt-1">Track your spendings trends over time and gain insights into where your money goes.</p>
                 </div>
             </div>
             
@@ -91,7 +91,7 @@ const ExpenseChart = ({ expenses }) => {
                         margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
                     >
                         <defs>
-                            <linearGradient id="colorExpense" x1="0" y1="0" x2="0" y2="1">
+                            <linearGradient id="colorSpendings" x1="0" y1="0" x2="0" y2="1">
                                 <stop offset="5%" stopColor="#ef4444" stopOpacity={0.3} />
                                 <stop offset="95%" stopColor="#ef4444" stopOpacity={0} />
                             </linearGradient>
@@ -117,7 +117,7 @@ const ExpenseChart = ({ expenses }) => {
                             stroke="#ef4444" 
                             strokeWidth={3}
                             fillOpacity={1} 
-                            fill="url(#colorExpense)" 
+                            fill="url(#colorSpendings)" 
                             activeDot={{ r: 6, fill: '#ef4444', stroke: '#fff', strokeWidth: 2 }}
                         />
                     </AreaChart>
@@ -127,4 +127,4 @@ const ExpenseChart = ({ expenses }) => {
     );
 };
 
-export default ExpenseChart;
+export default SpendingsChart;
