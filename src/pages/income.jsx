@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import Dashboard from "../components/dashboard";
 import axiosConfig from "../util/axiosConfig";
 import { API_ENDPOINTS } from "../util/apiEndPoints";
-import { Plus, Wallet, Mail, Download, LoaderCircle, TrendingUp } from "lucide-react";
+import { Plus, Wallet, Mail, Download, LoaderCircle } from "lucide-react";
 import Modal from "../components/modal";
 import TransactionForm from "../components/TransactionForm";
 import TransactionCard from "../components/TransactionCard";
@@ -10,7 +10,9 @@ import PageLoader from "../components/PageLoader";
 import EmptyState from "../components/EmptyState";
 import DeleteConfirmModal from "../components/DeleteConfirmModal";
 import EarningsChart from "../components/IncomeChart";
+import InfoCard from "../components/InfoCard";
 import toast from "react-hot-toast";
+import { ArrowUpCircle, History, LayoutGrid, TrendingUp } from "lucide-react";
 
 const Earnings = () => {
     const [earnings, setEarnings] = useState([]);
@@ -102,6 +104,9 @@ const Earnings = () => {
         return sum + (isNaN(amount) ? 0 : amount);
     }, 0);
 
+    const totalTransactions = earnings.length;
+    const uniqueCategoriesCount = new Set(earnings.filter(item => item.categoryName).map(item => item.categoryName)).size;
+
     return (
         <Dashboard activeMenu="Earnings">
             <div>
@@ -141,23 +146,33 @@ const Earnings = () => {
                 {/* Chart */}
                 {!loading && earnings.length > 0 && <EarningsChart earnings={earnings} />}
 
-                {/* Total Summary */}
+                {/* Cards Summary */}
                 {!loading && earnings.length > 0 && (
-                    <div className="bg-emerald-50 border border-emerald-100 rounded-2xl p-5 mb-6 flex items-center justify-between shadow-sm">
-                        <div className="flex items-center gap-4">
-                            <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow-sm">
-                                <TrendingUp className="w-6 h-6 text-emerald-600" />
-                            </div>
-                            <div>
-                                <p className="text-xs font-bold text-emerald-800 uppercase tracking-widest">Total Earnings</p>
-                                <p className="text-[11px] text-emerald-600 font-medium">
-                                    {earnings.length} source{earnings.length !== 1 ? "s" : ""} recorded
-                                </p>
-                            </div>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 animate-fade-in">
+                        <div>
+                            <InfoCard
+                                icon={<TrendingUp size={24} />}
+                                label="Total Earnings"
+                                value={`₹${totalEarnings.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+                                color="bg-emerald-500"
+                            />
                         </div>
-                        <p className="text-2xl font-bold text-emerald-700">
-                            +₹{totalEarnings.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
-                        </p>
+                        <div style={{ animationDelay: "0.1s" }}>
+                            <InfoCard
+                                icon={<History size={24} />}
+                                label="Total Transactions"
+                                value={totalTransactions}
+                                color="bg-teal-500"
+                            />
+                        </div>
+                        <div style={{ animationDelay: "0.2s" }}>
+                            <InfoCard
+                                icon={<LayoutGrid size={24} />}
+                                label="Categories Used"
+                                value={uniqueCategoriesCount}
+                                color="bg-blue-500"
+                            />
+                        </div>
                     </div>
                 )}
 
@@ -173,14 +188,15 @@ const Earnings = () => {
                         onAction={() => setShowAddModal(true)}
                     />
                 ) : (
-                    <div className="space-y-3">
+                    <div className="space-y-3 stagger-children">
                         {earnings.map((earning) => (
-                            <TransactionCard
-                                key={earning.id}
-                                transaction={earning}
-                                type="earnings"
-                                onDelete={handleDeleteClick}
-                            />
+                            <div key={earning.id}>
+                                <TransactionCard
+                                    transaction={earning}
+                                    type="earnings"
+                                    onDelete={handleDeleteClick}
+                                />
+                            </div>
                         ))}
                     </div>
                 )}

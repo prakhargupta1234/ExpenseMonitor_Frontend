@@ -18,7 +18,7 @@ const CustomTooltip = ({ active, payload, label }) => {
                 <p className="font-bold text-gray-900 mb-2">{label}</p>
                 <div className="flex items-center justify-between mb-1">
                     <span className="text-sm font-semibold text-gray-700">Total: </span>
-                    <span className="text-sm font-bold text-[#7c26f0]">
+                    <span className="text-sm font-bold text-emerald-600">
                         ₹{data.amount.toLocaleString("en-IN")}
                     </span>
                 </div>
@@ -91,10 +91,14 @@ const EarningsChart = ({ earnings }) => {
                     >
                         <defs>
                             <linearGradient id="colorAmount" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="5%" stopColor="#7c26f0" stopOpacity={0.3} />
-                                <stop offset="95%" stopColor="#7c26f0" stopOpacity={0} />
+                                <stop offset="5%" stopColor="#10b981" stopOpacity={0.4} />
+                                <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
                             </linearGradient>
+                            <filter id="shadow" height="200%">
+                                <feDropShadow dx="0" dy="4" stdDeviation="4" floodColor="#10b981" floodOpacity="0.2"/>
+                            </filter>
                         </defs>
+                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f3f4f6" />
                         <XAxis 
                             dataKey="date" 
                             axisLine={false}
@@ -109,15 +113,16 @@ const EarningsChart = ({ earnings }) => {
                             tickFormatter={(value) => value >= 1000 ? `${(value / 1000).toFixed(0)}k` : value}
                             dx={-10}
                         />
-                        <Tooltip content={<CustomTooltip />} cursor={{ stroke: '#f3f4f6', strokeWidth: 2 }} />
+                        <Tooltip content={<CustomTooltip />} cursor={{ stroke: '#10b981', strokeWidth: 1, strokeDasharray: '4 4' }} wrapperStyle={{ outline: 'none', transition: 'all 0.2s ease' }} />
                         <Area 
                             type="monotone" 
                             dataKey="amount" 
-                            stroke="#7c26f0" 
-                            strokeWidth={3}
+                            stroke="#10b981" 
+                            strokeWidth={4}
                             fillOpacity={1} 
                             fill="url(#colorAmount)" 
-                            activeDot={{ r: 6, fill: '#7c26f0', stroke: '#fff', strokeWidth: 2 }}
+                            activeDot={{ r: 7, fill: '#10b981', stroke: '#fff', strokeWidth: 3 }}
+                            style={{ filter: 'url(#shadow)' }}
                         />
                     </AreaChart>
                 </ResponsiveContainer>

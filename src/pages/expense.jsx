@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
-import { Plus, Coins, Download, Mail, LoaderCircle, TrendingDown } from "lucide-react";
+import { Plus, Coins, Download, Mail, LoaderCircle, TrendingDown, History, LayoutGrid } from "lucide-react";
 import Dashboard from "../components/dashboard";
 import { useUser } from "../hooks/useUser";
 import axiosConfig from "../util/axiosConfig";
@@ -12,6 +12,7 @@ import DeleteConfirmModal from "../components/DeleteConfirmModal";
 import EmptyState from "../components/EmptyState";
 import PageLoader from "../components/PageLoader";
 import SpendingsChart from "../components/ExpenseChart";
+import InfoCard from "../components/InfoCard";
 
 const Spendings = () => {
     useUser();
@@ -113,8 +114,11 @@ const Spendings = () => {
         return sum + (isNaN(amount) ? 0 : amount);
     }, 0);
 
+    const totalTransactions = spendings.length;
+    const uniqueCategoriesCount = new Set(spendings.filter(item => item.categoryName).map(item => item.categoryName)).size;
+
     return (
-        <Dashboard activeMenu="Spending">
+        <Dashboard activeMenu="Spendings">
             <div>
                 {/* Header */}
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
@@ -152,23 +156,33 @@ const Spendings = () => {
                 {/* Chart */}
                 {!loading && spendings.length > 0 && <SpendingsChart spendings={spendings} />}
 
-                {/* Total Summary */}
+                {/* Cards Summary */}
                 {!loading && spendings.length > 0 && (
-                    <div className="bg-red-50 border border-red-100 rounded-2xl p-5 mb-6 flex items-center justify-between shadow-sm">
-                        <div className="flex items-center gap-4">
-                            <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow-sm">
-                                <TrendingDown className="w-6 h-6 text-red-600" />
-                            </div>
-                            <div>
-                                <p className="text-xs font-bold text-red-800 uppercase tracking-widest">Total Spendings</p>
-                                <p className="text-[11px] text-red-600 font-medium">
-                                    {spendings.length} transaction{spendings.length !== 1 ? "s" : ""} recorded
-                                </p>
-                            </div>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 animate-fade-in">
+                        <div>
+                            <InfoCard
+                                icon={<TrendingDown size={24} />}
+                                label="Total Spendings"
+                                value={`₹${totalSpendings.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+                                color="bg-red-500"
+                            />
                         </div>
-                        <p className="text-2xl font-bold text-red-700">
-                            -₹{totalSpendings.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
-                        </p>
+                        <div style={{ animationDelay: "0.1s" }}>
+                            <InfoCard
+                                icon={<History size={24} />}
+                                label="Total Transactions"
+                                value={totalTransactions}
+                                color="bg-orange-500"
+                            />
+                        </div>
+                        <div style={{ animationDelay: "0.2s" }}>
+                            <InfoCard
+                                icon={<LayoutGrid size={24} />}
+                                label="Categories Used"
+                                value={uniqueCategoriesCount}
+                                color="bg-rose-500"
+                            />
+                        </div>
                     </div>
                 )}
 
@@ -184,14 +198,15 @@ const Spendings = () => {
                         onAction={() => setShowAddModal(true)}
                     />
                 ) : (
-                    <div className="space-y-3">
+                    <div className="space-y-3 stagger-children">
                         {spendings.map((spending) => (
-                            <TransactionCard
-                                key={spending.id}
-                                transaction={spending}
-                                type="spendings"
-                                onDelete={handleDeleteClick}
-                            />
+                            <div key={spending.id}>
+                                <TransactionCard
+                                    transaction={spending}
+                                    type="spendings"
+                                    onDelete={handleDeleteClick}
+                                />
+                            </div>
                         ))}
                     </div>
                 )}

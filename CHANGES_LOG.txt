@@ -222,3 +222,118 @@ NOTES
   - Emoji icons are stored as image URLs from emoji-picker-react
 
 =====================================================
+
+=====================================================
+  MONEY MANAGER - REBRANDING & UI ENHANCEMENTS
+  Date: 2026-05-15
+=====================================================
+
+OVERVIEW:
+---------
+Completed a comprehensive rebranding of the application from "Income/Expense" 
+to "Earnings/Spendings" and updated the project name to "SpendingsIQ". 
+Modernized the UI with interactive cards, enhanced charts, and smoother animations.
+
+=====================================================
+GLOBAL REBRANDING
+=====================================================
+
+1. Project Identity
+   - Renamed application to "SpendingsIQ" (Login, Signup, Settings, AppInitializer)
+   - Updated Sidebar labels: "Income" -> "Earnings", "Expense" -> "Spendings"
+   - Replaced Lucide icons for consistency (Wallet for Earnings, Coins for Spendings)
+
+2. Terminology Updates
+   - Updated all UI labels, headings, and descriptions from Income/Expense to Earnings/Spendings.
+   - Maintained backend compatibility by mapping UI types ("earnings"/"spendings") 
+     to API constants ("INCOME"/"EXPENSE") in data submission.
+
+=====================================================
+UI/UX ENHANCEMENTS
+=====================================================
+
+1. Interactive Dashboard Cards (InfoCard.jsx)
+   - Replaced single total summary banners with a grid of 3 InfoCards.
+   - Metrics: Total Amount, Total Transactions, Categories Used.
+   - Added hover scale effects and smooth transitions.
+   - Made icons optional for count-based cards (Total Transactions).
+
+2. Premium Chart Styling
+   - IncomeChart.jsx: Updated color to Emerald (#10b981) to match Earnings theme.
+   - ExpenseChart.jsx: Updated styling to match Spendings theme.
+   - Added interactive features: CartesianGrid (dashed), Area Drop Shadow, 
+     Thicker stroke (4px), and animated custom Tooltips.
+
+3. Motion & Animations
+   - Implemented staggered list animations using `.stagger-children`.
+   - Added fade-in transitions for main content areas.
+
+=====================================================
+BUGS FIXED
+=====================================================
+
+1. sideBar.jsx / Expense.jsx
+   - ISSUE: Sidebar did not highlight "Spendings" because Expense.jsx passed "Spending" (singular).
+   - FIX: Synchronized activeMenu prop value to "Spendings".
+
+2. App.jsx
+   - ISSUE: Inconsistent import casing (e.g., ./pages/Income vs ./pages/income).
+   - FIX: Standardized all imports to match actual file system casing.
+
+3. InfoCard.jsx
+   - ISSUE: Hardcoded ₹ symbol caused issues for non-currency values like transaction counts.
+   - FIX: Moved currency formatting to the page level; InfoCard now displays raw value passed.
+
+=====================================================
+FILES MODIFIED:
+=====================================================
+- src/App.jsx
+- src/assets/assets.js
+- src/components/InfoCard.jsx
+- src/components/IncomeChart.jsx
+- src/components/ExpenseChart.jsx
+- src/components/sideBar.jsx
+- src/pages/Income.jsx
+- src/pages/Expense.jsx
+- src/pages/Login.jsx
+- src/pages/Signup.jsx
+- src/pages/Settings.jsx
+- src/components/AppInitializer.jsx
+- src/components/TransactionForm.jsx
+- src/pages/Filter.jsx
+
+=====================================================
+  MONEY MANAGER - INFOCARD UI & ICON UPDATES
+  Date: 2026-05-15 (Update 2)
+=====================================================
+
+OVERVIEW:
+---------
+Enhanced the informational cards (InfoCard.jsx) with a premium glassmorphism 
+aesthetic and interactive animations. Standardized icons across Earnings 
+and Spendings pages for better data visualization.
+
+=====================================================
+UI/UX ENHANCEMENTS
+=====================================================
+
+1. Premium InfoCard Design (InfoCard.jsx)
+   - Added backdrop-blur (glassmorphism) and subtle border transitions.
+   - Implemented ambient background glows that react to hover.
+   - Added interactive icon animations (scaling and rotation on hover).
+   - Refined typography with better tracking and font weights.
+
+2. Context-Aware Icons
+   - Standardized icons across Earnings and Spendings pages:
+     * Total Transactions: History icon
+     * Categories Used: LayoutGrid icon
+   - Integrated these icons into Income.jsx and Expense.jsx.
+
+=====================================================
+FILES MODIFIED:
+=====================================================
+- src/components/InfoCard.jsx
+- src/pages/Income.jsx
+- src/pages/Expense.jsx
+
+=====================================================
