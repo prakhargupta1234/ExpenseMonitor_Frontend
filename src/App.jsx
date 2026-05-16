@@ -4,7 +4,7 @@ import { Toaster } from "react-hot-toast";
 import Home from "./pages/home";
 import Category from "./pages/category";
 import Earnings from "./pages/income";
-import Spendings from "./pages/expense";
+import Spendings from "./pages/Expense";
 import Filter from "./pages/filter";
 import Settings from "./pages/Settings";
 import Login from "./pages/Login";
