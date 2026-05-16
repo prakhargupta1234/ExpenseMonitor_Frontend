@@ -2,8 +2,8 @@ import { Plus, Layers2, TrendingUp, TrendingDown } from "lucide-react";
 import Dashboard from "../components/Dashboard";
 import { useUser } from "../hooks/useUser";
 import toast from "react-hot-toast";
-import CategoryList from "../components/CategoryList";
-import { useEffect, useState } from "react";
+import CategoryList from "../components/categoryList";
+import { useEffect, usenpmState } from "react";
 import axiosConfig from "../util/axiosConfig";
 import { API_ENDPOINTS } from "../util/apiEndPoints";
 import Modal from "../components/Modal";
@@ -131,8 +131,8 @@ const Category = () => {
                     <CategoryList categories={categoryData} onEditCategory={onEditClick} />
 
                     {/* add the modal */}
-                    <Modal 
-                        isOpen={openAddCategoryModal} 
+                    <Modal
+                        isOpen={openAddCategoryModal}
                         onClose={() => setOpenAddCategoryModal(false)}
                         title="Add New Category"
                     >
@@ -140,13 +140,13 @@ const Category = () => {
                     </Modal>
 
                     {/* edit the modal */}
-                    <Modal 
-                        isOpen={openEditCategoryModal} 
+                    <Modal
+                        isOpen={openEditCategoryModal}
                         onClose={() => setOpenEditCategoryModal(false)}
                         title="Edit Category"
                     >
-                        <AddCategoryForm 
-                            onAddCategory={handleUpdateCategory} 
+                        <AddCategoryForm
+                            onAddCategory={handleUpdateCategory}
                             initialCategoryData={selectedCategory}
                             isEditing={true}
                         />

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Wallet, Info, ServerCog } from 'lucide-react';
 import axiosConfig from '../util/axiosConfig';
 import { API_ENDPOINTS } from '../util/apiEndPoints';
-import Modal from './modal'; // Reusing the existing modal component
+import Modal from './Modal'; // Reusing the existing modal component
 
 const AppInitializer = ({ onComplete }) => {
     const [showSplash, setShowSplash] = useState(true);
@@ -38,7 +38,7 @@ const AppInitializer = ({ onComplete }) => {
 
     return (
         <div className={`fixed inset-0 z-50 flex items-center justify-center transition-colors duration-1000 ${showSplash ? 'bg-emerald-950' : 'bg-transparent'}`}>
-            
+
             {/* Custom Animations for Splash */}
             <style>{`
                 @keyframes scaleUpFade {
@@ -78,7 +78,7 @@ const AppInitializer = ({ onComplete }) => {
                     {/* Decorative Flat Background Elements */}
                     <div className="absolute top-[15%] left-[10%] md:left-[20%] w-32 h-32 bg-emerald-600 rounded-full opacity-20 animate-float-1"></div>
                     <div className="absolute bottom-[20%] right-[10%] md:right-[15%] w-48 h-48 bg-green-500 opacity-10 animate-float-2"></div>
-                    
+
                     <div className="relative z-10 flex flex-col items-center">
                         {/* Animated Icon Container */}
                         <div className="relative w-28 h-28 mb-8 animate-scale-up group cursor-default">
@@ -123,12 +123,12 @@ const AppInitializer = ({ onComplete }) => {
                     </div>
                     <h3 className="text-lg font-semibold text-gray-800 mb-2">Important Information</h3>
                     <p className="text-gray-600 text-sm leading-relaxed mb-6">
-                        To keep this application free, our backend server is hosted on a resource-saving tier. 
+                        To keep this application free, our backend server is hosted on a resource-saving tier.
                         <strong> If no one has visited recently, the server goes to sleep.</strong>
                         <br /><br />
                         We have just sent a signal to wake it up! However, it may take <strong>up to 5 minutes</strong> for the server to fully restart. Please be patient if your login or signup takes a little longer than usual.
                     </p>
-                    
+
                     <button
                         onClick={handleAcknowledge}
                         className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-xl transition-colors duration-200 shadow-md active:scale-95"
