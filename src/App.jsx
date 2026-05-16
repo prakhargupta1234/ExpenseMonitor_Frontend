@@ -7,7 +7,7 @@ import Earnings from "./pages/income";
 // import Spendings from "./pages/Expense";
 import Filter from "./pages/filter";
 import Settings from "./pages/Settings";
-import Login from "./pages/Login";
+import Login from "./pages/login";
 import Signup from "./pages/Signup";
 import Activate from "./pages/activate";
 import ProtectedRoute from "./components/ProtectedRoute";
