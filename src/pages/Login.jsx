@@ -72,17 +72,17 @@ const Login = () => {
             />
 
             {/* Top Left Logo and Project Name */}
-            <div className="absolute top-6 left-6 z-20 flex items-center gap-2">
-                <div className="w-10 h-10 bg-emerald-600 rounded-xl flex items-center justify-center shadow-lg">
-                    <Wallet size={20} className="text-white" />
+            <div className="absolute top-4 left-4 sm:top-6 sm:left-6 z-20 flex items-center gap-2">
+                <div className="w-9 h-9 sm:w-10 sm:h-10 bg-emerald-600 rounded-xl flex items-center justify-center shadow-lg">
+                    <Wallet size={18} className="text-white" />
                 </div>
-                <span className="text-2xl font-bold text-white drop-shadow-md">SpendingsIQ</span>
+                <span className="text-xl sm:text-2xl font-bold text-white drop-shadow-md">ExpenseIQ</span>
             </div>
 
-            <div className="relative z-10 w-full max-w-lg px-6">
-                <div className="bg-white bg-opacity-95 backdrop-blur-sm rounded-lg shadow-2xl p-8 max-h-[90vh] overflow-y-auto">
-                    <h3 className="text-3xl font-bold text-black text-center mb-2">
-                        Welcome Back to SpendingsIQ
+            <div className="relative z-10 w-full max-w-lg px-4 sm:px-6">
+                <div className="bg-white bg-opacity-95 backdrop-blur-sm rounded-2xl shadow-2xl p-6 sm:p-8 max-h-[90vh] overflow-y-auto">
+                    <h3 className="text-2xl sm:text-3xl font-bold text-black text-center mb-2">
+                        Welcome Back to ExpenseIQ
                     </h3>
 
                     <p className="text-sm text-slate-700 text-center mb-8 font-medium">

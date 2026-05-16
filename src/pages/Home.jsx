@@ -129,7 +129,7 @@ const Home = () => {
                     <div className="absolute bottom-0 left-10 w-48 h-48 bg-teal-400 rounded-full mix-blend-multiply filter blur-3xl opacity-30 translate-y-1/2"></div>
                     
                     <div className="relative z-10 max-w-3xl">
-                        <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold mb-3 leading-tight">
+                        <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold mb-3 leading-tight">
                             Take Control of Your Financial Life
                         </h1>
                         <p className="text-emerald-100 text-sm sm:text-base max-w-2xl leading-relaxed">
@@ -139,7 +139,7 @@ const Home = () => {
                 </div>
 
                 {/* Stats Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8 stagger-children">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-5 mb-8 stagger-children">
                     {/* Total Balance */}
                     <div className="bg-slate-900 rounded-3xl p-6 shadow-xl shadow-slate-200 relative overflow-hidden group hover:scale-[1.02] transition-all duration-300">
                         <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-3xl -mr-10 -mt-10"></div>
@@ -151,7 +151,7 @@ const Home = () => {
                                 <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-widest bg-emerald-500/10 px-2 py-1 rounded-lg border border-emerald-500/20">Net Worth</span>
                             </div>
                             <p className="text-emerald-100/60 text-xs font-semibold uppercase tracking-wider mb-1">Total Balance</p>
-                            <p className="text-3xl font-bold text-white tracking-tight">{formatCurrency(balance)}</p>
+                            <p className="text-2xl sm:text-3xl font-bold text-white tracking-tight">{formatCurrency(balance)}</p>
                         </div>
                     </div>
 
@@ -165,7 +165,7 @@ const Home = () => {
                                 </div>
                             </div>
                             <p className="text-emerald-700/60 text-xs font-semibold uppercase tracking-wider mb-1">Total Earnings</p>
-                            <p className="text-3xl font-bold text-emerald-900 tracking-tight">{formatCurrency(totalEarnings)}</p>
+                            <p className="text-2xl sm:text-3xl font-bold text-emerald-900 tracking-tight">{formatCurrency(totalEarnings)}</p>
                             <div className="mt-3 flex items-center gap-1 text-[11px] font-bold text-emerald-600">
                                 <div className="w-1 h-1 rounded-full bg-emerald-600 animate-pulse"></div>
                                 Cumulative earnings
@@ -183,7 +183,7 @@ const Home = () => {
                                 </div>
                             </div>
                             <p className="text-red-700/60 text-xs font-semibold uppercase tracking-wider mb-1">Total Spendings</p>
-                            <p className="text-3xl font-bold text-red-900 tracking-tight">{formatCurrency(totalSpendings)}</p>
+                            <p className="text-2xl sm:text-3xl font-bold text-red-900 tracking-tight">{formatCurrency(totalSpendings)}</p>
                             <div className="mt-3 flex items-center gap-1 text-[11px] font-bold text-red-600">
                                 <div className="w-1 h-1 rounded-full bg-red-600 animate-pulse"></div>
                                 Total spending
@@ -193,7 +193,7 @@ const Home = () => {
                 </div>
 
                 {/* Middle Row */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-6">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-5 mb-6">
                     {/* Recent Transactions */}
                     <div className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm animate-fade-in">
                         <div className="flex justify-between items-center mb-5">
@@ -279,7 +279,7 @@ const Home = () => {
                 </div>
 
                 {/* Bottom Row */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-6">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-5 mb-6">
                     <div className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm animate-fade-in">
                         <div className="flex justify-between items-center mb-5">
                             <h3 className="text-base font-bold text-gray-900">Recent Spendings</h3>

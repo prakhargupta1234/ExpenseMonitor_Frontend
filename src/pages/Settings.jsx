@@ -153,7 +153,7 @@ const Settings = () => {
                 {/* Footer */}
                 <footer className="py-8 text-center border-t border-gray-100 animate-fade-in" style={{ animationDelay: '0.4s' }}>
                     <p className="text-sm text-gray-400 font-medium">
-                        &copy; 2026 <span className="text-gray-900 font-bold">SpendingsIQ</span>. All rights reserved.
+                        &copy; 2026 <span className="text-gray-900 font-bold">ExpenseIQ</span>. All rights reserved.
                     </p>
                 </footer>
             </div>
