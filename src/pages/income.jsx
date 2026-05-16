@@ -1,9 +1,9 @@
 import { useEffect, useState, useCallback } from "react";
-import Dashboard from "../components/dashboard";
+import Dashboard from "../components/Dashboard";
 import axiosConfig from "../util/axiosConfig";
 import { API_ENDPOINTS } from "../util/apiEndPoints";
 import { Plus, Wallet, Mail, Download, LoaderCircle } from "lucide-react";
-import Modal from "../components/modal";
+import Modal from "../components/Modal";
 import TransactionForm from "../components/TransactionForm";
 import TransactionCard from "../components/TransactionCard";
 import PageLoader from "../components/PageLoader";
@@ -14,7 +14,7 @@ import InfoCard from "../components/InfoCard";
 import toast from "react-hot-toast";
 import { ArrowUpCircle, History, LayoutGrid, TrendingUp } from "lucide-react";
 
-const Earnings = () => {
+const Income = () => {
     const [earnings, setEarnings] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showAddModal, setShowAddModal] = useState(false);
@@ -227,4 +227,4 @@ const Earnings = () => {
     );
 };
 
-export default Earnings;
+export default Income;

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Search, SlidersHorizontal, ArrowUpDown, TrendingUp, TrendingDown } from "lucide-react";
-import Dashboard from "../components/dashboard";
+import Dashboard from "../components/Dashboard";
 import { useUser } from "../hooks/useUser";
 import axiosConfig from "../util/axiosConfig";
 import { API_ENDPOINTS } from "../util/apiEndPoints";

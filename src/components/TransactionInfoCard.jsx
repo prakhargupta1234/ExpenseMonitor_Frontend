@@ -1,5 +1,4 @@
 import { Trash2, TrendingDown, TrendingUp, UtensilsCrossed } from "lucide-react";
-import income from "../pages/income.jsx";
 
 import { addThousandsSeparator } from "../util/util.js";
 

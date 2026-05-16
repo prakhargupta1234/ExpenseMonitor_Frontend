@@ -1,11 +1,11 @@
 import { useEffect, useState, useCallback } from "react";
 import { Plus, Coins, Download, Mail, LoaderCircle, TrendingDown, History, LayoutGrid } from "lucide-react";
-import Dashboard from "../components/dashboard";
+import Dashboard from "../components/Dashboard";
 import { useUser } from "../hooks/useUser";
 import axiosConfig from "../util/axiosConfig";
 import { API_ENDPOINTS } from "../util/apiEndPoints";
 import toast from "react-hot-toast";
-import Modal from "../components/modal";
+import Modal from "../components/Modal";
 import TransactionForm from "../components/TransactionForm";
 import TransactionCard from "../components/TransactionCard";
 import DeleteConfirmModal from "../components/DeleteConfirmModal";
@@ -14,7 +14,7 @@ import PageLoader from "../components/PageLoader";
 import SpendingsChart from "../components/ExpenseChart";
 import InfoCard from "../components/InfoCard";
 
-const Spendings = () => {
+const Expense = () => {
     useUser();
 
     const [spendings, setSpendings] = useState([]);
@@ -237,4 +237,4 @@ const Spendings = () => {
     );
 };
 
-export default Spendings;
+export default Expense;

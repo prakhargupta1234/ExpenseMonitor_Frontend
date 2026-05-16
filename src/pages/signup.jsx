@@ -7,7 +7,7 @@ import { validateEmail } from "../util/validation";
 import axiosConfig from "../util/axiosConfig";
 import toast from "react-hot-toast";
 import { API_ENDPOINTS } from "../util/apiEndPoints";
-import ProfilePhotoSelector from "../components/profilePhotoSelector";
+import ProfilePhotoSelector from "../components/ProfilePhotoSelector";
 import uploadProfileImage from "../util/uploadProfileImage";
 
 const Signup = () => {

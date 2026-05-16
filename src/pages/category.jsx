@@ -1,12 +1,12 @@
 import { Plus, Layers2, TrendingUp, TrendingDown } from "lucide-react";
-import Dashboard from "../components/dashboard";
+import Dashboard from "../components/Dashboard";
 import { useUser } from "../hooks/useUser";
 import toast from "react-hot-toast";
-import CategoryList from "../components/categoryList";
+import CategoryList from "../components/CategoryList";
 import { useEffect, useState } from "react";
 import axiosConfig from "../util/axiosConfig";
 import { API_ENDPOINTS } from "../util/apiEndPoints";
-import Modal from "../components/modal";
+import Modal from "../components/Modal";
 import AddCategoryForm from "../components/AddCategoryForm";
 
 

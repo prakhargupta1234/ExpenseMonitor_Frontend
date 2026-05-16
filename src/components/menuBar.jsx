@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Menu, X, User, LogOut, Bell, Settings, ChevronDown } from "lucide-react";
 import logo from "../assets/logo.png";
 import { useContext, useState, useRef, useEffect } from "react";
-import SideBar from "./sideBar";
+import SideBar from "./SideBar";
 
 const MenuBar = ({ activeMenu }) => {
     const [openSideMenu, setOpenSideMenu] = useState(false);

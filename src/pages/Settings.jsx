@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { User, Mail, Shield, Palette, LogOut, Edit3 } from "lucide-react";
-import Dashboard from "../components/dashboard";
+import Dashboard from "../components/Dashboard";
 import { useUser } from "../hooks/useUser";
 import { AppContext } from "../context/AppContext";
 import { useNavigate } from "react-router-dom";

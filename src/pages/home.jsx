@@ -3,7 +3,7 @@ import axiosConfig from "../util/axiosConfig";
 import { API_ENDPOINTS } from "../util/apiEndPoints";
 import { TrendingUp, TrendingDown, Wallet, ArrowRight } from "lucide-react";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from "recharts";
-import Dashboard from "../components/dashboard";
+import Dashboard from "../components/Dashboard";
 import { useUser } from "../hooks/useUser";
 import PageLoader from "../components/PageLoader";
 import { Link } from "react-router-dom";

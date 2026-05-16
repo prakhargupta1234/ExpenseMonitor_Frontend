@@ -1,6 +1,6 @@
 import { useContext } from "react";
-import MenuBar from "./menuBar";
-import SideBar from "./sideBar";
+import MenuBar from "./MenuBar";
+import SideBar from "./SideBar";
 import { AppContext } from "../context/AppContext";
 
 const Dashboard = ({ children, activeMenu }) => {
