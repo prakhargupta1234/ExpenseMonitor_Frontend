@@ -1,6 +1,7 @@
 import { useContext } from "react";
-import MenuBar from "./MenuBar";
+import MenuBar from "./menuBar";
 import SideBar from "./SideBar";
+
 import { AppContext } from "../context/AppContext";
 
 const Dashboard = ({ children, activeMenu }) => {
@@ -17,7 +18,7 @@ const Dashboard = ({ children, activeMenu }) => {
                     </div>
                     {/* Main Content - Adjusts width dynamically */}
                     <div className="flex-1 w-full h-full overflow-y-auto content-transition bg-gray-50/30">
-                        <main className="min-h-full p-4 sm:p-6 lg:p-10">
+                        <main className="min-h-full p-4 sm:p-6 lg:p-10 animate-page-enter">
                             <div className="max-w-[1400px] mx-auto">
                                 {children}
                             </div>

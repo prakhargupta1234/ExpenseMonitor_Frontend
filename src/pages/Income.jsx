@@ -66,11 +66,11 @@ const Income = () => {
     const handleEmail = async () => {
         setIsEmailing(true);
         try {
-            await axiosConfig.get(`${API_ENDPOINTS.GET_ALL_EARNINGS}/download/email`);
-            alert("Report sent to your email!");
+            await axiosConfig.get(API_ENDPOINTS.EMAIL_EARNINGS);
+            toast.success("Earnings report emailed successfully!");
         } catch (err) {
             console.error("Email failed:", err);
-            alert("Failed to send email.");
+            toast.error("Failed to send email");
         } finally {
             setIsEmailing(false);
         }
@@ -79,19 +79,22 @@ const Income = () => {
     const handleDownload = async () => {
         setIsDownloading(true);
         try {
-            const response = await axiosConfig.get(`${API_ENDPOINTS.GET_ALL_EARNINGS}/download/excel`, {
+            const response = await axiosConfig.get(API_ENDPOINTS.EARNINGS_EXCEL_DOWNLOAD, {
                 responseType: 'blob'
             });
-            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+            const url = window.URL.createObjectURL(blob);
             const link = document.createElement('a');
             link.href = url;
             link.setAttribute('download', 'Earnings_Report.xlsx');
             document.body.appendChild(link);
             link.click();
-            link.remove();
+            link.parentNode.removeChild(link);
+            window.URL.revokeObjectURL(url);
+            toast.success("Excel file downloaded successfully!");
         } catch (err) {
             console.error("Download failed:", err);
-            alert("Failed to download report.");
+            toast.error("Failed to download Excel file");
         } finally {
             setIsDownloading(false);
         }
