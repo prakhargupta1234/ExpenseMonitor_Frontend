@@ -1,8 +1,8 @@
-import {useState} from "react";
-import {Image, X} from "lucide-react";
+import { useState } from "react";
+import { Image, X } from "lucide-react";
 import EmojiPicker from "emoji-picker-react";
 
-const EmojiPickerPopup = ({icon, onSelect}) => {
+const EmojiPickerPopup = ({ icon, onSelect }) => {
     const [isOpen, setIsOpen] = useState(false);
     const handleEmojiClick = (emoji) => {
         onSelect(emoji?.imageUrl || "");
@@ -16,7 +16,7 @@ const EmojiPickerPopup = ({icon, onSelect}) => {
                 <div className="w-12 h-12 flex items-center justify-center text-2xl bg-emerald-50 text-emerald-600 rounded-lg shadow-sm border border-emerald-100">
                     {icon ? (
                         <img src={icon} alt="Icon" className="w-12 h-12" />
-                    ): (
+                    ) : (
                         <Image />
                     )}
 

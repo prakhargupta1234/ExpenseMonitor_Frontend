@@ -1,13 +1,25 @@
+import { useEffect } from "react";
+import { createPortal } from "react-dom";
 import { LoaderCircle } from "lucide-react";
 
 const DeleteConfirmModal = ({ isOpen, onClose, onConfirm, isDeleting, itemName = "item" }) => {
+    // Lock body scroll when modal is open
+    useEffect(() => {
+        if (isOpen) {
+            document.body.style.overflow = "hidden";
+        }
+        return () => {
+            document.body.style.overflow = "";
+        };
+    }, [isOpen]);
+
     if (!isOpen) return null;
 
-    return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
-            {/* Backdrop */}
+    return createPortal(
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center">
+            {/* Backdrop — covers entire viewport including sidebar */}
             <div
-                className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+                className="absolute inset-0 bg-black/50 backdrop-blur-[2px]"
                 onClick={onClose}
             />
 
@@ -51,7 +63,8 @@ const DeleteConfirmModal = ({ isOpen, onClose, onConfirm, isDeleting, itemName =
                     </div>
                 </div>
             </div>
-        </div>
+        </div>,
+        document.body
     );
 };
 

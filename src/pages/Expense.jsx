@@ -58,7 +58,7 @@ const Expense = () => {
             const response = await axiosConfig.get(API_ENDPOINTS.SPENDINGS_EXCEL_DOWNLOAD, {
                 responseType: 'blob',
             });
-            
+
             const blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
             const url = window.URL.createObjectURL(blob);
             const link = document.createElement('a');
@@ -68,7 +68,7 @@ const Expense = () => {
             link.click();
             link.parentNode.removeChild(link);
             window.URL.revokeObjectURL(url);
-            
+
             toast.success("Excel file downloaded successfully!");
         } catch (error) {
             console.error("Failed to download excel:", error);
@@ -108,8 +108,8 @@ const Expense = () => {
     };
 
     const totalSpendings = spendings.reduce((sum, item) => {
-        const amount = typeof item.amount === 'string' 
-            ? Number(item.amount.replace(/[^\d.-]/g, '')) 
+        const amount = typeof item.amount === 'string'
+            ? Number(item.amount.replace(/[^\d.-]/g, ''))
             : Number(item.amount);
         return sum + (isNaN(amount) ? 0 : amount);
     }, 0);

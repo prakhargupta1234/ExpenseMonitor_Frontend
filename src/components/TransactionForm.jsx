@@ -24,15 +24,15 @@ const TransactionForm = ({ type, onSuccess, onCancel }) => {
             try {
                 const response = await axiosConfig.get(API_ENDPOINTS.GET_ALL_CATEGORIES);
                 const allCategories = response.data || [];
-                
+
                 // Filter categories based on type
                 const targetType = isIncome ? "income" : "expense";
-                const filtered = allCategories.filter(cat => 
-                    cat.type?.toLowerCase() === targetType || 
-                    (isIncome && cat.type?.toLowerCase() === "earnings") || 
+                const filtered = allCategories.filter(cat =>
+                    cat.type?.toLowerCase() === targetType ||
+                    (isIncome && cat.type?.toLowerCase() === "earnings") ||
                     (!isIncome && cat.type?.toLowerCase() === "spendings")
                 );
-                
+
                 setCategories(filtered);
             } catch (err) {
                 console.error("Failed to fetch categories:", err);
