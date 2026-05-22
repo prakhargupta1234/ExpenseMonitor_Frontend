@@ -40,6 +40,7 @@ const AddCategoryForm = ({ onAddCategory, initialCategoryData, isEditing }) => {
             <EmojiPickerPopup
                 icon={category.icon}
                 onSelect={(selectedIcon) => handleChange("icon", selectedIcon)}
+                disabled={isEditing}
             />
 
             <div className="grid grid-cols-1 gap-5">
@@ -57,7 +58,8 @@ const AddCategoryForm = ({ onAddCategory, initialCategoryData, isEditing }) => {
                         <select
                             value={category.type}
                             onChange={({ target }) => handleChange("type", target.value)}
-                            className="w-full bg-transparent border border-gray-300 rounded-md py-2.5 px-3 appearance-none text-gray-700 leading-tight focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors shadow-sm"
+                            disabled={isEditing}
+                            className="w-full bg-transparent border border-gray-300 rounded-md py-2.5 px-3 appearance-none text-gray-700 leading-tight focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors shadow-sm disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed"
                         >
                             <option value="income">Earnings</option>
                             <option value="expense">Spendings</option>

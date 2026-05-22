@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import Dashboard from "../components/Dashboard";
 import axiosConfig from "../util/axiosConfig";
 import { API_ENDPOINTS } from "../util/apiEndPoints";
-import { Plus, Wallet, Mail, Download, LoaderCircle } from "lucide-react";
+import { Plus, Wallet, Mail, Download, LoaderCircle, Calendar } from "lucide-react";
 import Modal from "../components/Modal";
 import TransactionForm from "../components/TransactionForm";
 import TransactionCard from "../components/TransactionCard";
@@ -23,6 +23,10 @@ const Income = () => {
     const [isEmailing, setIsEmailing] = useState(false);
     const [isDownloading, setIsDownloading] = useState(false);
     const [categories, setCategories] = useState([]);
+    const [selectedCategory, setSelectedCategory] = useState("all");
+    const [showDateFilter, setShowDateFilter] = useState(false);
+    const [startDate, setStartDate] = useState("");
+    const [endDate, setEndDate] = useState("");
 
     const fetchEarnings = useCallback(async () => {
         try {
@@ -36,9 +40,22 @@ const Income = () => {
         }
     }, []);
 
+    const fetchCategories = useCallback(async () => {
+        try {
+            const response = await axiosConfig.get(API_ENDPOINTS.GET_ALL_CATEGORIES);
+            const filtered = (response.data || []).filter(
+                c => c.type?.toLowerCase() === 'income' || c.type?.toLowerCase() === 'earnings'
+            );
+            setCategories(filtered);
+        } catch (err) {
+            console.error("Failed to fetch categories:", err);
+        }
+    }, []);
+
     useEffect(() => {
         fetchEarnings();
-    }, [fetchEarnings]);
+        fetchCategories();
+    }, [fetchEarnings, fetchCategories]);
 
     const handleDeleteClick = (id) => {
         setDeleteId(id);
@@ -100,15 +117,44 @@ const Income = () => {
         }
     };
 
-    const totalEarnings = earnings.reduce((sum, item) => {
+    const filteredEarnings = earnings.filter(item => {
+        // 1. Category filter
+        const matchesCategory = selectedCategory === "all" || 
+            item.categoryName?.toLowerCase() === selectedCategory.toLowerCase();
+            
+        // // 2. Date filter (if active/provided)
+        // let matchesDate = true;
+        // if (startDate && endDate) {
+        //     const itemDate = new Date(item.date);
+        //     const start = new Date(startDate);
+        //     const end = new Date(endDate);
+        //     start.setHours(0, 0, 0, 0);
+        //     end.setHours(23, 59, 59, 999);
+        //     matchesDate = itemDate >= start && itemDate <= end;
+        // } else if (startDate) {
+        //     const itemDate = new Date(item.date);
+        //     const start = new Date(startDate);
+        //     start.setHours(0, 0, 0, 0);
+        //     matchesDate = itemDate >= start;
+        // } else if (endDate) {
+        //     const itemDate = new Date(item.date);
+        //     const end = new Date(endDate);
+        //     end.setHours(23, 59, 59, 999);
+        //     matchesDate = itemDate <= end;
+        // }
+        
+        return matchesCategory;
+    });
+
+    const totalEarnings = filteredEarnings.reduce((sum, item) => {
         const amount = typeof item.amount === 'string'
             ? Number(item.amount.replace(/[^\d.-]/g, ''))
             : Number(item.amount);
         return sum + (isNaN(amount) ? 0 : amount);
     }, 0);
 
-    const totalTransactions = earnings.length;
-    const uniqueCategoriesCount = new Set(earnings.filter(item => item.categoryName).map(item => item.categoryName)).size;
+    const totalTransactions = filteredEarnings.length;
+    const uniqueCategoriesCount = new Set(filteredEarnings.filter(item => item.categoryName).map(item => item.categoryName)).size;
 
     return (
         <Dashboard activeMenu="Earnings">
@@ -120,6 +166,27 @@ const Income = () => {
                         <p className="text-sm text-gray-500 mt-1">Manage and track your earnings sources</p>
                     </div>
                     <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
+                        {!loading && earnings.length > 0 && (
+                            <div className="relative w-full sm:w-auto sm:min-w-[160px]">
+                                <select
+                                    value={selectedCategory}
+                                    onChange={(e) => setSelectedCategory(e.target.value)}
+                                    className="w-full bg-white border border-gray-200 rounded-xl py-2 px-3 pr-10 text-sm font-medium text-gray-700 leading-tight focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all shadow-sm appearance-none cursor-pointer"
+                                >
+                                    <option value="all">All Categories</option>
+                                    {categories.map((cat) => (
+                                        <option key={cat.id} value={cat.name}>
+                                            {cat.name}
+                                        </option>
+                                    ))}
+                                </select>
+                                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500">
+                                    <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                        <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                                    </svg>
+                                </div>
+                            </div>
+                        )}
                         <button
                             onClick={handleEmail}
                             disabled={isEmailing}
@@ -147,7 +214,7 @@ const Income = () => {
                 </div>
 
                 {/* Chart */}
-                {!loading && earnings.length > 0 && <EarningsChart earnings={earnings} />}
+                {!loading && filteredEarnings.length > 0 && <EarningsChart earnings={filteredEarnings} />}
 
                 {/* Cards Summary */}
                 {!loading && earnings.length > 0 && (
@@ -190,9 +257,17 @@ const Income = () => {
                         actionLabel="Add Earning"
                         onAction={() => setShowAddModal(true)}
                     />
+                ) : filteredEarnings.length === 0 ? (
+                    <EmptyState
+                        icon={Wallet}
+                        title="No transactions in this category"
+                        description="Try clearing the category filter to view all your earnings."
+                        actionLabel="Clear Filter"
+                        onAction={() => setSelectedCategory("all")}
+                    />
                 ) : (
                     <div className="space-y-3 stagger-children">
-                        {earnings.map((earning) => (
+                        {filteredEarnings.map((earning) => (
                             <div key={earning.id}>
                                 <TransactionCard
                                     transaction={earning}

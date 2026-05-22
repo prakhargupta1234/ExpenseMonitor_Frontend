@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
-import { Plus, Coins, Download, Mail, LoaderCircle, TrendingDown, History, LayoutGrid } from "lucide-react";
+import { Plus, Coins, Download, Mail, LoaderCircle, TrendingDown, History, LayoutGrid, Calendar } from "lucide-react";
 import Dashboard from "../components/Dashboard";
 import { useUser } from "../hooks/useUser";
 import axiosConfig from "../util/axiosConfig";
@@ -24,6 +24,11 @@ const Expense = () => {
     const [isDeleting, setIsDeleting] = useState(false);
     const [isDownloading, setIsDownloading] = useState(false);
     const [isEmailing, setIsEmailing] = useState(false);
+    const [categories, setCategories] = useState([]);
+    const [selectedCategory, setSelectedCategory] = useState("all");
+    const [showDateFilter, setShowDateFilter] = useState(false);
+    const [startDate, setStartDate] = useState("");
+    const [endDate, setEndDate] = useState("");
 
     const fetchSpendings = useCallback(async () => {
         try {
@@ -38,9 +43,22 @@ const Expense = () => {
         }
     }, []);
 
+    const fetchCategories = useCallback(async () => {
+        try {
+            const response = await axiosConfig.get(API_ENDPOINTS.GET_ALL_CATEGORIES);
+            const filtered = (response.data || []).filter(
+                c => c.type?.toLowerCase() === 'expense' || c.type?.toLowerCase() === 'spendings'
+            );
+            setCategories(filtered);
+        } catch (err) {
+            console.error("Failed to fetch categories:", err);
+        }
+    }, []);
+
     useEffect(() => {
         fetchSpendings();
-    }, [fetchSpendings]);
+        fetchCategories();
+    }, [fetchSpendings, fetchCategories]);
 
     const handleAddSuccess = () => {
         setShowAddModal(false);
@@ -107,15 +125,44 @@ const Expense = () => {
         }
     };
 
-    const totalSpendings = spendings.reduce((sum, item) => {
+    const filteredSpendings = spendings.filter(item => {
+        // 1. Category filter
+        const matchesCategory = selectedCategory === "all" ||
+            item.categoryName?.toLowerCase() === selectedCategory.toLowerCase();
+
+        // // 2. Date filter (if active/provided)
+        // let matchesDate = true;
+        // if (startDate && endDate) {
+        //     const itemDate = new Date(item.date);
+        //     const start = new Date(startDate);
+        //     const end = new Date(endDate);
+        //     start.setHours(0, 0, 0, 0);
+        //     end.setHours(23, 59, 59, 999);
+        //     matchesDate = itemDate >= start && itemDate <= end;
+        // } else if (startDate) {
+        //     const itemDate = new Date(item.date);
+        //     const start = new Date(startDate);
+        //     start.setHours(0, 0, 0, 0);
+        //     matchesDate = itemDate >= start;
+        // } else if (endDate) {
+        //     const itemDate = new Date(item.date);
+        //     const end = new Date(endDate);
+        //     end.setHours(23, 59, 59, 999);
+        //     matchesDate = itemDate <= end;
+        // }
+
+        return matchesCategory;
+    });
+
+    const totalSpendings = filteredSpendings.reduce((sum, item) => {
         const amount = typeof item.amount === 'string'
             ? Number(item.amount.replace(/[^\d.-]/g, ''))
             : Number(item.amount);
         return sum + (isNaN(amount) ? 0 : amount);
     }, 0);
 
-    const totalTransactions = spendings.length;
-    const uniqueCategoriesCount = new Set(spendings.filter(item => item.categoryName).map(item => item.categoryName)).size;
+    const totalTransactions = filteredSpendings.length;
+    const uniqueCategoriesCount = new Set(filteredSpendings.filter(item => item.categoryName).map(item => item.categoryName)).size;
 
     return (
         <Dashboard activeMenu="Spendings">
@@ -127,6 +174,27 @@ const Expense = () => {
                         <p className="text-sm text-gray-500 mt-1">Manage and track your monthly spending</p>
                     </div>
                     <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
+                        {!loading && spendings.length > 0 && (
+                            <div className="relative w-full sm:w-auto sm:min-w-[160px]">
+                                <select
+                                    value={selectedCategory}
+                                    onChange={(e) => setSelectedCategory(e.target.value)}
+                                    className="w-full bg-white border border-gray-200 rounded-xl py-2 px-3 pr-10 text-sm font-medium text-gray-700 leading-tight focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-all shadow-sm appearance-none cursor-pointer"
+                                >
+                                    <option value="all">All Categories</option>
+                                    {categories.map((cat) => (
+                                        <option key={cat.id} value={cat.name}>
+                                            {cat.name}
+                                        </option>
+                                    ))}
+                                </select>
+                                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500">
+                                    <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                        <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                                    </svg>
+                                </div>
+                            </div>
+                        )}
                         <button
                             onClick={handleEmail}
                             disabled={isEmailing}
@@ -154,7 +222,7 @@ const Expense = () => {
                 </div>
 
                 {/* Chart */}
-                {!loading && spendings.length > 0 && <SpendingsChart spendings={spendings} />}
+                {!loading && filteredSpendings.length > 0 && <SpendingsChart spendings={filteredSpendings} />}
 
                 {/* Cards Summary */}
                 {!loading && spendings.length > 0 && (
@@ -197,9 +265,17 @@ const Expense = () => {
                         actionLabel="Add Spending"
                         onAction={() => setShowAddModal(true)}
                     />
+                ) : filteredSpendings.length === 0 ? (
+                    <EmptyState
+                        icon={Coins}
+                        title="No transactions in this category"
+                        description="Try clearing the category filter to view all your spendings."
+                        actionLabel="Clear Filter"
+                        onAction={() => setSelectedCategory("all")}
+                    />
                 ) : (
                     <div className="space-y-3 stagger-children">
-                        {spendings.map((spending) => (
+                        {filteredSpendings.map((spending) => (
                             <div key={spending.id}>
                                 <TransactionCard
                                     transaction={spending}
