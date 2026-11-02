@@ -32,7 +32,7 @@ const Home = () => {
 
     if (isLoading) {
         return (
-            <Dashboard activeMenu="Dashboard">
+            <Dashboard activeMenu="Overview">
                 <PageLoader />
             </Dashboard>
         );
@@ -40,7 +40,7 @@ const Home = () => {
 
     if (error) {
         return (
-            <Dashboard activeMenu="Dashboard">
+            <Dashboard activeMenu="Overview">
                 <div className="text-red-500 text-center py-12">{error}</div>
             </Dashboard>
         );
@@ -85,13 +85,13 @@ const Home = () => {
         return (
             <div
                 key={tx.id || index}
-                className="group flex items-center justify-between p-3.5 rounded-xl hover:bg-gray-50/80 transition-all duration-200"
+                className="group flex items-center justify-between p-2.5 sm:p-3 rounded-xl hover:bg-gray-50/80 transition-all duration-200"
             >
-                <div className="flex items-center gap-3">
-                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-base shrink-0 transition-all duration-200 ${isIncome ? "bg-emerald-50 group-hover:bg-emerald-100" : "bg-red-50 group-hover:bg-red-100"}`}>
+                <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                    <div className={`w-9 h-9 rounded-xl flex items-center justify-center text-sm shrink-0 transition-all duration-200 ${isIncome ? "bg-emerald-50 group-hover:bg-emerald-100" : "bg-red-50 group-hover:bg-red-100"}`}>
                         {(tx.icon || tx.categoryIcon) ? (
                             (tx.icon || tx.categoryIcon).startsWith('http') || (tx.icon || tx.categoryIcon).startsWith('data:') ? (
-                                <img src={tx.icon || tx.categoryIcon} alt={displayName} className="w-5 h-5 object-contain" />
+                                <img src={tx.icon || tx.categoryIcon} alt={displayName} className="w-4 h-4 object-contain" />
                             ) : (
                                 <span>{tx.icon || tx.categoryIcon}</span>
                             )
@@ -101,18 +101,18 @@ const Home = () => {
                             </span>
                         )}
                     </div>
-                    <div className="min-w-0">
-                        <p className="font-semibold text-sm text-gray-900 capitalize truncate">
+                    <div className="min-w-0 flex-1">
+                        <p className="font-semibold text-xs sm:text-sm text-gray-900 capitalize truncate">
                             {displayName}
                         </p>
-                        <p className="text-[11px] font-medium text-gray-400 mt-0.5">
+                        <p className="text-[10.5px] font-medium text-gray-400 mt-0.5">
                             {displayDate}
                         </p>
                     </div>
                 </div>
-                <div className="shrink-0 text-right">
-                    <span className={`font-bold text-sm px-2.5 py-1 rounded-lg inline-flex items-center gap-1 ${isIncome ? "text-emerald-700 bg-emerald-50" : "text-red-600 bg-red-50"}`}>
-                        {isIncome ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
+                <div className="shrink-0 text-right ml-2">
+                    <span className={`font-bold text-xs sm:text-sm px-2 py-0.5 rounded-lg inline-flex items-center gap-1 ${isIncome ? "text-emerald-700 bg-emerald-50" : "text-red-600 bg-red-50"}`}>
+                        {isIncome ? <TrendingUp size={11} /> : <TrendingDown size={11} />}
                         {isIncome ? "+" : "-"}{formatCurrency(tx.amount)}
                     </span>
                 </div>
@@ -124,49 +124,49 @@ const Home = () => {
         <Dashboard activeMenu="Overview">
             <div>
                 {/* Hero Section */}
-                <div className="bg-emerald-600 rounded-2xl p-7 sm:p-10 mb-7 text-white shadow-lg relative overflow-hidden animate-scale-in">
+                <div className="bg-emerald-600 rounded-2xl p-5 sm:p-6 mb-5 text-white shadow-md relative overflow-hidden animate-scale-in">
                     <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500 rounded-full mix-blend-multiply filter blur-3xl opacity-50 translate-x-1/2 -translate-y-1/2"></div>
                     <div className="absolute bottom-0 left-10 w-48 h-48 bg-teal-400 rounded-full mix-blend-multiply filter blur-3xl opacity-30 translate-y-1/2"></div>
                     
-                    <div className="relative z-10 max-w-3xl">
-                        <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold mb-3 leading-tight">
+                    <div className="relative z-10 max-w-2xl">
+                        <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-extrabold mb-1.5 leading-tight">
                             Take Control of Your Financial Life
                         </h1>
-                        <p className="text-emerald-100 text-sm sm:text-base max-w-2xl leading-relaxed">
+                        <p className="text-emerald-100 text-xs sm:text-sm max-w-xl leading-relaxed">
                             Track spendings, monitor earnings, analyze spending habits, and manage your finances smarter with <strong className="text-white">ExpenseIQ</strong>.
                         </p>
                     </div>
                 </div>
 
                 {/* Stats Cards */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-5 mb-8 stagger-children">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3.5 sm:gap-4 mb-5 stagger-children">
                     {/* Total Balance */}
-                    <div className="bg-slate-900 rounded-3xl p-6 shadow-xl shadow-slate-200 relative overflow-hidden group hover:scale-[1.02] transition-all duration-300">
+                    <div className="bg-slate-900 rounded-2xl p-4 sm:p-5 shadow-lg shadow-slate-200 relative overflow-hidden group hover:scale-[1.01] transition-all duration-300">
                         <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-3xl -mr-10 -mt-10"></div>
                         <div className="relative z-10">
-                            <div className="flex items-center justify-between mb-4">
-                                <div className="w-10 h-10 bg-emerald-500/20 rounded-xl flex items-center justify-center border border-emerald-500/30">
-                                    <Wallet className="w-5 h-5 text-emerald-400" />
+                            <div className="flex items-center justify-between mb-3">
+                                <div className="w-9 h-9 bg-emerald-500/20 rounded-xl flex items-center justify-center border border-emerald-500/30">
+                                    <Wallet className="w-4 h-4 text-emerald-400" />
                                 </div>
-                                <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-widest bg-emerald-500/10 px-2 py-1 rounded-lg border border-emerald-500/20">Net Worth</span>
+                                <span className="text-[9.5px] font-bold text-emerald-400 uppercase tracking-widest bg-emerald-500/10 px-2 py-0.5 rounded-lg border border-emerald-500/20">Net Worth</span>
                             </div>
-                            <p className="text-emerald-100/60 text-xs font-semibold uppercase tracking-wider mb-1">Total Balance</p>
-                            <p className="text-2xl sm:text-3xl font-bold text-white tracking-tight">{formatCurrency(balance)}</p>
+                            <p className="text-emerald-100/60 text-[11px] font-semibold uppercase tracking-wider mb-0.5">Total Balance</p>
+                            <p className="text-xl sm:text-2xl font-bold text-white tracking-tight">{formatCurrency(balance)}</p>
                         </div>
                     </div>
 
                     {/* Total Earnings */}
-                    <div className="bg-emerald-50 border border-emerald-100 rounded-3xl p-6 shadow-sm hover:shadow-md transition-all duration-300 group overflow-hidden relative">
+                    <div className="bg-emerald-50/80 border border-emerald-100 rounded-2xl p-4 sm:p-5 shadow-xs hover:shadow-sm transition-all duration-300 group overflow-hidden relative">
                         <div className="absolute -right-4 -bottom-4 w-24 h-24 bg-emerald-200/30 rounded-full blur-2xl group-hover:scale-125 transition-transform duration-500"></div>
                         <div className="relative z-10">
-                            <div className="flex items-center justify-between mb-4">
-                                <div className="w-10 h-10 bg-emerald-600 rounded-xl flex items-center justify-center shadow-md shadow-emerald-100">
-                                    <TrendingUp className="w-5 h-5 text-white" />
+                            <div className="flex items-center justify-between mb-3">
+                                <div className="w-9 h-9 bg-emerald-600 rounded-xl flex items-center justify-center shadow-xs">
+                                    <TrendingUp className="w-4 h-4 text-white" />
                                 </div>
                             </div>
-                            <p className="text-emerald-700/60 text-xs font-semibold uppercase tracking-wider mb-1">Total Earnings</p>
-                            <p className="text-2xl sm:text-3xl font-bold text-emerald-900 tracking-tight">{formatCurrency(totalEarnings)}</p>
-                            <div className="mt-3 flex items-center gap-1 text-[11px] font-bold text-emerald-600">
+                            <p className="text-emerald-700/60 text-[11px] font-semibold uppercase tracking-wider mb-0.5">Total Earnings</p>
+                            <p className="text-xl sm:text-2xl font-bold text-emerald-900 tracking-tight">{formatCurrency(totalEarnings)}</p>
+                            <div className="mt-2 flex items-center gap-1 text-[10.5px] font-bold text-emerald-600">
                                 <div className="w-1 h-1 rounded-full bg-emerald-600 animate-pulse"></div>
                                 Cumulative earnings
                             </div>
@@ -174,17 +174,17 @@ const Home = () => {
                     </div>
 
                     {/* Total Spendings */}
-                    <div className="bg-red-50 border border-red-100 rounded-3xl p-6 shadow-sm hover:shadow-md transition-all duration-300 group overflow-hidden relative">
+                    <div className="bg-red-50/80 border border-red-100 rounded-2xl p-4 sm:p-5 shadow-xs hover:shadow-sm transition-all duration-300 group overflow-hidden relative">
                         <div className="absolute -right-4 -bottom-4 w-24 h-24 bg-red-200/30 rounded-full blur-2xl group-hover:scale-125 transition-transform duration-500"></div>
                         <div className="relative z-10">
-                            <div className="flex items-center justify-between mb-4">
-                                <div className="w-10 h-10 bg-red-600 rounded-xl flex items-center justify-center shadow-md shadow-red-100">
-                                    <TrendingDown className="w-5 h-5 text-white" />
+                            <div className="flex items-center justify-between mb-3">
+                                <div className="w-9 h-9 bg-red-600 rounded-xl flex items-center justify-center shadow-xs">
+                                    <TrendingDown className="w-4 h-4 text-white" />
                                 </div>
                             </div>
-                            <p className="text-red-700/60 text-xs font-semibold uppercase tracking-wider mb-1">Total Spendings</p>
-                            <p className="text-2xl sm:text-3xl font-bold text-red-900 tracking-tight">{formatCurrency(totalSpendings)}</p>
-                            <div className="mt-3 flex items-center gap-1 text-[11px] font-bold text-red-600">
+                            <p className="text-red-700/60 text-[11px] font-semibold uppercase tracking-wider mb-0.5">Total Spendings</p>
+                            <p className="text-xl sm:text-2xl font-bold text-red-900 tracking-tight">{formatCurrency(totalSpendings)}</p>
+                            <div className="mt-2 flex items-center gap-1 text-[10.5px] font-bold text-red-600">
                                 <div className="w-1 h-1 rounded-full bg-red-600 animate-pulse"></div>
                                 Total spending
                             </div>
@@ -193,55 +193,55 @@ const Home = () => {
                 </div>
 
                 {/* Middle Row */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-5 mb-6">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-3.5 sm:gap-4 mb-5">
                     {/* Recent Transactions */}
-                    <div className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm animate-fade-in">
-                        <div className="flex justify-between items-center mb-5">
-                            <h3 className="text-base font-bold text-gray-900">Recent Transactions</h3>
-                            <Link to="/filter" className="flex items-center gap-1.5 px-3 py-1.5 bg-gray-50 hover:bg-gray-100 text-gray-500 rounded-lg text-xs font-semibold transition-all">
-                                More <ArrowRight size={13} />
+                    <div className="bg-white border border-gray-100 rounded-2xl p-4 sm:p-5 shadow-xs animate-fade-in flex flex-col">
+                        <div className="flex justify-between items-center mb-3.5">
+                            <h3 className="text-sm sm:text-base font-bold text-gray-900">Recent Transactions</h3>
+                            <Link to="/filter" className="flex items-center gap-1 px-2.5 py-1 bg-gray-50 hover:bg-gray-100 text-gray-500 rounded-lg text-xs font-semibold transition-all">
+                                More <ArrowRight size={12} />
                             </Link>
                         </div>
                         {generalRecent.length === 0 ? (
-                            <p className="text-gray-400 text-sm text-center py-10">No recent transactions</p>
+                            <p className="text-gray-400 text-xs sm:text-sm text-center py-8">No recent transactions</p>
                         ) : (
-                            <div className="space-y-0.5">
+                            <div className="space-y-0.5 divide-y divide-gray-50">
                                 {generalRecent.map((tx, index) => renderTransactionItem(tx, index))}
                             </div>
                         )}
                     </div>
 
                     {/* Financial Overview */}
-                    <div className="bg-white border border-gray-100 rounded-3xl p-6 shadow-sm flex flex-col animate-fade-in group">
-                        <div className="flex items-center justify-between mb-4">
-                            <h3 className="text-base font-bold text-gray-900">Financial Overview</h3>
-                            <div className="w-8 h-8 bg-gray-50 rounded-lg flex items-center justify-center">
-                                <TrendingUp size={16} className="text-emerald-600" />
+                    <div className="bg-white border border-gray-100 rounded-2xl p-4 sm:p-5 shadow-xs flex flex-col animate-fade-in group">
+                        <div className="flex items-center justify-between mb-3">
+                            <h3 className="text-sm sm:text-base font-bold text-gray-900">Financial Overview</h3>
+                            <div className="w-7 h-7 bg-gray-50 rounded-lg flex items-center justify-center">
+                                <TrendingUp size={14} className="text-emerald-600" />
                             </div>
                         </div>
-                        <div className="flex-1 relative flex flex-col items-center justify-center min-h-[300px]">
+                        <div className="flex-1 relative flex flex-col items-center justify-center min-h-[250px]">
                             {overviewData.length === 1 && overviewData[0].name === "No Data" ? (
-                                <p className="text-gray-400 text-sm">No financial data available</p>
+                                <p className="text-gray-400 text-xs sm:text-sm">No financial data available</p>
                             ) : (
                                 <>
-                                    <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none pb-8">
+                                    <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none pb-6">
                                         <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-0.5">Balance</p>
-                                        <p className="text-2xl font-bold text-slate-900">{formatCurrency(balance)}</p>
+                                        <p className="text-xl sm:text-2xl font-bold text-slate-900">{formatCurrency(balance)}</p>
                                     </div>
-                                    <ResponsiveContainer width="100%" height={300}>
+                                    <ResponsiveContainer width="100%" height={250}>
                                         <PieChart>
                                             <Pie
                                                 data={overviewData}
                                                 cx="50%"
                                                 cy="50%"
-                                                innerRadius={80}
-                                                outerRadius={110}
-                                                paddingAngle={8}
+                                                innerRadius={70}
+                                                outerRadius={95}
+                                                paddingAngle={6}
                                                 dataKey="value"
                                                 stroke="none"
                                                 activeShape={{ stroke: 'none', fillOpacity: 0.8 }}
                                                 isAnimationActive={true}
-                                                animationDuration={1000}
+                                                animationDuration={800}
                                             >
                                                 {overviewData.map((entry, index) => (
                                                     <Cell 
@@ -254,11 +254,11 @@ const Home = () => {
                                             <Tooltip 
                                                 formatter={(value) => [formatCurrency(value), ""]} 
                                                 contentStyle={{ 
-                                                    borderRadius: '16px', 
+                                                    borderRadius: '12px', 
                                                     border: 'none', 
-                                                    boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1)',
-                                                    padding: '12px 16px',
-                                                    fontSize: '13px',
+                                                    boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)',
+                                                    padding: '8px 12px',
+                                                    fontSize: '12px',
                                                     fontWeight: 'bold',
                                                     color: '#1e293b'
                                                 }}
@@ -267,7 +267,7 @@ const Home = () => {
                                             />
                                             <Legend 
                                                 iconType="circle" 
-                                                wrapperStyle={{ paddingTop: '20px', fontSize: '12px', fontWeight: '600' }}
+                                                wrapperStyle={{ paddingTop: '12px', fontSize: '11px', fontWeight: '600' }}
                                                 verticalAlign="bottom"
                                             />
                                         </PieChart>
@@ -279,34 +279,34 @@ const Home = () => {
                 </div>
 
                 {/* Bottom Row */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-5 mb-6">
-                    <div className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm animate-fade-in">
-                        <div className="flex justify-between items-center mb-5">
-                            <h3 className="text-base font-bold text-gray-900">Recent Spendings</h3>
-                            <Link to="/expense" className="flex items-center gap-1.5 px-3 py-1.5 bg-gray-50 hover:bg-gray-100 text-gray-500 rounded-lg text-xs font-semibold transition-all">
-                                More <ArrowRight size={13} />
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-3.5 sm:gap-4 mb-4">
+                    <div className="bg-white border border-gray-100 rounded-2xl p-4 sm:p-5 shadow-xs animate-fade-in">
+                        <div className="flex justify-between items-center mb-3.5">
+                            <h3 className="text-sm sm:text-base font-bold text-gray-900">Recent Spendings</h3>
+                            <Link to="/expense" className="flex items-center gap-1 px-2.5 py-1 bg-gray-50 hover:bg-gray-100 text-gray-500 rounded-lg text-xs font-semibold transition-all">
+                                More <ArrowRight size={12} />
                             </Link>
                         </div>
                         {recentSpendings.length === 0 ? (
-                            <p className="text-gray-400 text-sm text-center py-8">No recent spendings</p>
+                            <p className="text-gray-400 text-xs sm:text-sm text-center py-6">No recent spendings</p>
                         ) : (
-                            <div className="space-y-0.5">
+                            <div className="space-y-0.5 divide-y divide-gray-50">
                                 {recentSpendings.map((tx, index) => renderTransactionItem(tx, index))}
                             </div>
                         )}
                     </div>
 
-                    <div className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm animate-fade-in">
-                        <div className="flex justify-between items-center mb-5">
-                            <h3 className="text-base font-bold text-gray-900">Recent Earnings</h3>
-                            <Link to="/income" className="flex items-center gap-1.5 px-3 py-1.5 bg-gray-50 hover:bg-gray-100 text-gray-500 rounded-lg text-xs font-semibold transition-all">
-                                More <ArrowRight size={13} />
+                    <div className="bg-white border border-gray-100 rounded-2xl p-4 sm:p-5 shadow-xs animate-fade-in">
+                        <div className="flex justify-between items-center mb-3.5">
+                            <h3 className="text-sm sm:text-base font-bold text-gray-900">Recent Earnings</h3>
+                            <Link to="/income" className="flex items-center gap-1 px-2.5 py-1 bg-gray-50 hover:bg-gray-100 text-gray-500 rounded-lg text-xs font-semibold transition-all">
+                                More <ArrowRight size={12} />
                             </Link>
                         </div>
                         {recentEarnings.length === 0 ? (
-                            <p className="text-gray-400 text-sm text-center py-8">No recent earnings</p>
+                            <p className="text-gray-400 text-xs sm:text-sm text-center py-6">No recent earnings</p>
                         ) : (
-                            <div className="space-y-0.5">
+                            <div className="space-y-0.5 divide-y divide-gray-50">
                                 {recentEarnings.map((tx, index) => renderTransactionItem(tx, index))}
                             </div>
                         )}

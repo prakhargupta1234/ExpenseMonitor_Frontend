@@ -3,9 +3,9 @@
 @import "tailwindcss";
 
 :root {
-  --sidebar-width: 270px;
-  --sidebar-collapsed-width: 80px;
-  --topbar-height: 64px;
+  --sidebar-width: 250px;
+  --sidebar-collapsed-width: 70px;
+  --topbar-height: 56px;
 }
 
 body {

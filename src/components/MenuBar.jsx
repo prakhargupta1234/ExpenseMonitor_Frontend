@@ -40,51 +40,53 @@ const MenuBar = ({ activeMenu }) => {
 
     return (
         <>
-            <div className="flex items-center justify-between gap-4 bg-white/80 backdrop-blur-xl border-b border-gray-100 py-3 px-4 sm:px-6 sticky top-0 z-30">
+            <div className="flex items-center justify-between gap-4 bg-white/80 backdrop-blur-xl border-b border-gray-100 py-2.5 px-4 sm:px-6 sticky top-0 z-30">
                 {/* Left side */}
                 <div className="flex items-center gap-3">
                     <button
                         onClick={() => setOpenSideMenu(!openSideMenu)}
-                        className="block lg:hidden p-2 rounded-xl text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-all duration-200"
+                        className="block lg:hidden p-1.5 rounded-xl text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-all duration-200"
                     >
-                        {openSideMenu ? <X size={20} /> : <Menu size={20} />}
+                        {openSideMenu ? <X size={19} /> : <Menu size={19} />}
                     </button>
 
-                    <div className="flex items-center gap-2.5 cursor-pointer" onClick={() => navigate("/dashboard")}>
-                        <img src={logo} alt="ExpenseIQ" className="h-9 w-9" />
-                        <div className="hidden sm:block">
-                            <span className="text-lg font-bold text-gray-900 tracking-tight">Expense</span>
-                            <span className="text-lg font-bold text-emerald-600 tracking-tight">IQ</span>
+                    {/* Mobile Brand Logo */}
+                    <div className="flex lg:hidden items-center gap-2 cursor-pointer" onClick={() => navigate("/dashboard")}>
+                        <img src={logo} alt="ExpenseIQ" className="h-7 w-7" />
+                        <div>
+                            <span className="text-sm font-bold text-gray-900 tracking-tight">Expense</span>
+                            <span className="text-sm font-bold text-emerald-600 tracking-tight">IQ</span>
                         </div>
+                    </div>
+
+                    {/* Desktop Breadcrumb Navigation */}
+                    <div className="hidden lg:flex items-center gap-2">
+                        <span className="text-xs font-medium text-gray-400">Application</span>
+                        <span className="text-gray-300 text-xs">/</span>
+                        <span className="text-sm font-semibold text-gray-800 capitalize">{activeMenu || "Overview"}</span>
                     </div>
                 </div>
 
                 {/* Right side */}
                 <div className="flex items-center gap-2">
-                    {/* Notification Bell */}
-                    {/* <button className="relative p-2 rounded-xl text-gray-400 hover:text-gray-600 hover:bg-gray-50 transition-all duration-200">
-                        <Bell size={20} />
-                        <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-emerald-500 rounded-full ring-2 ring-white"></span>
-                    </button> */}
-
                     {/* User Avatar Dropdown */}
                     <div className="relative" ref={dropDownRef}>
                         <button
                             onClick={() => setShowDropdown(!showDropdown)}
-                            className="flex items-center gap-2 p-1.5 pr-3 rounded-xl hover:bg-gray-50 transition-all duration-200 focus:outline-none"
+                            className="flex items-center gap-2 p-1 pr-2.5 rounded-xl hover:bg-gray-50 transition-all duration-200 focus:outline-none border border-transparent hover:border-gray-100"
                         >
                             {user?.profileImageUrl ? (
-                                <img src={user.profileImageUrl} alt="profile" className="w-8 h-8 rounded-lg object-cover" />
+                                <img src={user.profileImageUrl} alt="profile" className="w-7 h-7 rounded-lg object-cover" />
                             ) : (
-                                <div className="w-8 h-8 bg-gradient-to-br from-emerald-400 to-teal-500 rounded-lg flex items-center justify-center">
-                                    <span className="text-white font-bold text-sm">{getInitials()}</span>
+                                <div className="w-7 h-7 bg-gradient-to-br from-emerald-400 to-teal-500 rounded-lg flex items-center justify-center shadow-xs">
+                                    <span className="text-white font-bold text-xs">{getInitials()}</span>
                                 </div>
                             )}
                             <div className="hidden sm:block text-left">
                                 <p className="text-xs font-semibold text-gray-800 leading-none">{user?.name || user?.fullName || "User"}</p>
-                                <p className="text-[10px] text-gray-400 leading-tight mt-0.5">Personal</p>
+                                <p className="text-[9.5px] text-gray-400 leading-tight mt-0.5">Personal</p>
                             </div>
-                            <ChevronDown size={14} className={`hidden sm:block text-gray-400 transition-transform duration-200 ${showDropdown ? 'rotate-180' : ''}`} />
+                            <ChevronDown size={13} className={`hidden sm:block text-gray-400 transition-transform duration-200 ${showDropdown ? 'rotate-180' : ''}`} />
                         </button>
 
                         {/* Dropdown Menu */}
@@ -94,10 +96,10 @@ const MenuBar = ({ activeMenu }) => {
                                 <div className="px-4 py-3 border-b border-gray-50">
                                     <div className="flex items-center gap-3">
                                         {user?.profileImageUrl ? (
-                                            <img src={user.profileImageUrl} alt="profile" className="w-11 h-11 rounded-xl object-cover" />
+                                            <img src={user.profileImageUrl} alt="profile" className="w-10 h-10 rounded-xl object-cover" />
                                         ) : (
-                                            <div className="w-11 h-11 bg-gradient-to-br from-emerald-400 to-teal-500 rounded-xl flex items-center justify-center">
-                                                <span className="text-white font-bold text-lg">{getInitials()}</span>
+                                            <div className="w-10 h-10 bg-gradient-to-br from-emerald-400 to-teal-500 rounded-xl flex items-center justify-center shadow-xs">
+                                                <span className="text-white font-bold text-sm">{getInitials()}</span>
                                             </div>
                                         )}
                                         <div className="flex-1 min-w-0">
@@ -135,14 +137,14 @@ const MenuBar = ({ activeMenu }) => {
                                 <div className="py-1.5 px-2">
                                     <button
                                         onClick={() => { navigate("/settings"); setShowDropdown(false); }}
-                                        className="flex items-center gap-3 w-full px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-50 rounded-xl transition-all duration-200"
+                                        className="flex items-center gap-3 w-full px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-xl transition-all duration-200"
                                     >
                                         <Settings className="w-4 h-4 text-gray-400" />
                                         <span className="font-medium">Settings</span>
                                     </button>
                                     <button
                                         onClick={handleLogout}
-                                        className="flex items-center gap-3 w-full px-3 py-2.5 text-sm text-red-600 hover:bg-red-50 rounded-xl transition-all duration-200"
+                                        className="flex items-center gap-3 w-full px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-xl transition-all duration-200"
                                     >
                                         <LogOut className="w-4 h-4 text-red-500" />
                                         <span className="font-medium">Logout</span>
@@ -162,19 +164,7 @@ const MenuBar = ({ activeMenu }) => {
             <div
                 className={`fixed inset-y-0 left-0 w-72 bg-white z-[110] lg:hidden transform transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] shadow-2xl ${openSideMenu ? 'translate-x-0' : '-translate-x-full'}`}
             >
-                <div className="flex items-center justify-between p-4 border-b border-gray-50">
-                    <div className="flex items-center gap-2">
-                        <img src={logo} alt="logo" className="h-8 w-8" />
-                        <div>
-                            <span className="text-base font-bold text-gray-900">Expense</span>
-                            <span className="text-base font-bold text-emerald-600">IQ</span>
-                        </div>
-                    </div>
-                    <button onClick={() => setOpenSideMenu(false)} className="p-2 hover:bg-gray-100 rounded-xl transition-colors">
-                        <X size={18} className="text-gray-500" />
-                    </button>
-                </div>
-                <div className="h-full overflow-y-auto pb-20">
+                <div className="h-full overflow-y-auto">
                     <SideBar activeMenu={activeMenu} onMenuItemClick={() => setOpenSideMenu(false)} />
                 </div>
             </div>
